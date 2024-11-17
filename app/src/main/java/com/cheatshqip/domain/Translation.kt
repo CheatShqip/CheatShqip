@@ -1,5 +1,3 @@
 package com.cheatshqip.domain
 
-class Translation {
-
-}
+data class Translation(val value: String)

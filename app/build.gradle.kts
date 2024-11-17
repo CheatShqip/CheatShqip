@@ -53,6 +53,8 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.test)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.juniper)
