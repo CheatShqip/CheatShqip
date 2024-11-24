@@ -7,7 +7,9 @@ coroutinesVersion = "1.9.0"
 espressoCoreVersion = "3.6.1"
 junitBomVersion = "5.11.3"
 junitVersion = "1.2.1"
+koinVersion = "3.2.0"
 kotlinVersion = "2.0.21"
+ktorVersion = "3.0.1"
 lifecycleRuntimeKtxVersion = "2.8.7"
 
 [libraries]
@@ -24,11 +26,16 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutinesVersion" }
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesVersion" }
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junitBomVersion" }
 junit-juniper = { group = "org.junit.jupiter", name = "junit-jupiter" }
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinVersion" }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinVersion" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorVersion" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agpVersion" }

@@ -53,8 +53,13 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.coroutines.android)
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.test)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.juniper)
