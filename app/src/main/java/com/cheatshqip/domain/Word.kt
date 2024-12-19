@@ -1,3 +1,3 @@
 package com.cheatshqip.domain
 
-class Word(value: String)
+class Word(val value: String)

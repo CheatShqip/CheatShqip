@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -16,6 +17,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            type = "String",
+            name = "API_BASE_URL",
+            value = "\"https://qub10cxllf.execute-api.eu-central-1.amazonaws.com/prod/\""
+        )
     }
 
     buildTypes {
@@ -35,6 +42,7 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }
@@ -60,10 +68,15 @@ dependencies {
     implementation(libs.ktor.client.okhttp)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.kotlin.serialization.json)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.juniper)
     testImplementation(libs.junit.platform.launcher)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.okhttp3.mockwebserver)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.espresso.core)

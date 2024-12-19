@@ -1,16 +1,19 @@
 [versions]
 activityComposeVersion = "1.9.3"
-agpVersion = "8.7.2"
-composeBomVersion = "2024.11.00"
+agpVersion = "8.7.3"
+composeBomVersion = "2024.12.01"
 coreKtxVersion = "1.15.0"
 coroutinesVersion = "1.9.0"
 espressoCoreVersion = "3.6.1"
 junitBomVersion = "5.11.3"
 junitVersion = "1.2.1"
-koinVersion = "3.2.0"
-kotlinVersion = "2.0.21"
+koinVersion = "4.0.0"
+kotlinVersion = "2.1.0"
+kotlinSerializationJsonVersion = "1.8.0-RC"
 ktorVersion = "3.0.1"
 lifecycleRuntimeKtxVersion = "2.8.7"
+okhttpVersion = "4.12.0"
+retrofitVersion = "2.11.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityComposeVersion" }
@@ -33,12 +36,18 @@ junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junitBomVe
 junit-juniper = { group = "org.junit.jupiter", name = "junit-jupiter" }
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinVersion" }
+koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koinVersion" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinVersion" }
+kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationJsonVersion" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorVersion" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorVersion" }
+okhttp3-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttpVersion" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
+retrofit-converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofitVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agpVersion" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVersion" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
 
