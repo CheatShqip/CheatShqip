@@ -74,6 +74,7 @@ dependencies {
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.juniper)
+    testImplementation(libs.junit.juniper.params)
     testImplementation(libs.junit.platform.launcher)
     testImplementation(libs.koin.test)
     testImplementation(libs.okhttp3.mockwebserver)

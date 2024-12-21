@@ -1,13 +1,13 @@
 package com.cheatshqip.adapter.output
 
-import com.cheatshqip.application.port.output.GetWordTranslationSuggestionsPort
+import com.cheatshqip.application.port.output.GetWordSuggestionsPort
 import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
 
-class RESTTranslationOutputAdapter(
+class RESTWordSuggestionsOutputAdapter(
     private val shqipRESTService: ShqipRESTService
-) : GetWordTranslationSuggestionsPort {
-    override suspend fun getWorldTranslationSuggestions(word: Word): List<Translation> {
+) : GetWordSuggestionsPort {
+    override suspend fun getWordSuggestionsOf(word: Word): List<Translation> {
         return shqipRESTService
             .define(word.value)
             .toTranslations()

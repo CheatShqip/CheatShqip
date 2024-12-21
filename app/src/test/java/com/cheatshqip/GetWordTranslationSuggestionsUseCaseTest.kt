@@ -6,27 +6,52 @@ import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 
 class GetWordTranslationSuggestionsUseCaseTest {
 
-    @Test
-    fun `given some characters, should propose translations`() = runTest {
+    @MethodSource("provideArguments")
+    @ParameterizedTest
+    fun `given some characters, should propose translations`(
+        word: Word,
+        expectedTranslations: List<Translation>
+    ) = runTest {
         val useCase: GetWordTranslationSuggestionsUseCase = TranslationService(
-            getWordTranslationSuggestionsPort = FakeTranslationOutputAdapter()
+            getAlbanianTranslationOfEnglishWordPort = FakeAlbanianTranslationOutputAdapter(),
+            getWordSuggestionsPort = FakeWordSuggestionsOutputAdapter(),
         )
 
-        val result = useCase.getWorldTranslationSuggestions(Word("work"))
+        val result = useCase.getWorldTranslationSuggestions(word)
 
         assertEquals(
-            listOf(
-                Translation("punë"),
-                Translation("pufe"),
-                Translation("pure"),
-                Translation("arne"),
-                Translation("buçe")
-            ),
+            expectedTranslations,
             result
+        )
+    }
+
+    companion object {
+        @Suppress("unused")
+        @JvmStatic
+        private fun provideArguments() = listOf(
+            Arguments.of(
+                Word("work"),
+                listOf(
+                    Translation("punë"),
+                    Translation("pufe"),
+                    Translation("pure"),
+                    Translation("arne"),
+                    Translation("buçe")
+                )
+            ),
+            Arguments.of(
+                Word("gift"),
+                listOf(
+                    Translation("dhuratë"),
+                    Translation("dhurëti"),
+                )
+            )
         )
     }
 }
