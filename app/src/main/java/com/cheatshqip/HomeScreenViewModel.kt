@@ -12,19 +12,22 @@ class HomeScreenViewModel(
     private val coroutineDispatcher: CoroutineDispatcher,
     private val getWordTranslationSuggestionsUseCase: GetWordTranslationSuggestionsUseCase
 ) : ViewModel() {
-    val homeScreenUIState = mutableStateOf<HomeScreenUIState>(HomeScreenUIState.Init())
+    val homeScreenUIState = mutableStateOf<HomeScreenUIState>(HomeScreenUIState.WithSearch(""))
 
     fun onSearchChanged(search: String) {
-        homeScreenUIState.value = HomeScreenUIState.Init(search)
+        homeScreenUIState.value = homeScreenUIState.value.onSearchChanged(search)
     }
 
     fun onSearch() = viewModelScope.launch(coroutineDispatcher) {
-        val state = homeScreenUIState.value as HomeScreenUIState.Init
+        val search = homeScreenUIState.value.search
 
         getWordTranslationSuggestionsUseCase
-            .getWorldTranslationSuggestions(Word(state.search))
+            .getWorldTranslationSuggestions(Word(search))
             .let { translations ->
-                homeScreenUIState.value = HomeScreenUIState.Success(translations)
+                homeScreenUIState.value = HomeScreenUIState.WithSearchAndWithTranslationSuggestions(
+                    search,
+                    translations
+                )
             }
     }
 }
