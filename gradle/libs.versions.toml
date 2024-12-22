@@ -4,6 +4,7 @@ agpVersion = "8.7.3"
 composeBomVersion = "2024.12.01"
 coreKtxVersion = "1.15.0"
 coroutinesVersion = "1.9.0"
+detektVersion = "1.23.7"
 espressoCoreVersion = "3.6.1"
 junitBomVersion = "5.11.3"
 junitVersion = "1.2.1"
@@ -50,6 +51,7 @@ retrofit-converter-kotlinx-serialization = { module = "com.squareup.retrofit2:co
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agpVersion" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detektVersion" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVersion" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }

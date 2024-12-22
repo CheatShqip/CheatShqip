@@ -6,6 +6,7 @@ import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 
@@ -38,5 +39,8 @@ class MlKitTranslator: GetAlbanianTranslationOfEnglishWordPort {
             .addOnFailureListener { exception ->
                 throw (exception)
             }
+        awaitClose {
+            // does nothing as we can't cancel the mlkit tasks
+        }
     }
 }
