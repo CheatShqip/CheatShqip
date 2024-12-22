@@ -18,7 +18,7 @@ class TranslationService(
             .getAlbanianTranslationOfEnglishWord(englishWord)
 
         return getWordSuggestionsPort
-            .getWordSuggestionsOf(albanianTranslation)
+            .getWordSuggestionsOf(albanianTranslation.normalize())
             .take(MAX_NUMBER_OF_RESULTS)
     }
 }

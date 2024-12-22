@@ -6,7 +6,7 @@ import com.cheatshqip.domain.Word
 
 class FakeWordSuggestionsOutputAdapter : GetWordSuggestionsPort {
     override suspend fun getWordSuggestionsOf(word: Word): List<Translation> {
-        if (word.value == "punë") {
+        if (word.value == "pune") {
             return listOf(
                 Translation("punë"),
                 Translation("pufe"),
@@ -15,7 +15,7 @@ class FakeWordSuggestionsOutputAdapter : GetWordSuggestionsPort {
                 Translation("buçe")
             )
         }
-        if (word.value == "dhuratë") {
+        if (word.value == "dhurate") {
             return listOf(
                 Translation("dhuratë"),
                 Translation("dhurëti"),

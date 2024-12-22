@@ -71,6 +71,40 @@ class GetWordTranslationSuggestionsUseCaseTest {
         )
     }
 
+    @Test
+    fun `given some characters, they should be normalized to work`() = runTest {
+        val useCase: GetWordTranslationSuggestionsUseCase = TranslationService(
+            getAlbanianTranslationOfEnglishWordPort = FakeAlbanianTranslationOutputAdapter(),
+            getWordSuggestionsPort = object : GetWordSuggestionsPort {
+                override suspend fun getWordSuggestionsOf(word: Word): List<Translation> {
+                    if (word.value == "pune") {
+                        return listOf(
+                            Translation("punë"),
+                            Translation("pufe"),
+                            Translation("pure"),
+                            Translation("arne"),
+                            Translation("buçe"),
+                        )
+                    }
+                    throw IllegalArgumentException("No translation found for ${word.value}")
+                }
+            }
+        )
+
+        val result = useCase.getWorldTranslationSuggestions(Word("work"))
+
+        assertEquals(
+            listOf(
+                Translation("punë"),
+                Translation("pufe"),
+                Translation("pure"),
+                Translation("arne"),
+                Translation("buçe"),
+            ),
+            result
+        )
+    }
+
     companion object {
         @Suppress("unused")
         @JvmStatic
