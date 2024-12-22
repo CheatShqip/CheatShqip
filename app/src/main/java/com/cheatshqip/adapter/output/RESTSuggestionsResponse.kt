@@ -4,7 +4,7 @@ import com.cheatshqip.domain.Translation
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RESTTranslationResponse(
+data class RESTSuggestionsResponse(
     val searchedWord: String,
     val exactMatches: List<RESTExactMatch>,
     val fuzzyMatches: List<RESTFuzzyMatch>,
@@ -15,6 +15,5 @@ data class RESTTranslationResponse(
             addAll(exactMatches.map(RESTExactMatch::word))
             addAll(fuzzyMatches.map(RESTFuzzyMatch::word))
         }.map(::Translation)
-            .take(5)
     }
 }

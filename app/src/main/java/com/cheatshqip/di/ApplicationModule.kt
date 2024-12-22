@@ -3,6 +3,7 @@ package com.cheatshqip.di
 import com.cheatshqip.BuildConfig
 import com.cheatshqip.HomeScreenViewModel
 import com.cheatshqip.adapter.output.ApiBaseURL
+import com.cheatshqip.adapter.output.MlKitTranslator
 import com.cheatshqip.adapter.output.RESTWordSuggestionsOutputAdapter
 import com.cheatshqip.adapter.output.ShqipRESTService
 import com.cheatshqip.application.TranslationService
@@ -73,7 +74,7 @@ val applicationModule = module {
     }
 
     single<GetAlbanianTranslationOfEnglishWordPort> {
-        TODO()
+        MlKitTranslator()
     }
 
     viewModelOf(::HomeScreenViewModel)

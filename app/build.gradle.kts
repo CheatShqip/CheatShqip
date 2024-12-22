@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.kotlin.serialization.json)
+    implementation(libs.mlkit.translate)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.kotlinx.serialization)
 

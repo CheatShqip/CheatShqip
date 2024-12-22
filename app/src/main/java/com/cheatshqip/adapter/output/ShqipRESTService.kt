@@ -5,5 +5,5 @@ import retrofit2.http.Path
 
 interface ShqipRESTService {
     @GET("define/{word}")
-    suspend fun define(@Path("word") word: String): RESTTranslationResponse
+    suspend fun define(@Path("word") word: String): RESTSuggestionsResponse
 }

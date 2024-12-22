@@ -1,7 +1,9 @@
 package com.cheatshqip.integration
 
+import com.cheatshqip.FakeAlbanianTranslationOutputAdapter
 import com.cheatshqip.adapter.output.ApiBaseURL
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
+import com.cheatshqip.application.port.output.GetAlbanianTranslationOfEnglishWordPort
 import com.cheatshqip.di.applicationModule
 import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
@@ -20,7 +22,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-class GetWordTranslationSuggestionsUseCaseIntegrationTest: KoinTest {
+class GetWordTranslationSuggestionsUseCaseRESTIntegrationTest: KoinTest {
     private val useCase : GetWordTranslationSuggestionsUseCase by inject()
     private val mockWebServer = MockWebServer()
 
@@ -29,7 +31,8 @@ class GetWordTranslationSuggestionsUseCaseIntegrationTest: KoinTest {
         mockWebServer.start()
         val baseURL = mockWebServer.url("/").toString()
         val baseURLModule = module {
-            single { ApiBaseURL(baseURL) }
+            single<ApiBaseURL> { ApiBaseURL(baseURL) }
+            single<GetAlbanianTranslationOfEnglishWordPort> { FakeAlbanianTranslationOutputAdapter() }
         }
         startKoin {
             modules(applicationModule, baseURLModule)

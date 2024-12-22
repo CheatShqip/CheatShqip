@@ -5,6 +5,9 @@ import com.cheatshqip.application.port.output.GetAlbanianTranslationOfEnglishWor
 import com.cheatshqip.application.port.output.GetWordSuggestionsPort
 import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
+import kotlin.collections.take
+
+private const val MAX_NUMBER_OF_RESULTS = 5
 
 class TranslationService(
     private val getAlbanianTranslationOfEnglishWordPort: GetAlbanianTranslationOfEnglishWordPort,
@@ -14,6 +17,8 @@ class TranslationService(
         val albanianTranslation = getAlbanianTranslationOfEnglishWordPort
             .getAlbanianTranslationOfEnglishWord(englishWord)
 
-        return getWordSuggestionsPort.getWordSuggestionsOf(albanianTranslation)
+        return getWordSuggestionsPort
+            .getWordSuggestionsOf(albanianTranslation)
+            .take(MAX_NUMBER_OF_RESULTS)
     }
 }
