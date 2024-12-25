@@ -1,5 +1,6 @@
 package com.cheatshqip
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,10 +11,9 @@ import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(
     private val coroutineDispatcher: CoroutineDispatcher,
-    private val getWordTranslationSuggestionsUseCase: GetWordTranslationSuggestionsUseCase
+    private val getWordTranslationSuggestionsUseCase: GetWordTranslationSuggestionsUseCase,
+    val homeScreenUIState: MutableState<HomeScreenUIState> = mutableStateOf(HomeScreenUIState.WithSearch(""))
 ) : ViewModel() {
-    val homeScreenUIState = mutableStateOf<HomeScreenUIState>(HomeScreenUIState.WithSearch(""))
-
     fun onSearchChanged(search: String) {
         homeScreenUIState.value = homeScreenUIState.value.onSearchChanged(search)
     }
