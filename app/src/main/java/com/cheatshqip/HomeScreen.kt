@@ -2,6 +2,8 @@ package com.cheatshqip
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,15 +19,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
 import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
@@ -36,7 +39,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    innerPadding: PaddingValues = PaddingValues(0.dp),
+    innerPadding: PaddingValues = PaddingValues(spacing().NONE),
     homeScreenViewModel: HomeScreenViewModel = koinViewModel()
 ) {
     Column(
@@ -69,7 +72,12 @@ fun HomeScreen(
 
                 for (translation in homeScreenUIState.translationSuggestions) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth()
+                            .clickable(
+                                onClick = { /*onTranslationClicked(translation)*/ },
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = ripple()
+                            ),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {

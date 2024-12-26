@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.dp
 import com.cheatshqip.R
 
 data class Spacing(private val context: Context) {
+    val NONE = 0.dp
     val XSMALL = context.resources.getDimension(R.dimen.spacing_x_small).dp
     val SMALL = context.resources.getDimension(R.dimen.spacing_small).dp
     val MEDIUM = context.resources.getDimension(R.dimen.spacing_medium).dp
