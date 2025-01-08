@@ -1,3 +1,4 @@
 package com.cheatshqip.domain
 
-data class Translation(val value: String)
+@JvmInline
+value class Translation(val value: String)

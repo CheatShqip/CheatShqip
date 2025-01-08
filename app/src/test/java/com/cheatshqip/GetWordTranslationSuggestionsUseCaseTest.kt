@@ -17,7 +17,7 @@ class GetWordTranslationSuggestionsUseCaseTest {
     @MethodSource("provideArguments")
     @ParameterizedTest
     fun `given some characters, should propose translations`(
-        word: Word,
+        word: String,
         expectedTranslations: List<Translation>
     ) = runTest {
         val useCase: GetWordTranslationSuggestionsUseCase = TranslationService(
@@ -25,7 +25,7 @@ class GetWordTranslationSuggestionsUseCaseTest {
             getWordSuggestionsPort = FakeWordSuggestionsOutputAdapter(),
         )
 
-        val result = useCase.getWorldTranslationSuggestions(word)
+        val result = useCase.getWorldTranslationSuggestions(Word(word))
 
         assertEquals(
             expectedTranslations,
@@ -110,7 +110,7 @@ class GetWordTranslationSuggestionsUseCaseTest {
         @JvmStatic
         private fun provideArguments() = listOf(
             Arguments.of(
-                Word("work"),
+                "work",
                 listOf(
                     Translation("punë"),
                     Translation("pufe"),
@@ -120,7 +120,7 @@ class GetWordTranslationSuggestionsUseCaseTest {
                 )
             ),
             Arguments.of(
-                Word("gift"),
+                "gift",
                 listOf(
                     Translation("dhuratë"),
                     Translation("dhurëti"),

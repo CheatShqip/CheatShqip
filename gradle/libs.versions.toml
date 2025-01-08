@@ -3,15 +3,14 @@ activityComposeVersion = "1.9.3"
 agpVersion = "8.7.3"
 composeBomVersion = "2024.12.01"
 coreKtxVersion = "1.15.0"
-coroutinesVersion = "1.9.0"
+coroutinesVersion = "1.10.1"
 detektVersion = "1.23.7"
 espressoCoreVersion = "3.6.1"
-junitBomVersion = "5.11.3"
+junitBomVersion = "5.11.4"
 junitVersion = "1.2.1"
-koinVersion = "4.0.0"
+koinVersion = "4.0.1"
 kotlinVersion = "2.1.0"
 kotlinSerializationJsonVersion = "1.8.0-RC"
-ktorVersion = "3.0.1"
 mlkitTranslateVersion = "17.0.3"
 navigationVersion = "2.8.5"
 lifecycleRuntimeKtxVersion = "2.8.7"
@@ -44,10 +43,10 @@ koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = 
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koinVersion" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinVersion" }
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationJsonVersion" }
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorVersion" }
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorVersion" }
 mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkitTranslateVersion" }
-okhttp3-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttpVersion" }
+okhttp3-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttpVersion" }
+okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp" }
+okhttp3-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
 retrofit-converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofitVersion" }
 
