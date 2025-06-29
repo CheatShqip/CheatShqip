@@ -3,7 +3,7 @@ package com.cheatshqip
 import com.cheatshqip.application.port.output.GetAlbanianTranslationOfEnglishWordPort
 import com.cheatshqip.domain.Word
 
-class FakeAlbanianTranslationOutputAdapter: GetAlbanianTranslationOfEnglishWordPort {
+class FakeAlbanianTranslationOutputAdapter : GetAlbanianTranslationOfEnglishWordPort {
     override suspend fun getAlbanianTranslationOfEnglishWord(englishWord: Word): Word {
         if (englishWord.value == "work") {
             return Word("punë")

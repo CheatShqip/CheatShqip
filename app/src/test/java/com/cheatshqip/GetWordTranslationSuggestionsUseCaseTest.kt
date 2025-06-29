@@ -13,14 +13,14 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
 class GetWordTranslationSuggestionsUseCaseTest {
-
     @MethodSource("provideArguments")
     @ParameterizedTest
     fun `given some characters, should propose translations`(
         word: String,
         expectedTranslations: List<Translation>
     ) = runTest {
-        val useCase: GetWordTranslationSuggestionsUseCase = TranslationService(
+        val useCase: GetWordTranslationSuggestionsUseCase =
+            TranslationService(
             getAlbanianTranslationOfEnglishWordPort = FakeAlbanianTranslationOutputAdapter(),
             getWordSuggestionsPort = FakeWordSuggestionsOutputAdapter(),
         )
@@ -34,10 +34,13 @@ class GetWordTranslationSuggestionsUseCaseTest {
     }
 
     @Test
-    fun `given some characters, the maximum number of proposed translations is 5`() = runTest {
-        val useCase: GetWordTranslationSuggestionsUseCase = TranslationService(
+    fun `given some characters, the maximum number of proposed translations is 5`() =
+        runTest {
+        val useCase: GetWordTranslationSuggestionsUseCase =
+            TranslationService(
             getAlbanianTranslationOfEnglishWordPort = FakeAlbanianTranslationOutputAdapter(),
-            getWordSuggestionsPort = object : GetWordSuggestionsPort {
+            getWordSuggestionsPort =
+                object : GetWordSuggestionsPort {
                 override suspend fun getWordSuggestionsOf(word: Word): List<Translation> {
                     return listOf(
                         Translation("punë"),
@@ -53,7 +56,6 @@ class GetWordTranslationSuggestionsUseCaseTest {
                         Translation("pufut"),
                     )
                 }
-
             }
         )
 
@@ -72,10 +74,13 @@ class GetWordTranslationSuggestionsUseCaseTest {
     }
 
     @Test
-    fun `given some characters, they should be normalized to work`() = runTest {
-        val useCase: GetWordTranslationSuggestionsUseCase = TranslationService(
+    fun `given some characters, they should be normalized to work`() =
+        runTest {
+        val useCase: GetWordTranslationSuggestionsUseCase =
+            TranslationService(
             getAlbanianTranslationOfEnglishWordPort = FakeAlbanianTranslationOutputAdapter(),
-            getWordSuggestionsPort = object : GetWordSuggestionsPort {
+            getWordSuggestionsPort =
+                object : GetWordSuggestionsPort {
                 override suspend fun getWordSuggestionsOf(word: Word): List<Translation> {
                     if (word.value == "pune") {
                         return listOf(
@@ -108,7 +113,8 @@ class GetWordTranslationSuggestionsUseCaseTest {
     companion object {
         @Suppress("unused")
         @JvmStatic
-        private fun provideArguments() = listOf(
+        private fun provideArguments() =
+            listOf(
             Arguments.of(
                 "work",
                 listOf(

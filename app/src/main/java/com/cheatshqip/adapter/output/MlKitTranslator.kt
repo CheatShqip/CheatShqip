@@ -10,20 +10,23 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 
-class MlKitTranslator: GetAlbanianTranslationOfEnglishWordPort {
+class MlKitTranslator : GetAlbanianTranslationOfEnglishWordPort {
     override suspend fun getAlbanianTranslationOfEnglishWord(englishWord: Word): Word {
         return translate(englishWord)
             .first()
     }
 
-    private fun translate(englishWord: Word) = callbackFlow<Word> {
-        val options = TranslatorOptions.Builder()
+    private fun translate(englishWord: Word) =
+        callbackFlow<Word> {
+        val options =
+            TranslatorOptions.Builder()
             .setSourceLanguage(TranslateLanguage.ENGLISH)
             .setTargetLanguage(TranslateLanguage.ALBANIAN)
             .build()
         val englishAlbanianTranslator = Translation.getClient(options)
 
-        var conditions = DownloadConditions.Builder()
+        var conditions =
+            DownloadConditions.Builder()
             .build()
 
         englishAlbanianTranslator.downloadModelIfNeeded(conditions)

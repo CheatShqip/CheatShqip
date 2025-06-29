@@ -4,9 +4,8 @@ import com.cheatshqip.application.AlbanianWordService
 import com.cheatshqip.application.port.input.GetAlbanianWordDetailUseCase
 import com.cheatshqip.domain.AblativeDeclension
 import com.cheatshqip.domain.AccusativeDeclension
-import com.cheatshqip.domain.AlbanianWordDetail
-import com.cheatshqip.domain.DativeDeclension
 import com.cheatshqip.domain.AlbanianDeclensions
+import com.cheatshqip.domain.DativeDeclension
 import com.cheatshqip.domain.GenitiveDeclension
 import com.cheatshqip.domain.GrammaticalDisplay
 import com.cheatshqip.domain.NominativeDeclension
@@ -20,9 +19,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class GetAlbanianWordDetailUseCaseTest {
-
     @Test
-    fun `should get albanian word singular definite declensions`() = runTest {
+    fun `should get albanian word singular definite declensions`() =
+        runTest {
         val useCase: GetAlbanianWordDetailUseCase = AlbanianWordService()
 
         val result = useCase.getAlbanianWordDetail(Word("dhuratë"))

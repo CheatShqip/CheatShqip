@@ -22,7 +22,8 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     topBar = {
                         TopAppBar(
-                            colors = TopAppBarDefaults.topAppBarColors(
+                            colors =
+                                TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 titleContentColor = MaterialTheme.colorScheme.primary,
                             ),
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                 ) { innerPadding ->
-                    HomeScreen(innerPadding)
+                    HomeScreenRoute(innerPadding)
                 }
             }
         }

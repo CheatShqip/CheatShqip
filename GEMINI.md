@@ -1,0 +1,1 @@
+You have to read the rules in the .windsurfrules file

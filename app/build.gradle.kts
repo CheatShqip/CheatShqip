@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.cheatshqip"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.cheatshqip"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 2
         versionName = "0.0.1"
 
@@ -54,8 +54,8 @@ tasks.withType<Test> {
 
 detekt {
     buildUponDefaultConfig = true
-    allRules = false
-    autoCorrect = false
+    allRules = true
+    autoCorrect = true
     config.setFrom("$rootDir/detekt-config.yml")
 }
 
@@ -96,4 +96,6 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    detektPlugins(libs.detekt.formatting)
 }

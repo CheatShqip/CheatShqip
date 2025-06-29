@@ -17,12 +17,14 @@ data class AlbanianWordDetail private constructor(
             return AlbanianWordDetail(
                 word = Word("dhuratë"),
                 kind = WordKind.Name,
-                grammaticalDisplay = GrammaticalDisplay(
+                grammaticalDisplay =
+                    GrammaticalDisplay(
                     singular = SingularGrammaticalDisplay("dhurát/ë,-a"),
                     plural = PluralGrammaticalDisplay("dhurát/a,-at"),
                 ),
                 gender = WordGender.Feminine,
-                singularDefiniteDeclensions = AlbanianDeclensions(
+                singularDefiniteDeclensions =
+                    AlbanianDeclensions(
                     nominative = NominativeDeclension("dhurata"),
                     genitive = GenitiveDeclension("dhurëtës"),
                     dative = DativeDeclension("dhuratës"),

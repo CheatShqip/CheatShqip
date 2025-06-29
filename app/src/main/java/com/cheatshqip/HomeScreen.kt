@@ -21,29 +21,51 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
 import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
 import com.cheatshqip.ui.theme.CheatShqipTheme
 import com.cheatshqip.ui.theme.spacing
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreen(
+fun HomeScreenRoute(
     innerPadding: PaddingValues = PaddingValues(spacing().NONE),
     homeScreenViewModel: HomeScreenViewModel = koinViewModel()
 ) {
+    val homeScreenUIState: HomeScreenUIState by homeScreenViewModel.state.collectAsStateWithLifecycle()
+
+    HomeScreen(
+        homeScreenUIState,
+        innerPadding,
+        homeScreenViewModel::onSearch
+    )
+}
+
+@Composable
+private fun HomeScreen(
+    homeScreenUIState: HomeScreenUIState,
+    innerPadding: PaddingValues,
+    onSearch: (String) -> Unit = {},
+) {
+    var searchInput by remember { mutableStateOf("") }
+
     Column(
-        modifier = Modifier
+        modifier =
+            Modifier
             .padding(innerPadding)
             .padding(spacing().SMALL),
         verticalArrangement = Arrangement.spacedBy(spacing().SMALL)
@@ -52,50 +74,55 @@ fun HomeScreen(
 
         TextField(
             modifier = containerModifier,
-            value = homeScreenViewModel.homeScreenUIState.value.search,
-            onValueChange = { homeScreenViewModel.onSearchChanged(it) },
+            value = searchInput,
+            onValueChange = { searchInput = it },
             label = { Text("Word") }
         )
         Button(
             modifier = containerModifier,
-            onClick = { homeScreenViewModel.onSearch() }
+            onClick = { onSearch(searchInput) }
         ) {
             Text("Translate")
         }
 
-        when (val homeScreenUIState = homeScreenViewModel.homeScreenUIState.value) {
-            is HomeScreenUIState.WithSearchAndWithTranslationSuggestions -> {
-                HorizontalDivider(
-                    modifier = containerModifier
-                        .background(MaterialTheme.colorScheme.primary)
-                )
+        if (homeScreenUIState is HomeScreenUIState.WithTranslationSuggestions) {
+            TranslationSuggestions(containerModifier, homeScreenUIState.translationSuggestions)
+        }
+    }
+}
 
-                for (translation in homeScreenUIState.translationSuggestions) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .clickable(
-                                onClick = { /*onTranslationClicked(translation)*/ },
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = ripple()
-                            ),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = translation.value
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_arrow_right),
-                            contentDescription = "Arrow",
-                            colorFilter = tint(MaterialTheme.colorScheme.primary)
-                        )
-                    }
-                }
-            }
+@Composable
+private fun TranslationSuggestions(
+    modifier: Modifier,
+    translationSuggestions: List<Translation>
+) {
+    HorizontalDivider(
+        modifier =
+            modifier
+            .background(MaterialTheme.colorScheme.primary)
+    )
 
-            else -> {
-                // do nothing
-            }
+    for (translation in translationSuggestions) {
+        Row(
+            modifier =
+                Modifier
+                .fillMaxWidth()
+                .clickable(
+                    onClick = { /*onTranslationClicked(translation)*/ },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple()
+                ),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = translation.value
+            )
+            Image(
+                painter = painterResource(id = R.drawable.ic_arrow_right),
+                contentDescription = "Arrow",
+                colorFilter = tint(MaterialTheme.colorScheme.primary)
+            )
         }
     }
 }
@@ -108,7 +135,8 @@ fun HomeScreenPreview() {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(
+                    colors =
+                        TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.primary,
                     ),
@@ -118,7 +146,7 @@ fun HomeScreenPreview() {
                 )
             },
         ) { innerPadding ->
-            HomeScreen(
+            HomeScreenRoute(
                 innerPadding = innerPadding,
                 homeScreenViewModel = homeScreenViewModelWithSearchAndTranslations()
             )
@@ -128,21 +156,17 @@ fun HomeScreenPreview() {
 // TODO : 2. Add a preview for HomeScreen with error state
 // TODO : 3. Add a preview for HomeScreen with empty state
 
-private fun homeScreenViewModelWithSearchAndTranslations() = HomeScreenViewModel(
+private fun homeScreenViewModelWithSearchAndTranslations() =
+    HomeScreenViewModel(
     coroutineDispatcher = Dispatchers.Default,
-    getWordTranslationSuggestionsUseCase = object : GetWordTranslationSuggestionsUseCase {
+    getWordTranslationSuggestionsUseCase =
+        object : GetWordTranslationSuggestionsUseCase {
         override suspend fun getWorldTranslationSuggestions(word: Word): List<Translation> {
             return listOf(
-                Translation("test")
+                Translation("test"),
+                Translation("test2")
             )
         }
     },
-    homeScreenUIState = mutableStateOf(
-        HomeScreenUIState.WithSearchAndWithTranslationSuggestions(
-            search = "test",
-            translationSuggestions = listOf(
-                Translation("test"), Translation("test2")
-            )
-        )
-    )
+    search = MutableStateFlow("test"),
 )

@@ -1,10 +1,10 @@
 [versions]
-activityComposeVersion = "1.9.3"
-agpVersion = "8.7.3"
-composeBomVersion = "2024.12.01"
-coreKtxVersion = "1.15.0"
+activityComposeVersion = "1.10.1"
+agpVersion = "8.11.0"
+composeBomVersion = "2025.06.00"
+coreKtxVersion = "1.16.0"
 coroutinesVersion = "1.10.1"
-detektVersion = "1.23.7"
+detektVersion = "1.23.8"
 espressoCoreVersion = "3.6.1"
 junitBomVersion = "5.11.4"
 junitVersion = "1.2.1"
@@ -12,8 +12,8 @@ koinVersion = "4.0.1"
 kotlinVersion = "2.1.0"
 kotlinSerializationJsonVersion = "1.8.0-RC"
 mlkitTranslateVersion = "17.0.3"
-navigationVersion = "2.8.5"
-lifecycleRuntimeKtxVersion = "2.8.7"
+navigationVersion = "2.9.0"
+lifecycleRuntimeKtxVersion = "2.9.1"
 okhttpVersion = "4.12.0"
 retrofitVersion = "2.11.0"
 
@@ -35,6 +35,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutinesVersion" }
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesVersion" }
+detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detektVersion" }
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junitBomVersion" }
 junit-juniper = { group = "org.junit.jupiter", name = "junit-jupiter" }
 junit-juniper-params = { group = "org.junit.jupiter", name = "junit-jupiter-params" }

@@ -1,0 +1,9 @@
+{
+  "rules": [
+    "Shared rules",
+    {
+      "filePathMatches": "**/*.kt",
+      "rulesPaths": ".windsurfrules"
+    }
+  ]
+}

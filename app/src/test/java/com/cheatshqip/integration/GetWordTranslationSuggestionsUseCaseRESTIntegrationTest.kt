@@ -22,15 +22,16 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-class GetWordTranslationSuggestionsUseCaseRESTIntegrationTest: KoinTest {
-    private val useCase : GetWordTranslationSuggestionsUseCase by inject()
+class GetWordTranslationSuggestionsUseCaseRESTIntegrationTest : KoinTest {
+    private val useCase: GetWordTranslationSuggestionsUseCase by inject()
     private val mockWebServer = MockWebServer()
 
     @BeforeEach
     fun setUp() {
         mockWebServer.start()
         val baseURL = mockWebServer.url("/").toString()
-        val baseURLModule = module {
+        val baseURLModule =
+            module {
             single<ApiBaseURL> { ApiBaseURL(baseURL) }
             single<GetAlbanianTranslationOfEnglishWordPort> { FakeAlbanianTranslationOutputAdapter() }
         }
@@ -45,13 +46,16 @@ class GetWordTranslationSuggestionsUseCaseRESTIntegrationTest: KoinTest {
     }
 
     @Test
-    fun `given some characters, should propose translations`() = runTest {
+    fun `given some characters, should propose translations`() =
+        runTest {
         val jsonResponse = PUNE_JSON_RESPONSE
 
-        mockWebServer.dispatcher = object : Dispatcher() {
+        mockWebServer.dispatcher =
+            object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse {
                 return when (request.path) {
-                    "/define/pune" -> MockResponse()
+                    "/define/pune" ->
+                        MockResponse()
                         .setResponseCode(200)
                         .setBody(jsonResponse)
                         .addHeader("Content-Type", "application/json")
@@ -74,6 +78,4 @@ class GetWordTranslationSuggestionsUseCaseRESTIntegrationTest: KoinTest {
             result
         )
     }
-
 }
-
