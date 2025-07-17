@@ -55,7 +55,7 @@ tasks.withType<Test> {
 detekt {
     buildUponDefaultConfig = true
     allRules = true
-    autoCorrect = true
+    autoCorrect = false
     config.setFrom("$rootDir/detekt-config.yml")
 }
 
