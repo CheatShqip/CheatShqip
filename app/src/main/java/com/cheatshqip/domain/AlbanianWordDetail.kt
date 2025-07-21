@@ -1,6 +1,6 @@
 package com.cheatshqip.domain
 
-data class AlbanianWordDetail private constructor(
+class AlbanianWordDetail private constructor(
     val word: Word,
     val kind: WordKind,
     val gender: WordGender,

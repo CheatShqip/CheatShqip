@@ -13,10 +13,10 @@ class TranslationService(
     private val getAlbanianTranslationOfEnglishWordPort: GetAlbanianTranslationOfEnglishWordPort,
     private val getWordSuggestionsPort: GetWordSuggestionsPort,
 ) : GetWordTranslationSuggestionsUseCase {
-    override suspend fun getWorldTranslationSuggestions(englishWord: Word): List<Translation> {
+    override suspend fun getWorldTranslationSuggestions(word: Word): List<Translation> {
         val albanianTranslation =
             getAlbanianTranslationOfEnglishWordPort
-            .getAlbanianTranslationOfEnglishWord(englishWord)
+            .getAlbanianTranslationOfEnglishWord(word)
 
         return getWordSuggestionsPort
             .getWordSuggestionsOf(albanianTranslation.normalize())

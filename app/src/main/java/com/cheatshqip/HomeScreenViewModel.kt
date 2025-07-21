@@ -16,7 +16,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeScreenViewModel(
     private val coroutineDispatcher: CoroutineDispatcher,
     private val getWordTranslationSuggestionsUseCase: GetWordTranslationSuggestionsUseCase,
@@ -28,11 +30,11 @@ class HomeScreenViewModel(
 
     val state = search.flatMapLatest { searchQuery ->
         if (searchQuery.isBlank()) {
-            return@flatMapLatest flowOf(HomeScreenUIState.Initial)
+            flowOf(HomeScreenUIState.Initial)
+        } else {
+            worldTranslationSuggestions
+                .map { suggestions -> HomeScreenUIState.WithTranslationSuggestions(suggestions) }
         }
-
-        worldTranslationSuggestions
-            .map { suggestions -> HomeScreenUIState.WithTranslationSuggestions(suggestions) }
     }.stateIn(
         scope = viewModelScope,
         initialValue = HomeScreenUIState.Initial,
