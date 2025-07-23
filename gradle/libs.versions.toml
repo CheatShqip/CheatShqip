@@ -57,6 +57,7 @@ retrofit-converter-kotlinx-serialization = { module = "com.squareup.retrofit2:co
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agpVersion" }
 android-library = { id = "com.android.library", version.ref = "agpVersion" }
+cheatshqip-module-android-presentation = { id = "com.cheatshqip.module.android.presentation" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detektVersion" }
 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }

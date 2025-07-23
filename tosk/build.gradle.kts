@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.cheatshqip.module.android.presentation)
     alias(libs.plugins.kotlin.android)
-    id("com.cheatshqip.module.android.presentation")
 }
 
 android {
