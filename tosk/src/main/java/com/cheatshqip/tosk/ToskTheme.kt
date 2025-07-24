@@ -6,6 +6,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalInspectionMode
+import com.cheatshqip.tosk.tokens.ToskColors
 import com.cheatshqip.tosk.tokens.ToskTypography
 
 private val LocalToskTypography = staticCompositionLocalOf<ToskTypography> {
