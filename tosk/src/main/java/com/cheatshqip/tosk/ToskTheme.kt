@@ -6,69 +6,50 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.text.font.FontFamily
+import com.cheatshqip.tosk.tokens.ToskTypography
 
-private val LocalBpkTypography = staticCompositionLocalOf<BpkTypography> {
-    error("Wrap you content with BpkTheme {} to get access to Backpack typography")
+private val LocalToskTypography = staticCompositionLocalOf<ToskTypography> {
+    error("Wrap you content with ToskTheme {} to get access to Backpack typography")
 }
-private val LocalBpkColors = staticCompositionLocalOf<BpkColors> {
-    error("Wrap you content with BpkTheme {} to get access to Backpack colors")
-}
-private val LocalBpkShapes = staticCompositionLocalOf<BpkShapes> {
-    error("Wrap you content with BpkTheme {} to get access to Backpack shapes")
+private val LocalToskColors = staticCompositionLocalOf<ToskColors> {
+    error("Wrap you content with ToskTheme {} to get access to Backpack colors")
 }
 
 @Composable
-fun BpkTheme(
-    fontFamily: FontFamily = FontFamily.SansSerif,
+fun ToskTheme(
     content: @Composable () -> Unit,
 ) {
-    val typography = BpkTypography(defaultFontFamily = fontFamily)
-    val colors = if (isSystemInDarkTheme()) BpkColors.dark() else BpkColors.light()
-    val shapes = BpkShapes()
+    val typography = ToskTypography.default()
+    val colors = if (isSystemInDarkTheme()) ToskColors.dark() else ToskColors.light()
 
     CompositionLocalProvider(
-        LocalBpkTypography provides typography,
-        LocalBpkColors provides colors,
-        LocalBpkShapes provides shapes,
-        LocalContentColor provides colors.textPrimary,
-        LocalTextStyle provides typography.bodyDefault,
+        LocalToskTypography provides typography,
+        LocalToskColors provides colors,
         content = content,
     )
 }
 
-object BpkTheme {
+object ToskTheme {
 
-    val typography: BpkTypography
+    val typography: ToskTypography
         @Composable
         @ReadOnlyComposable
         get() = if (LocalInspectionMode.current) {
             // when in preview mode return a default typography object to ensure previews work
             // without wrapping it in another composable
-            BpkTypography(defaultFontFamily = FontFamily.SansSerif)
+            ToskTypography.default()
         } else {
-            LocalBpkTypography.current
+            LocalToskTypography.current
         }
 
-    val colors: BpkColors
+    val colors: ToskColors
         @Composable
         @ReadOnlyComposable
         get() = if (LocalInspectionMode.current) {
             // when in preview mode return a default colour object to ensure previews work
             // without wrapping it in another composable
-            if (isSystemInDarkTheme()) BpkColors.dark() else BpkColors.light()
+            if (isSystemInDarkTheme()) ToskColors.dark() else ToskColors.light()
         } else {
-            LocalBpkColors.current
-        }
-
-    val shapes: BpkShapes
-        @Composable
-        @ReadOnlyComposable
-        get() = if (LocalInspectionMode.current) {
-            // when in preview mode return a default typography object to ensure previews work
-            // without wrapping it in another composable
-            BpkShapes()
-        } else {
-            LocalBpkShapes.current
+            LocalToskColors.current
         }
 }
