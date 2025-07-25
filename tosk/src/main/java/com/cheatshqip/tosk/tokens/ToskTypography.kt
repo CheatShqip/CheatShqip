@@ -4,7 +4,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 
-class ToskTypography internal constructor(
+val defaultFontFamily = FontFamily.SansSerif
+
+sealed class ToskTypography(
     val body: TextStyle,
     val caption: TextStyle,
     val footnote: TextStyle,
@@ -23,137 +25,130 @@ class ToskTypography internal constructor(
     val label3: TextStyle,
     val subheading: TextStyle,
 ) {
-    companion object {
-        fun default(): ToskTypography {
-            val defaultFontFamily = FontFamily.SansSerif
-
-            return ToskTypography(
-                body = TextStyle(
-                    fontWeight = FontWeight.Normal,
-                    fontSize = ToskFontSize.M,
-                    lineHeight = ToskLineHeight.M,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                caption = TextStyle(
-                    fontWeight = FontWeight.Normal,
-                    fontSize = ToskFontSize.XS,
-                    lineHeight = ToskLineHeight.XS,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                footnote = TextStyle(
-                    fontWeight = FontWeight.Normal,
-                    fontSize = ToskFontSize.S,
-                    lineHeight = ToskLineHeight.S,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                heading1 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.`3XL`,
-                    lineHeight = ToskLineHeight.`3XL`,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                heading2 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.XXL,
-                    lineHeight = ToskLineHeight.XXL,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                heading3 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.XL,
-                    lineHeight = ToskLineHeight.XL,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                heading4 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.L,
-                    lineHeight = ToskLineHeight.L,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                heading5 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.M,
-                    lineHeight = ToskLineHeight.M,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                hero1 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.`8xl`,
-                    lineHeight = ToskLineHeight.`7XL`,
-                    letterSpacing = ToskLetterSpacing.Tight,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                hero2 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.`7xl`,
-                    lineHeight = ToskLineHeight.`6XL`,
-                    letterSpacing = ToskLetterSpacing.Tight,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                hero3 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.`6xl`,
-                    lineHeight = ToskLineHeight.`5XL`,
-                    letterSpacing = ToskLetterSpacing.Tight,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                hero4 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.`4XL`,
-                    lineHeight = ToskLineHeight.`4XL`,
-                    letterSpacing = ToskLetterSpacing.Tight,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                hero5 = TextStyle(
-                    fontWeight = FontWeight.Black,
-                    fontSize = ToskFontSize.`5XL`,
-                    lineHeight = ToskLineHeight.`3XL`,
-                    letterSpacing = ToskLetterSpacing.Tight,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                label1 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.M,
-                    lineHeight = ToskLineHeight.M,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                label2 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.S,
-                    lineHeight = ToskLineHeight.S,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                label3 = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = ToskFontSize.XS,
-                    lineHeight = ToskLineHeight.XS,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-                subheading = TextStyle(
-                    fontWeight = FontWeight.Normal,
-                    fontSize = ToskFontSize.XL,
-                    lineHeight = ToskLineHeight.L,
-                    fontFamily = defaultFontFamily,
-                    lineHeightStyle = defaultLineHeightStyle(),
-                ),
-            )
-        }
-    }
-
+    data object Default : ToskTypography(
+        body = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = ToskFontSize.M,
+            lineHeight = ToskLineHeight.M,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        caption = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = ToskFontSize.XS,
+            lineHeight = ToskLineHeight.XS,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        footnote = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = ToskFontSize.S,
+            lineHeight = ToskLineHeight.S,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        heading1 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.`3XL`,
+            lineHeight = ToskLineHeight.`3XL`,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        heading2 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.XXL,
+            lineHeight = ToskLineHeight.XXL,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        heading3 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.XL,
+            lineHeight = ToskLineHeight.XL,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        heading4 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.L,
+            lineHeight = ToskLineHeight.L,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        heading5 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.M,
+            lineHeight = ToskLineHeight.M,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        hero1 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.`8xl`,
+            lineHeight = ToskLineHeight.`7XL`,
+            letterSpacing = ToskLetterSpacing.Tight,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        hero2 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.`7xl`,
+            lineHeight = ToskLineHeight.`6XL`,
+            letterSpacing = ToskLetterSpacing.Tight,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        hero3 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.`6xl`,
+            lineHeight = ToskLineHeight.`5XL`,
+            letterSpacing = ToskLetterSpacing.Tight,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        hero4 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.`4XL`,
+            lineHeight = ToskLineHeight.`4XL`,
+            letterSpacing = ToskLetterSpacing.Tight,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        hero5 = TextStyle(
+            fontWeight = FontWeight.Black,
+            fontSize = ToskFontSize.`5XL`,
+            lineHeight = ToskLineHeight.`3XL`,
+            letterSpacing = ToskLetterSpacing.Tight,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        label1 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.M,
+            lineHeight = ToskLineHeight.M,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        label2 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.S,
+            lineHeight = ToskLineHeight.S,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        label3 = TextStyle(
+            fontWeight = FontWeight.Bold,
+            fontSize = ToskFontSize.XS,
+            lineHeight = ToskLineHeight.XS,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+        subheading = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = ToskFontSize.XL,
+            lineHeight = ToskLineHeight.L,
+            fontFamily = defaultFontFamily,
+            lineHeightStyle = defaultLineHeightStyle(),
+        ),
+    )
 }
