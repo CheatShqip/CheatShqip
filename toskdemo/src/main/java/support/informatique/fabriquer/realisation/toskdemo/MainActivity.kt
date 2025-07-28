@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.button.ToskButton
 import com.cheatshqip.tosk.button.ToskButtonType
+import com.cheatshqip.tosk.chip.ToskChip
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +76,14 @@ fun GreetingPreview() {
             Spacer(modifier = Modifier.padding(10.0.dp))
 
             ToskButton(
+                enabled = true,
+                contentDescription = "Singular Indefinite",
+                onClick = { },
+            ) { Text("Singular Indefinite") }
+
+            Spacer(modifier = Modifier.padding(10.0.dp))
+
+            ToskChip (
                 enabled = true,
                 contentDescription = "Singular Indefinite",
                 onClick = { },
