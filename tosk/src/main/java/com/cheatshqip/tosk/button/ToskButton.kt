@@ -42,42 +42,50 @@ sealed interface ToskButtonType {
     data object Primary : ToskButtonType {
         @Composable
         override fun backgroundColor(interactionSource: InteractionSource): Color {
-
             return interactionSource.animateAsColor(
                 default = ToskTheme.colors.backgroundAccent,
-                pressed = ToskTheme.colors.backgroundAccent
+                pressed = ToskTheme.colors.backgroundAccentPressed
             )
         }
         @Composable
         override fun contentColor(interactionSource: InteractionSource): Color {
-            TODO("Not yet implemented")
+            return interactionSource.animateAsColor(
+                default = ToskTheme.colors.textAccent,
+                pressed = ToskTheme.colors.textAccentPressed
+            )
         }
         @Composable
         override fun disabledBackgroundColor(interactionSource: InteractionSource): Color {
-            TODO("Not yet implemented")
+            return ToskTheme.colors.backgroundAccentDisabled
         }
         @Composable
         override fun disabledContentColor(interactionSource: InteractionSource): Color {
-            TODO("Not yet implemented")
+            return ToskTheme.colors.textAccentDisabled
         }
     }
 
     data object Secondary : ToskButtonType {
         @Composable
         override fun backgroundColor(interactionSource: InteractionSource): Color {
-            TODO("Not yet implemented")
+            return interactionSource.animateAsColor(
+                default = ToskTheme.colors.backgroundSecondary,
+                pressed = ToskTheme.colors.backgroundSecondaryPressed
+            )
         }
         @Composable
         override fun contentColor(interactionSource: InteractionSource): Color {
-            TODO("Not yet implemented")
+            return interactionSource.animateAsColor(
+                default = ToskTheme.colors.textSecondary,
+                pressed = ToskTheme.colors.textSecondaryPressed
+            )
         }
         @Composable
         override fun disabledBackgroundColor(interactionSource: InteractionSource): Color {
-            TODO("Not yet implemented")
+            return ToskTheme.colors.backgroundSecondaryDisabled
         }
         @Composable
         override fun disabledContentColor(interactionSource: InteractionSource): Color {
-            TODO("Not yet implemented")
+            return ToskTheme.colors.textSecondaryDisabled
         }
     }
 }
