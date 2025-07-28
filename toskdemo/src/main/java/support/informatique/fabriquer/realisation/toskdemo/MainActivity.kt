@@ -47,47 +47,48 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Hello $name!",
+            modifier = modifier
+        )
+
+        Spacer(modifier = Modifier.padding(10.0.dp))
+
+        ToskButton(
+            enabled = true,
+            type = ToskButtonType.Secondary,
+            contentDescription = "Singular Definite",
+            onClick = { },
+        ) { Text("Singular Definite") }
+
+        Spacer(modifier = Modifier.padding(10.0.dp))
+
+        ToskButton(
+            enabled = true,
+            contentDescription = "Singular Indefinite",
+            onClick = { },
+        ) { Text("Singular Indefinite") }
+
+        Spacer(modifier = Modifier.padding(10.0.dp))
+
+        ToskChip(
+            enabled = true,
+            contentDescription = "Singular Indefinite",
+            onClick = { },
+        ) { Text("Singular Indefinite") }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     ToskTheme {
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Greeting("Android")
-
-            Spacer(modifier = Modifier.padding(10.0.dp))
-
-            ToskButton(
-                enabled = true,
-                type = ToskButtonType.Secondary,
-                contentDescription = "Singular Definite",
-                onClick = { },
-            ) { Text("Singular Definite") }
-
-            Spacer(modifier = Modifier.padding(10.0.dp))
-
-            ToskButton(
-                enabled = true,
-                contentDescription = "Singular Indefinite",
-                onClick = { },
-            ) { Text("Singular Indefinite") }
-
-            Spacer(modifier = Modifier.padding(10.0.dp))
-
-            ToskChip (
-                enabled = true,
-                contentDescription = "Singular Indefinite",
-                onClick = { },
-            ) { Text("Singular Indefinite") }
-        }
+        Greeting("Android")
     }
 }

@@ -17,8 +17,10 @@ import androidx.compose.material3.SelectableChipColors
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -141,10 +143,10 @@ fun ToskChip(
         elevation = null,
         border = null,
         interactionSource = interactionSource,
-        selected = selected,
+        selected = active,
         onClick = {
+            active = !active
             onClick()
-            selected = !enabled
         }
     )
 }
