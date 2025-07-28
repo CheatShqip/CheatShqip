@@ -1,10 +1,13 @@
 package com.cheatshqip.tosk.button
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
@@ -23,7 +26,7 @@ sealed interface ToskButtonSize {
     val minHeight: Dp
 
     data object Medium : ToskButtonSize {
-        override val minHeight = 46.dp
+        override val minHeight = 56.dp
     }
 }
 
@@ -33,11 +36,11 @@ sealed interface ToskButtonType {
     @Composable
     fun contentColor(interactionSource: InteractionSource): Color
     @Composable
-    fun disabledBackgroundColor(interactionSource: InteractionSource): Color
+    fun disabledBackgroundColor(): Color
     @Composable
-    fun disabledContentColor(interactionSource: InteractionSource): Color
+    fun disabledContentColor(): Color
     val contentPadding: PaddingValues
-        get() = PaddingValues(ToskSpacing.M)
+        get() = PaddingValues(vertical = ToskSpacing.None, horizontal = ToskSpacing.M)
 
     data object Primary : ToskButtonType {
         @Composable
@@ -55,11 +58,11 @@ sealed interface ToskButtonType {
             )
         }
         @Composable
-        override fun disabledBackgroundColor(interactionSource: InteractionSource): Color {
+        override fun disabledBackgroundColor(): Color {
             return ToskTheme.colors.backgroundAccentDisabled
         }
         @Composable
-        override fun disabledContentColor(interactionSource: InteractionSource): Color {
+        override fun disabledContentColor(): Color {
             return ToskTheme.colors.textAccentDisabled
         }
     }
@@ -80,11 +83,11 @@ sealed interface ToskButtonType {
             )
         }
         @Composable
-        override fun disabledBackgroundColor(interactionSource: InteractionSource): Color {
+        override fun disabledBackgroundColor(): Color {
             return ToskTheme.colors.backgroundSecondaryDisabled
         }
         @Composable
-        override fun disabledContentColor(interactionSource: InteractionSource): Color {
+        override fun disabledContentColor(): Color {
             return ToskTheme.colors.textSecondaryDisabled
         }
     }
@@ -105,15 +108,17 @@ fun ToskButton(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier
-            .requiredHeight(size.minHeight)
+            .requiredHeight(40.dp)
             .clearAndSetSemantics {
                 this.contentDescription = contentDescription
-            },
+            }//.border(2.dp, ToskTheme.colors.borderAccent, shape = RoundedCornerShape(10.dp))
+            .padding(1.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = type.backgroundColor(interactionSource),
             contentColor = type.contentColor(interactionSource),
-            disabledContainerColor = type.disabledBackgroundColor(interactionSource),
-            disabledContentColor = type.disabledContentColor(interactionSource),
+            disabledContainerColor = type.disabledBackgroundColor(),
+            disabledContentColor = type.disabledContentColor(),
         ),
         contentPadding = type.contentPadding,
         content = content,

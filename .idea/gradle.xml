@@ -24,6 +24,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/tosk" />
+            <option value="$PROJECT_DIR$/toskdemo" />
           </set>
         </option>
       </GradleProjectSettings>

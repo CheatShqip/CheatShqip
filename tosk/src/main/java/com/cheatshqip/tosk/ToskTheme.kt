@@ -21,7 +21,7 @@ fun ToskTheme(
     content: @Composable () -> Unit,
 ) {
     val typography = ToskTypography.Default
-    val colors = if (isSystemInDarkTheme()) ToskColors.Light else ToskColors.Dark
+    val colors = if (isSystemInDarkTheme()) ToskColors.Dark else ToskColors.Light
 
     CompositionLocalProvider(
         LocalToskTypography provides typography,

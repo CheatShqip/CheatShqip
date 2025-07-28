@@ -23,3 +23,4 @@ dependencyResolutionManagement {
 rootProject.name = "Cheat Shqip"
 include(":app")
 include(":tosk")
+include(":toskdemo")
