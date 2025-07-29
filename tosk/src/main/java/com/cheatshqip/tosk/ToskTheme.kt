@@ -6,13 +6,13 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalInspectionMode
-import com.cheatshqip.tosk.tokens.ToskColors
-import com.cheatshqip.tosk.tokens.ToskTypography
+import com.cheatshqip.tosk.tokens.primitive.ToskPalette
+import com.cheatshqip.tosk.tokens.semantic.ToskTypography
 
 private val LocalToskTypography = staticCompositionLocalOf<ToskTypography> {
     error("Wrap you content with ToskTheme {} to get access to Backpack typography")
 }
-private val LocalToskColors = staticCompositionLocalOf<ToskColors> {
+private val LocalToskColors = staticCompositionLocalOf<ToskPalette> {
     error("Wrap you content with ToskTheme {} to get access to Backpack colors")
 }
 
@@ -21,7 +21,7 @@ fun ToskTheme(
     content: @Composable () -> Unit,
 ) {
     val typography = ToskTypography.Default
-    val colors = if (isSystemInDarkTheme()) ToskColors.Dark else ToskColors.Light
+    val colors = if (isSystemInDarkTheme()) ToskPalette.Dark else ToskPalette.Light
 
     CompositionLocalProvider(
         LocalToskTypography provides typography,
@@ -43,13 +43,13 @@ object ToskTheme {
             LocalToskTypography.current
         }
 
-    val colors: ToskColors
+    val colors: ToskPalette
         @Composable
         @ReadOnlyComposable
         get() = if (LocalInspectionMode.current) {
             // when in preview mode return a default colour object to ensure previews work
             // without wrapping it in another composable
-            if (isSystemInDarkTheme()) ToskColors.Dark else ToskColors.Light
+            if (isSystemInDarkTheme()) ToskPalette.Dark else ToskPalette.Light
         } else {
             LocalToskColors.current
         }

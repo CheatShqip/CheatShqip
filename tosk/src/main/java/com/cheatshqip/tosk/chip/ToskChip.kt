@@ -1,27 +1,20 @@
 package com.cheatshqip.tosk.chip
 
-import android.R.attr.contentDescription
-import android.R.attr.enabled
-import android.R.attr.label
-import android.R.attr.onClick
-import android.R.attr.type
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ChipColors
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.SelectableChipColors
-import androidx.compose.material3.SuggestionChip
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -29,7 +22,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.animateAsColor
-import com.cheatshqip.tosk.tokens.ToskSpacing
+import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 sealed interface ToskChipSize {
     val minHeight: Dp
@@ -122,7 +118,11 @@ fun ToskChip(
             .requiredHeight(40.dp)
             .clearAndSetSemantics {
                 this.contentDescription = contentDescription
-            }.padding(1.dp),
+            }//.padding(1.dp)
+            //.border(2.dp, ToskTheme.colors.borderAccent, shape = RoundedCornerShape(10.dp))
+            .applyIf(active) {
+                border(2.dp, ToskTheme.colors.borderAccent, shape = RoundedCornerShape(8.dp))
+            }.clipToBounds(),
         shape = RoundedCornerShape(8.dp),
         colors = SelectableChipColors(
             containerColor = ToskTheme.colors.backgroundSecondary,
@@ -149,4 +149,12 @@ fun ToskChip(
             onClick()
         }
     )
+}
+
+@OptIn(ExperimentalContracts::class)
+internal inline fun Modifier.applyIf(predicate: Boolean, block: Modifier.() -> Modifier): Modifier {
+    contract {
+        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (predicate) block() else this
 }

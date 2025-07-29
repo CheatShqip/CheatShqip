@@ -1,6 +1,5 @@
 package com.cheatshqip.tosk.button
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.animateAsColor
-import com.cheatshqip.tosk.tokens.ToskSpacing
+import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 
 sealed interface ToskButtonSize {
     val minHeight: Dp

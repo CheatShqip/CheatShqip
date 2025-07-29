@@ -1,8 +1,12 @@
-package com.cheatshqip.tosk.tokens
+package com.cheatshqip.tosk.tokens.semantic
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.cheatshqip.tosk.tokens.primitive.ToskFontSize
+import com.cheatshqip.tosk.tokens.primitive.ToskLetterSpacing
+import com.cheatshqip.tosk.tokens.primitive.ToskLineHeight
+import com.cheatshqip.tosk.tokens.primitive.defaultLineHeightStyle
 
 val defaultFontFamily = FontFamily.SansSerif
 
