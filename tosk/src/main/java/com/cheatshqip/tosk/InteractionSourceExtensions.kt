@@ -11,8 +11,8 @@ import androidx.compose.ui.graphics.Color
 @Composable
 internal fun InteractionSource.animateAsColor(
     default: Color,
-    pressed: Color = default,
-    focused: Color = pressed,
+    pressed: Color,
+    focused: Color,
 ): Color {
     if (default == pressed && default == focused) {
         return default
@@ -25,4 +25,13 @@ internal fun InteractionSource.animateAsColor(
         else -> default
     }
     return animateColorAsState(target).value
-} // TODO : tester par rapport à l'utilisation de ripple
+}
+
+@Composable
+internal fun InteractionSource.animateAsColor(
+    color: StateColor
+): Color {
+    return animateAsColor(color.default, color.pressed, color.focused)
+}
+
+class StateColor(val default: Color, val pressed: Color = default, val focused: Color = pressed)

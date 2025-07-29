@@ -1,8 +1,6 @@
 package com.cheatshqip.tosk.button
 
-import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
@@ -12,91 +10,18 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.animateAsColor
-import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
-
-sealed interface ToskButtonSize {
-    val minHeight: Dp
-
-    data object Medium : ToskButtonSize {
-        override val minHeight = 56.dp
-    }
-}
-
-sealed interface ToskButtonType {
-    @Composable
-    fun backgroundColor(interactionSource: InteractionSource): Color
-    @Composable
-    fun contentColor(interactionSource: InteractionSource): Color
-    @Composable
-    fun disabledBackgroundColor(): Color
-    @Composable
-    fun disabledContentColor(): Color
-    val contentPadding: PaddingValues
-        get() = PaddingValues(vertical = ToskSpacing.None, horizontal = ToskSpacing.M)
-
-    data object Primary : ToskButtonType {
-        @Composable
-        override fun backgroundColor(interactionSource: InteractionSource): Color {
-            return interactionSource.animateAsColor(
-                default = ToskTheme.colors.background.accent,
-                pressed = ToskTheme.colors.background.accentPressed
-            )
-        }
-        @Composable
-        override fun contentColor(interactionSource: InteractionSource): Color {
-            return interactionSource.animateAsColor(
-                default = ToskTheme.colors.text.accent,
-                pressed = ToskTheme.colors.text.accentPressed
-            )
-        }
-        @Composable
-        override fun disabledBackgroundColor(): Color {
-            return ToskTheme.colors.background.accentDisabled
-        }
-        @Composable
-        override fun disabledContentColor(): Color {
-            return ToskTheme.colors.text.accentDisabled
-        }
-    }
-
-    data object Secondary : ToskButtonType {
-        @Composable
-        override fun backgroundColor(interactionSource: InteractionSource): Color {
-            return interactionSource.animateAsColor(
-                default = ToskTheme.colors.background.secondary,
-                pressed = ToskTheme.colors.background.secondaryPressed
-            )
-        }
-        @Composable
-        override fun contentColor(interactionSource: InteractionSource): Color {
-            return interactionSource.animateAsColor(
-                default = ToskTheme.colors.text.secondary,
-                pressed = ToskTheme.colors.text.secondaryPressed
-            )
-        }
-        @Composable
-        override fun disabledBackgroundColor(): Color {
-            return ToskTheme.colors.background.secondaryDisabled
-        }
-        @Composable
-        override fun disabledContentColor(): Color {
-            return ToskTheme.colors.text.secondaryDisabled
-        }
-    }
-}
+import com.cheatshqip.tosk.button.tokens.ToskButtonSize
+import com.cheatshqip.tosk.button.tokens.ToskButtonColor
 
 @Composable
 fun ToskButton(
     modifier: Modifier = Modifier,
     size: ToskButtonSize = ToskButtonSize.Medium,
-    type: ToskButtonType = ToskButtonType.Primary,
+    color: ToskButtonColor = ToskButtonColor.primary(),
     enabled: Boolean = true,
     contentDescription: String,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
@@ -107,19 +32,19 @@ fun ToskButton(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier
-            .requiredHeight(40.dp)
+            .requiredHeight(size.minHeight)
             .clearAndSetSemantics {
                 this.contentDescription = contentDescription
             }//.border(2.dp, ToskTheme.colors.borderAccent, shape = RoundedCornerShape(10.dp))
             .padding(1.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = type.backgroundColor(interactionSource),
-            contentColor = type.contentColor(interactionSource),
-            disabledContainerColor = type.disabledBackgroundColor(),
-            disabledContentColor = type.disabledContentColor(),
+            containerColor = interactionSource.animateAsColor(color.backgroundColor),
+            contentColor = interactionSource.animateAsColor(color.contentColor),
+            disabledContainerColor = color.disabledBackgroundColor,
+            disabledContentColor = color.disabledContentColor,
         ),
-        contentPadding = type.contentPadding,
+        contentPadding = size.contentPadding,
         content = content,
     )
 }

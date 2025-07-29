@@ -1,21 +1,13 @@
 package support.informatique.fabriquer.realisation.toskdemo
 
-import android.R.attr.contentDescription
-import android.R.attr.enabled
-import android.R.attr.onClick
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Divider
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.button.ToskButton
-import com.cheatshqip.tosk.button.ToskButtonType
+import com.cheatshqip.tosk.button.tokens.ToskButtonColor
 import com.cheatshqip.tosk.chip.ToskChip
 
 class MainActivity : ComponentActivity() {
@@ -62,7 +54,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
         ToskButton(
             enabled = true,
-            type = ToskButtonType.Secondary,
+            color = ToskButtonColor.secondary(),
             contentDescription = "Singular Definite",
             onClick = { },
         ) { Text("Singular Definite") }
