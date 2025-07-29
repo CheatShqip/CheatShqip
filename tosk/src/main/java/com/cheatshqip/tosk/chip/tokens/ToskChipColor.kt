@@ -6,41 +6,29 @@ import com.cheatshqip.tosk.StateColor
 import com.cheatshqip.tosk.ToskTheme
 
 data class ToskChipColor(
-    val backgroundColor: StateColor,
-    val contentColor: StateColor,
-    val disabledBackgroundColor: Color,
-    val disabledContentColor: Color,
+    val backgroundColor: Color,
+    val contentColor: Color,
+    val borderColor: Color,
+    val selectedBackgroundColor: StateColor,
+    val selectedContentColor: StateColor,
+    val selectedBorderColor: Color,
 ) {
     companion object Companion {
         @Composable
-        fun primary(): ToskChipColor {
+        fun default(): ToskChipColor {
             return ToskChipColor(
-                backgroundColor = StateColor(
+                backgroundColor = ToskTheme.colors.background.secondary,
+                contentColor = ToskTheme.colors.text.secondary,
+                borderColor = ToskTheme.colors.border.none,
+                selectedBackgroundColor = StateColor(
                     default = ToskTheme.colors.background.accent,
                     pressed = ToskTheme.colors.background.accentPressed,
                 ),
-                contentColor = StateColor(
+                selectedContentColor = StateColor(
                     default = ToskTheme.colors.text.accent,
                     pressed = ToskTheme.colors.text.accentPressed,
                 ),
-                disabledBackgroundColor = ToskTheme.colors.background.accentDisabled,
-                disabledContentColor = ToskTheme.colors.text.accentDisabled,
-            )
-        }
-
-        @Composable
-        fun secondary(): ToskChipColor {
-            return ToskChipColor(
-                backgroundColor = StateColor(
-                    default = ToskTheme.colors.background.secondary,
-                    pressed = ToskTheme.colors.background.secondaryPressed,
-                ),
-                contentColor = StateColor(
-                    default = ToskTheme.colors.text.secondary,
-                    pressed = ToskTheme.colors.text.secondaryPressed
-                ),
-                disabledBackgroundColor = ToskTheme.colors.background.secondaryDisabled,
-                disabledContentColor = ToskTheme.colors.text.secondaryDisabled,
+                selectedBorderColor = ToskTheme.colors.border.accent,
             )
         }
     }

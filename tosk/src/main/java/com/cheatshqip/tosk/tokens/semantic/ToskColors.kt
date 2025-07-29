@@ -85,4 +85,5 @@ data class ToskColorsBorder(
     val primary: Color,
     val secondary: Color,
     val accent: Color,
+    val none : Color = ToskPalette.transparent
 )

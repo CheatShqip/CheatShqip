@@ -25,4 +25,5 @@ object ToskPalette {
     val lemonChiffon = Color(0xFFFEF9C3)
     val papayaWhip = Color(0xFFFFEDD5)
     val pinkLace = Color(0xFFFAD7D5)
+    val transparent = Color(0x00000000)
 }

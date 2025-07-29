@@ -12,11 +12,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.dp
-import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.animateAsColor
 import com.cheatshqip.tosk.chip.tokens.ToskChipColor
 import com.cheatshqip.tosk.chip.tokens.ToskChipSize
@@ -25,7 +23,7 @@ import com.cheatshqip.tosk.chip.tokens.ToskChipSize
 fun ToskChip(
     modifier: Modifier = Modifier,
     size: ToskChipSize = ToskChipSize.Medium,
-    color: ToskChipColor = ToskChipColor.primary(),
+    color: ToskChipColor = ToskChipColor.default(),
     enabled: Boolean = true,
     selected: Boolean = false,
     contentDescription: String,
@@ -42,31 +40,30 @@ fun ToskChip(
             .clearAndSetSemantics {
                 this.contentDescription = contentDescription
             },
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(8.dp), // TODO : extraire en size
         colors = SelectableChipColors(
-            containerColor = ToskTheme.colors.background.secondary,
-            labelColor = ToskTheme.colors.text.secondary,
-            leadingIconColor = ToskTheme.colors.text.secondary,
-            trailingIconColor = ToskTheme.colors.text.secondary,
-            selectedContainerColor = interactionSource.animateAsColor(color.backgroundColor),
-            selectedLabelColor = interactionSource.animateAsColor(color.contentColor),
-            selectedLeadingIconColor = interactionSource.animateAsColor(color.contentColor),
-            selectedTrailingIconColor = interactionSource.animateAsColor(color.contentColor),
-            disabledLabelColor = color.disabledContentColor,
-            disabledTrailingIconColor = color.disabledContentColor,
-            disabledLeadingIconColor = color.disabledContentColor,
-            disabledContainerColor = color.disabledBackgroundColor,
-            disabledSelectedContainerColor = color.disabledBackgroundColor,
+            containerColor = color.backgroundColor,
+            labelColor = color.contentColor,
+            leadingIconColor = color.contentColor,
+            trailingIconColor = color.contentColor,
+            selectedContainerColor = interactionSource.animateAsColor(color.selectedBackgroundColor),
+            selectedLabelColor = interactionSource.animateAsColor(color.selectedContentColor),
+            selectedLeadingIconColor = interactionSource.animateAsColor(color.selectedContentColor),
+            selectedTrailingIconColor = interactionSource.animateAsColor(color.selectedContentColor),
+            disabledLabelColor = color.contentColor,
+            disabledTrailingIconColor = color.contentColor,
+            disabledLeadingIconColor = color.contentColor,
+            disabledContainerColor = color.backgroundColor,
+            disabledSelectedContainerColor = color.backgroundColor, // TODO: extraire ce qui est vraiment modifié
         ),
         label = label,
         elevation = null,
         border = InputChipDefaults.inputChipBorder(
             enabled = enabled,
             selected = active,
-            borderColor = Color.Transparent,
-            disabledBorderColor = Color.Transparent,
-            selectedBorderColor = ToskTheme.colors.border.accent,
-            selectedBorderWidth = 2.dp
+            borderColor = color.borderColor,
+            selectedBorderColor = color.selectedBorderColor,
+            selectedBorderWidth = 2.dp // TODO : extraire en size
         ),
         interactionSource = interactionSource,
         selected = active,

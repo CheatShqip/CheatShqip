@@ -6,7 +6,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalInspectionMode
-import com.cheatshqip.tosk.tokens.primitive.ToskPalette
 import com.cheatshqip.tosk.tokens.semantic.ToskColors
 import com.cheatshqip.tosk.tokens.semantic.ToskTypography
 
