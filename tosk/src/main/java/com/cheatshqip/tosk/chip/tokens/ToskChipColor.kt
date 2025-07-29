@@ -1,11 +1,11 @@
-package com.cheatshqip.tosk.button.tokens
+package com.cheatshqip.tosk.chip.tokens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.cheatshqip.tosk.StateColor
 import com.cheatshqip.tosk.ToskTheme
 
-data class ToskButtonColor(
+data class ToskChipColor(
     val backgroundColor: StateColor,
     val contentColor: StateColor,
     val disabledBackgroundColor: Color,
@@ -13,8 +13,8 @@ data class ToskButtonColor(
 ) {
     companion object Companion {
         @Composable
-        fun primary(): ToskButtonColor {
-            return ToskButtonColor(
+        fun primary(): ToskChipColor {
+            return ToskChipColor(
                 backgroundColor = StateColor(
                     default = ToskTheme.colors.background.accent,
                     pressed = ToskTheme.colors.background.accentPressed,
@@ -29,8 +29,8 @@ data class ToskButtonColor(
         }
 
         @Composable
-        fun secondary(): ToskButtonColor {
-            return ToskButtonColor(
+        fun secondary(): ToskChipColor {
+            return ToskChipColor(
                 backgroundColor = StateColor(
                     default = ToskTheme.colors.background.secondary,
                     pressed = ToskTheme.colors.background.secondaryPressed,
