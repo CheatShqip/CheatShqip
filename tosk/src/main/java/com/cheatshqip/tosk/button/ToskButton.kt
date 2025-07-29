@@ -45,24 +45,24 @@ sealed interface ToskButtonType {
         @Composable
         override fun backgroundColor(interactionSource: InteractionSource): Color {
             return interactionSource.animateAsColor(
-                default = ToskTheme.colors.backgroundAccent,
-                pressed = ToskTheme.colors.backgroundAccentPressed
+                default = ToskTheme.colors.background.accent,
+                pressed = ToskTheme.colors.background.accentPressed
             )
         }
         @Composable
         override fun contentColor(interactionSource: InteractionSource): Color {
             return interactionSource.animateAsColor(
-                default = ToskTheme.colors.textAccent,
-                pressed = ToskTheme.colors.textAccentPressed
+                default = ToskTheme.colors.text.accent,
+                pressed = ToskTheme.colors.text.accentPressed
             )
         }
         @Composable
         override fun disabledBackgroundColor(): Color {
-            return ToskTheme.colors.backgroundAccentDisabled
+            return ToskTheme.colors.background.accentDisabled
         }
         @Composable
         override fun disabledContentColor(): Color {
-            return ToskTheme.colors.textAccentDisabled
+            return ToskTheme.colors.text.accentDisabled
         }
     }
 
@@ -70,24 +70,24 @@ sealed interface ToskButtonType {
         @Composable
         override fun backgroundColor(interactionSource: InteractionSource): Color {
             return interactionSource.animateAsColor(
-                default = ToskTheme.colors.backgroundSecondary,
-                pressed = ToskTheme.colors.backgroundSecondaryPressed
+                default = ToskTheme.colors.background.secondary,
+                pressed = ToskTheme.colors.background.secondaryPressed
             )
         }
         @Composable
         override fun contentColor(interactionSource: InteractionSource): Color {
             return interactionSource.animateAsColor(
-                default = ToskTheme.colors.textSecondary,
-                pressed = ToskTheme.colors.textSecondaryPressed
+                default = ToskTheme.colors.text.secondary,
+                pressed = ToskTheme.colors.text.secondaryPressed
             )
         }
         @Composable
         override fun disabledBackgroundColor(): Color {
-            return ToskTheme.colors.backgroundSecondaryDisabled
+            return ToskTheme.colors.background.secondaryDisabled
         }
         @Composable
         override fun disabledContentColor(): Color {
-            return ToskTheme.colors.textSecondaryDisabled
+            return ToskTheme.colors.text.secondaryDisabled
         }
     }
 }

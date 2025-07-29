@@ -51,24 +51,24 @@ sealed interface ToskChipType {
         @Composable
         override fun backgroundColor(interactionSource: InteractionSource): Color {
             return interactionSource.animateAsColor(
-                default = ToskTheme.colors.backgroundAccent,
-                pressed = ToskTheme.colors.backgroundAccentPressed
+                default = ToskTheme.colors.background.accent,
+                pressed = ToskTheme.colors.background.accentPressed
             )
         }
         @Composable
         override fun contentColor(interactionSource: InteractionSource): Color {
             return interactionSource.animateAsColor(
-                default = ToskTheme.colors.textAccent,
-                pressed = ToskTheme.colors.textAccentPressed
+                default = ToskTheme.colors.text.accent,
+                pressed = ToskTheme.colors.text.accentPressed
             )
         }
         @Composable
         override fun disabledBackgroundColor(): Color {
-            return ToskTheme.colors.backgroundAccentDisabled
+            return ToskTheme.colors.background.accentDisabled
         }
         @Composable
         override fun disabledContentColor(): Color {
-            return ToskTheme.colors.textAccentDisabled
+            return ToskTheme.colors.text.accentDisabled
         }
     }
 
@@ -76,24 +76,24 @@ sealed interface ToskChipType {
         @Composable
         override fun backgroundColor(interactionSource: InteractionSource): Color {
             return interactionSource.animateAsColor(
-                default = ToskTheme.colors.backgroundSecondary,
-                pressed = ToskTheme.colors.backgroundSecondaryPressed
+                default = ToskTheme.colors.background.secondary,
+                pressed = ToskTheme.colors.background.secondaryPressed
             )
         }
         @Composable
         override fun contentColor(interactionSource: InteractionSource): Color {
             return interactionSource.animateAsColor(
-                default = ToskTheme.colors.textSecondary,
-                pressed = ToskTheme.colors.textSecondaryPressed
+                default = ToskTheme.colors.text.secondary,
+                pressed = ToskTheme.colors.text.secondaryPressed
             )
         }
         @Composable
         override fun disabledBackgroundColor(): Color {
-            return ToskTheme.colors.backgroundSecondaryDisabled
+            return ToskTheme.colors.background.secondaryDisabled
         }
         @Composable
         override fun disabledContentColor(): Color {
-            return ToskTheme.colors.textSecondaryDisabled
+            return ToskTheme.colors.text.secondaryDisabled
         }
     }
 }
@@ -121,14 +121,14 @@ fun ToskChip(
             }//.padding(1.dp)
             //.border(2.dp, ToskTheme.colors.borderAccent, shape = RoundedCornerShape(10.dp))
             .applyIf(active) {
-                border(2.dp, ToskTheme.colors.borderAccent, shape = RoundedCornerShape(8.dp))
+                border(2.dp, ToskTheme.colors.border.accent, shape = RoundedCornerShape(8.dp))
             }.clipToBounds(),
         shape = RoundedCornerShape(8.dp),
         colors = SelectableChipColors(
-            containerColor = ToskTheme.colors.backgroundSecondary,
-            labelColor = ToskTheme.colors.textSecondary,
-            leadingIconColor = ToskTheme.colors.textSecondary,
-            trailingIconColor = ToskTheme.colors.textSecondary,
+            containerColor = ToskTheme.colors.background.secondary,
+            labelColor = ToskTheme.colors.text.secondary,
+            leadingIconColor = ToskTheme.colors.text.secondary,
+            trailingIconColor = ToskTheme.colors.text.secondary,
             selectedContainerColor = type.backgroundColor(interactionSource),
             selectedLabelColor = type.contentColor(interactionSource),
             selectedLeadingIconColor = type.contentColor(interactionSource),

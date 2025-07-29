@@ -17,11 +17,11 @@ sealed class ToskColors(
             accent = ToskPalette.purple,
             accentPressed = ToskPalette.deepPurple,
             accentDisabled = ToskPalette.silver,
-            holorRed = ToskPalette.fireBrick,
-            holoBlue = ToskPalette.royalBlue,
-            holoGreen = ToskPalette.forestGreen,
-            holoBrown = ToskPalette.brown,
-            holoOrange = ToskPalette.rust,
+            textOnInfoRed = ToskPalette.fireBrick,
+            textOnInfoBlue = ToskPalette.royalBlue,
+            textOnInfoGreen = ToskPalette.forestGreen,
+            textOnInfoYellow = ToskPalette.brown,
+            textOnInfoOrange = ToskPalette.rust,
         ),
         background = ToskColorsBackground(
             primary = ToskPalette.crimson,
@@ -31,17 +31,23 @@ sealed class ToskColors(
             accent = ToskPalette.lavender,
             accentPressed = ToskPalette.mauve,
             accentDisabled = ToskPalette.lightGray,
-            holoRed = ToskPalette.mistyRose,
-            holoBlue = ToskPalette.aliceBlue,
-            holoGreen = ToskPalette.honeydew,
-            holoYellow = ToskPalette.lemonChiffon,
-            holoOrange = ToskPalette.papayaWhip,
+            infoRed = ToskPalette.mistyRose,
+            infoBlue = ToskPalette.aliceBlue,
+            infoGreen = ToskPalette.honeydew,
+            infoYellow = ToskPalette.lemonChiffon,
+            infoOrange = ToskPalette.papayaWhip,
         ),
         border = ToskColorsBorder(
             primary = ToskPalette.pinkLace,
             secondary = ToskPalette.lightGray,
             accent = ToskPalette.mauve,
         )
+    )
+
+    data object Dark : ToskColors(
+        text = TODO(),
+        background = TODO(),
+        border = TODO()
     )
 }
 
@@ -53,11 +59,11 @@ data class ToskColorsText(
     val accent: Color,
     val accentPressed: Color,
     val accentDisabled: Color,
-    val holorRed: Color,
-    val holoBlue: Color,
-    val holoGreen: Color,
-    val holoBrown: Color,
-    val holoOrange: Color,
+    val textOnInfoRed: Color,
+    val textOnInfoBlue: Color,
+    val textOnInfoGreen: Color,
+    val textOnInfoYellow: Color,
+    val textOnInfoOrange: Color,
 )
 
 data class ToskColorsBackground(
@@ -68,11 +74,11 @@ data class ToskColorsBackground(
     val accent: Color,
     val accentPressed: Color,
     val accentDisabled: Color,
-    val holoRed: Color,
-    val holoBlue: Color,
-    val holoGreen: Color,
-    val holoYellow: Color,
-    val holoOrange: Color,
+    val infoRed: Color,
+    val infoBlue: Color,
+    val infoGreen: Color,
+    val infoYellow: Color,
+    val infoOrange: Color,
 )
 
 data class ToskColorsBorder(
