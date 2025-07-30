@@ -2,9 +2,7 @@ package com.cheatshqip.tosk.button
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
@@ -12,10 +10,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.unit.dp
 import com.cheatshqip.tosk.animateAsColor
-import com.cheatshqip.tosk.button.tokens.ToskButtonSize
 import com.cheatshqip.tosk.button.tokens.ToskButtonColor
+import com.cheatshqip.tosk.button.tokens.ToskButtonSize
+import com.cheatshqip.tosk.tokens.semantic.ToskShape
 
 @Composable
 fun ToskButton(
@@ -35,9 +33,8 @@ fun ToskButton(
             .requiredHeight(size.minHeight)
             .clearAndSetSemantics {
                 this.contentDescription = contentDescription
-            }//.border(2.dp, ToskTheme.colors.borderAccent, shape = RoundedCornerShape(10.dp))
-            .padding(1.dp),
-        shape = RoundedCornerShape(8.dp),
+            },
+        shape = ToskShape.Medium,
         colors = ButtonDefaults.buttonColors(
             containerColor = interactionSource.animateAsColor(color.backgroundColor),
             contentColor = interactionSource.animateAsColor(color.contentColor),
