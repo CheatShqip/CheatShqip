@@ -62,6 +62,7 @@ detekt {
 }
 
 dependencies {
+    implementation(project(":tosk"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation)

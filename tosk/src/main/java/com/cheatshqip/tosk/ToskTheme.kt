@@ -6,6 +6,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalInspectionMode
+import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 import com.cheatshqip.tosk.tokens.semantic.ToskColors
 import com.cheatshqip.tosk.tokens.semantic.ToskTypography
 
@@ -21,7 +22,7 @@ fun ToskTheme(
     content: @Composable () -> Unit,
 ) {
     val typography = ToskTypography.Default
-    val colors = if (isSystemInDarkTheme()) ToskColors.Dark else ToskColors.Light
+    val colors = if (isSystemInDarkTheme()) ToskColors.Light else ToskColors.Light // TODO: change once dark theme is implemented
 
     CompositionLocalProvider(
         LocalToskTypography provides typography,
@@ -49,8 +50,12 @@ object ToskTheme {
         get() = if (LocalInspectionMode.current) {
             // when in preview mode return a default colour object to ensure previews work
             // without wrapping it in another composable
-            if (isSystemInDarkTheme()) ToskColors.Dark else ToskColors.Light
+            if (isSystemInDarkTheme()) ToskColors.Light else ToskColors.Light // TODO: change once dark theme is implemented
         } else {
             LocalToskColors.current
         }
+
+    val spacing: ToskSpacing
+        @Composable
+        get() = ToskSpacing
 }

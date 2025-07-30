@@ -11,12 +11,15 @@ sealed class ToskColors(
     data object Light : ToskColors(
         text = ToskColorsText(
             primary = ToskPalette.black,
+            textOnPrimary = ToskPalette.alabaster,
+            textOnPrimaryPressed = ToskPalette.alabaster,
+            textOnPrimaryDisabled = ToskPalette.coralReef,
             secondary = ToskPalette.slateGray,
-            secondaryPressed = ToskPalette.charcoal,
-            secondaryDisabled = ToskPalette.silver,
+            textOnSecondaryPressed = ToskPalette.charcoal,
+            textOnSecondaryDisabled = ToskPalette.silver,
             accent = ToskPalette.purple,
-            accentPressed = ToskPalette.deepPurple,
-            accentDisabled = ToskPalette.silver,
+            textOnAccentPressed = ToskPalette.deepPurple,
+            textOnAccentDisabled = ToskPalette.silver,
             textOnInfoRed = ToskPalette.fireBrick,
             textOnInfoBlue = ToskPalette.royalBlue,
             textOnInfoGreen = ToskPalette.forestGreen,
@@ -25,6 +28,8 @@ sealed class ToskColors(
         ),
         background = ToskColorsBackground(
             primary = ToskPalette.crimson,
+            primaryPressed = ToskPalette.cardinal,
+            primaryDisabled = ToskPalette.salmonPink,
             secondary = ToskPalette.alabaster,
             secondaryPressed = ToskPalette.lightGray,
             secondaryDisabled = ToskPalette.lightGray,
@@ -53,12 +58,15 @@ sealed class ToskColors(
 
 data class ToskColorsText(
     val primary: Color,
+    val textOnPrimary: Color,
+    val textOnPrimaryPressed: Color,
+    val textOnPrimaryDisabled: Color,
     val secondary: Color,
-    val secondaryPressed: Color,
-    val secondaryDisabled: Color,
+    val textOnSecondaryPressed: Color,
+    val textOnSecondaryDisabled: Color,
     val accent: Color,
-    val accentPressed: Color,
-    val accentDisabled: Color,
+    val textOnAccentPressed: Color,
+    val textOnAccentDisabled: Color,
     val textOnInfoRed: Color,
     val textOnInfoBlue: Color,
     val textOnInfoGreen: Color,
@@ -68,6 +76,8 @@ data class ToskColorsText(
 
 data class ToskColorsBackground(
     val primary: Color,
+    val primaryPressed: Color,
+    val primaryDisabled: Color,
     val secondary: Color,
     val secondaryPressed: Color,
     val secondaryDisabled: Color,

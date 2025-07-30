@@ -26,7 +26,7 @@ data class ToskChipColor(
                 ),
                 selectedContentColor = StateColor(
                     default = ToskTheme.colors.text.accent,
-                    pressed = ToskTheme.colors.text.accentPressed,
+                    pressed = ToskTheme.colors.text.textOnAccentPressed,
                 ),
                 selectedBorderColor = ToskTheme.colors.border.accent,
             )

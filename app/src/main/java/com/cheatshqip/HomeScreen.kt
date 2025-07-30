@@ -10,10 +10,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -35,15 +33,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
 import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
-import com.cheatshqip.ui.theme.CheatShqipTheme
-import com.cheatshqip.ui.theme.spacing
+import com.cheatshqip.tosk.ToskTheme
+import com.cheatshqip.tosk.button.ToskButton
+import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreenRoute(
-    innerPadding: PaddingValues = PaddingValues(spacing().NONE),
+    innerPadding: PaddingValues = PaddingValues(ToskTheme.spacing.None),
     homeScreenViewModel: HomeScreenViewModel = koinViewModel()
 ) {
     val homeScreenUIState: HomeScreenUIState by homeScreenViewModel.state.collectAsStateWithLifecycle()
@@ -67,8 +66,8 @@ private fun HomeScreen(
         modifier =
             Modifier
             .padding(innerPadding)
-            .padding(spacing().SMALL),
-        verticalArrangement = Arrangement.spacedBy(spacing().SMALL)
+            .padding(ToskSpacing.S),
+        verticalArrangement = Arrangement.spacedBy(ToskSpacing.S)
     ) {
         val containerModifier = Modifier.fillMaxWidth()
 
@@ -78,8 +77,9 @@ private fun HomeScreen(
             onValueChange = { searchInput = it },
             label = { Text("Word") }
         )
-        Button(
+        ToskButton(
             modifier = containerModifier,
+            contentDescription = "Translate",
             onClick = { onSearch(searchInput) }
         ) {
             Text("Translate")
@@ -99,7 +99,7 @@ private fun TranslationSuggestions(
     HorizontalDivider(
         modifier =
             modifier
-            .background(MaterialTheme.colorScheme.primary)
+            .background(ToskTheme.colors.background.primary)
     )
 
     for (translation in translationSuggestions) {
@@ -121,7 +121,7 @@ private fun TranslationSuggestions(
             Image(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = "Arrow",
-                colorFilter = tint(MaterialTheme.colorScheme.primary)
+                colorFilter = tint(ToskTheme.colors.background.primary)
             )
         }
     }
@@ -131,14 +131,14 @@ private fun TranslationSuggestions(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    CheatShqipTheme {
+    ToskTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
                     colors =
                         TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        titleContentColor = MaterialTheme.colorScheme.primary,
+                        containerColor = ToskTheme.colors.background.secondary,
+                        titleContentColor = ToskTheme.colors.text.textOnPrimary,
                     ),
                     title = {
                         Text(LocalContext.current.resources.getString(R.string.app_name))

@@ -15,6 +15,9 @@ object ToskPalette {
     val brown = Color(0xFFA16207)
     val rust = Color(0xFFC2410B)
     val crimson = Color(0xFFDC2625)
+    val cardinal = Color(0xFFB91C1B)
+    val salmonPink = Color(0xFFFCA5A5)
+    val coralReef = Color(0xFFE57373) // Darker salmon pink for text on a salmonPink container
     val alabaster = Color(0xFFF3F4F6)
     val lightGray = Color(0xFFE5E7EB)
     val lavender = Color(0xFFF3E8FF)
