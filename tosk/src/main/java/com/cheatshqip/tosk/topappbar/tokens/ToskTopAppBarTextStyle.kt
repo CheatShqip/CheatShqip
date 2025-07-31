@@ -1,4 +1,4 @@
-package com.cheatshqip.tosk.topappbar
+package com.cheatshqip.tosk.topappbar.tokens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle

@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
@@ -77,9 +78,10 @@ private fun HomeScreen(
             onValueChange = { searchInput = it },
             label = { Text("Word") }
         )
+
         ToskButton(
             modifier = containerModifier,
-            contentDescription = "Translate",
+            contentDescription = stringResource(R.string.translate),
             onClick = { onSearch(searchInput) }
         ) {
             Text("Translate")
