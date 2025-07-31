@@ -1,17 +1,19 @@
 package com.cheatshqip.tosk.chip.tokens
 
+import androidx.compose.material3.RippleConfiguration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.cheatshqip.tosk.StateColor
 import com.cheatshqip.tosk.ToskTheme
+import com.cheatshqip.tosk.tokens.primitive.ToskRippleAlpha
 
 data class ToskChipColor(
     val backgroundColor: Color,
     val contentColor: Color,
     val borderColor: Color,
-    val selectedBackgroundColor: StateColor,
-    val selectedContentColor: StateColor,
+    val selectedBackgroundColor: Color,
+    val selectedContentColor: Color,
     val selectedBorderColor: Color,
+    val ripple: RippleConfiguration,
 ) {
     companion object Companion {
         @Composable
@@ -20,15 +22,13 @@ data class ToskChipColor(
                 backgroundColor = ToskTheme.colors.background.secondary,
                 contentColor = ToskTheme.colors.text.secondary,
                 borderColor = ToskTheme.colors.border.none,
-                selectedBackgroundColor = StateColor(
-                    default = ToskTheme.colors.background.accent,
-                    pressed = ToskTheme.colors.background.accentPressed,
-                ),
-                selectedContentColor = StateColor(
-                    default = ToskTheme.colors.text.accent,
-                    pressed = ToskTheme.colors.text.textOnAccentPressed,
-                ),
+                selectedBackgroundColor = ToskTheme.colors.background.accent,
+                selectedContentColor = ToskTheme.colors.text.accent,
                 selectedBorderColor = ToskTheme.colors.border.accent,
+                ripple = RippleConfiguration(
+                    color = ToskTheme.colors.ripple.default,
+                    rippleAlpha = ToskRippleAlpha.S
+                )
             )
         }
     }
