@@ -28,9 +28,4 @@ internal object ToskLineHeight {
     internal val `7XL`: TextUnit = 120.0.sp
 }
 
-internal fun defaultLineHeightStyle(): LineHeightStyle = LineHeightStyle(
-    alignment = defaultLightHeightStyleAlignment(),
-    trim = LineHeightStyle.Trim.None,
-)
-
-private fun defaultLightHeightStyleAlignment(): LineHeightStyle.Alignment = LineHeightStyle.Alignment(topRatio = 0.2f)
+internal fun defaultLineHeightStyle(): LineHeightStyle = LineHeightStyle.Default

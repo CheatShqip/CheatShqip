@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
@@ -35,6 +36,7 @@ import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.button.ToskButton
+import com.cheatshqip.tosk.chip.ToskChip
 import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,8 +67,8 @@ private fun HomeScreen(
     Column(
         modifier =
             Modifier
-            .padding(innerPadding)
-            .padding(ToskSpacing.S),
+                .padding(innerPadding)
+                .padding(ToskSpacing.S),
         verticalArrangement = Arrangement.spacedBy(ToskSpacing.S)
     ) {
         val containerModifier = Modifier.fillMaxWidth()
@@ -85,6 +87,17 @@ private fun HomeScreen(
             Text("Translate")
         }
 
+        ToskChip(
+            modifier = containerModifier,
+            contentDescription = "Translate",
+            onClick = { onSearch(searchInput) }
+        ) {
+            Text(
+                text = "Translate",
+                textAlign = TextAlign.Center
+            )
+        }
+
         if (homeScreenUIState is HomeScreenUIState.WithTranslationSuggestions) {
             TranslationSuggestions(containerModifier, homeScreenUIState.translationSuggestions)
         }
@@ -99,19 +112,19 @@ private fun TranslationSuggestions(
     HorizontalDivider(
         modifier =
             modifier
-            .background(ToskTheme.colors.background.primary)
+                .background(ToskTheme.colors.background.primary)
     )
 
     for (translation in translationSuggestions) {
         Row(
             modifier =
                 Modifier
-                .fillMaxWidth()
-                .clickable(
-                    onClick = { /*onTranslationClicked(translation)*/ },
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = ripple()
-                ),
+                    .fillMaxWidth()
+                    .clickable(
+                        onClick = { /*onTranslationClicked(translation)*/ },
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = ripple()
+                    ),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -137,9 +150,9 @@ fun HomeScreenPreview() {
                 TopAppBar(
                     colors =
                         TopAppBarDefaults.topAppBarColors(
-                        containerColor = ToskTheme.colors.background.secondary,
-                        titleContentColor = ToskTheme.colors.text.textOnPrimary,
-                    ),
+                            containerColor = ToskTheme.colors.background.secondary,
+                            titleContentColor = ToskTheme.colors.text.textOnPrimary,
+                        ),
                     title = {
                         Text(LocalContext.current.resources.getString(R.string.app_name))
                     }
@@ -158,15 +171,15 @@ fun HomeScreenPreview() {
 
 private fun homeScreenViewModelWithSearchAndTranslations() =
     HomeScreenViewModel(
-    coroutineDispatcher = Dispatchers.Default,
-    getWordTranslationSuggestionsUseCase =
-        object : GetWordTranslationSuggestionsUseCase {
-        override suspend fun getWorldTranslationSuggestions(word: Word): List<Translation> {
-            return listOf(
-                Translation("test"),
-                Translation("test2")
-            )
-        }
-    },
-    search = MutableStateFlow("test"),
-)
+        coroutineDispatcher = Dispatchers.Default,
+        getWordTranslationSuggestionsUseCase =
+            object : GetWordTranslationSuggestionsUseCase {
+                override suspend fun getWorldTranslationSuggestions(word: Word): List<Translation> {
+                    return listOf(
+                        Translation("test"),
+                        Translation("test2")
+                    )
+                }
+            },
+        search = MutableStateFlow("test"),
+    )
