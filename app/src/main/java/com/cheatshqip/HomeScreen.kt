@@ -14,7 +14,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.ripple
@@ -36,6 +35,7 @@ import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.button.ToskButton
+import com.cheatshqip.tosk.textfield.ToskTextField
 import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -72,11 +72,11 @@ private fun HomeScreen(
     ) {
         val containerModifier = Modifier.fillMaxWidth()
 
-        TextField(
+        ToskTextField(
             modifier = containerModifier,
             value = searchInput,
             onValueChange = { searchInput = it },
-            label = { Text("Word") }
+            placeholder = { Text("Word") }
         )
 
         ToskButton(
