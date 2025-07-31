@@ -7,9 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import com.cheatshqip.tosk.ToskTheme
+import com.cheatshqip.tosk.topappbar.ToskTopAppBar
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -20,12 +19,7 @@ class MainActivity : ComponentActivity() {
             ToskTheme {
                 Scaffold(
                     topBar = {
-                        TopAppBar(
-                            colors =
-                                TopAppBarDefaults.topAppBarColors(
-                                    containerColor = ToskTheme.colors.background.primary,
-                                    titleContentColor = ToskTheme.colors.text.textOnPrimary,
-                                ),
+                        ToskTopAppBar(
                             title = {
                                 Text(resources.getString(R.string.app_name))
                             }

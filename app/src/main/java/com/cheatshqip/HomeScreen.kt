@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter.Companion.tint
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
@@ -36,7 +35,6 @@ import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.button.ToskButton
-import com.cheatshqip.tosk.chip.ToskChip
 import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -85,17 +83,6 @@ private fun HomeScreen(
             onClick = { onSearch(searchInput) }
         ) {
             Text("Translate")
-        }
-
-        ToskChip(
-            modifier = containerModifier,
-            contentDescription = "Translate",
-            onClick = { onSearch(searchInput) }
-        ) {
-            Text(
-                text = "Translate",
-                textAlign = TextAlign.Center
-            )
         }
 
         if (homeScreenUIState is HomeScreenUIState.WithTranslationSuggestions) {
