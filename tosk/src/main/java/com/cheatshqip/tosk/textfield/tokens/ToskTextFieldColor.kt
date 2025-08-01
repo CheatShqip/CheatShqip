@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.tokens.primitive.ToskPalette
 
-data class ToskTextFieldColors(
+data class ToskTextFieldColor(
     val errorIndicatorColor: Color,
     val errorContainerColor: Color,
     val errorTextColor: Color,
@@ -52,10 +52,10 @@ data class ToskTextFieldColors(
     }
 
 
-    companion object {
+    companion object Companion {
         @Composable
-        fun default(): ToskTextFieldColors {
-            return ToskTextFieldColors(
+        fun default(): ToskTextFieldColor {
+            return ToskTextFieldColor(
                 errorIndicatorColor = ToskPalette.crimson,
                 errorContainerColor = ToskTheme.colors.background.secondary,
                 errorTextColor = ToskTheme.colors.text.primary,

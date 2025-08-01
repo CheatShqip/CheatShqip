@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.VisualTransformation
-import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldColors
+import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldColor
 import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldSize
 import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldTextStyle
 import com.cheatshqip.tosk.tokens.semantic.ToskShape
@@ -39,7 +39,7 @@ fun ToskTextField(
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
-    colors: ToskTextFieldColors = ToskTextFieldColors.default()
+    colors: ToskTextFieldColor = ToskTextFieldColor.default()
 ) {
     val materialColors = colors.textFieldColors()
     val interactionSource = remember { MutableInteractionSource() }

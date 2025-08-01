@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.button.ToskButton
 import com.cheatshqip.tosk.button.tokens.ToskButtonColor
+import com.cheatshqip.tosk.card.ToskCard
 import com.cheatshqip.tosk.chip.ToskChip
 import com.cheatshqip.tosk.textfield.ToskTextField
 import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
@@ -27,7 +28,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ToskTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    containerColor = ToskTheme.colors.background.secondary,
+                ) { innerPadding ->
                     Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
@@ -93,6 +97,12 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             onValueChange = {  },
             placeholder = { Text("Verb") }
         )
+
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
+
+        ToskCard(onClick = {}) {
+            Text("Lol")
+        }
     }
 }
 

@@ -4,6 +4,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 object ToskElevation {
-
     val none: Dp = 0.dp
+    val XS: Dp = 1.dp
 }

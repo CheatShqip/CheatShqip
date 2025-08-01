@@ -1,6 +1,5 @@
 package com.cheatshqip
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -8,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,8 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter.Companion.tint
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,6 +30,7 @@ import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.button.ToskButton
+import com.cheatshqip.tosk.card.ToskCard
 import com.cheatshqip.tosk.textfield.ToskTextField
 import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 import com.cheatshqip.tosk.topappbar.ToskTopAppBar
@@ -103,7 +102,7 @@ private fun TranslationSuggestions(
     )
 
     for (translation in translationSuggestions) {
-        Row(
+        ToskCard(
             modifier =
                 Modifier
                     .fillMaxWidth()
@@ -112,17 +111,18 @@ private fun TranslationSuggestions(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = ripple()
                     ),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            onClick = {},
+            enabled = true,
         ) {
-            Text(
-                text = translation.value
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = "Arrow",
-                colorFilter = tint(ToskTheme.colors.background.primary)
-            )
+            Row(
+                modifier = modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = translation.value
+                )
+            }
         }
     }
 }
@@ -133,6 +133,7 @@ private fun TranslationSuggestions(
 fun HomeScreenPreview() {
     ToskTheme {
         Scaffold(
+            containerColor = ToskTheme.colors.background.secondary,
             topBar = {
                 ToskTopAppBar(
                     title = {
