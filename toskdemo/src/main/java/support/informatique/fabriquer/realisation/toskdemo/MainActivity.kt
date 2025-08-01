@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.cheatshqip.tosk.ToskTheme
+import com.cheatshqip.tosk.badge.ToskBadge
+import com.cheatshqip.tosk.badge.tokens.ToskBadgeColor
 import com.cheatshqip.tosk.button.ToskButton
 import com.cheatshqip.tosk.button.tokens.ToskButtonColor
 import com.cheatshqip.tosk.card.ToskCard
@@ -47,7 +51,8 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(ToskSpacing.M),
+            .padding(ToskSpacing.M)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -102,6 +107,46 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
         ToskCard(onClick = {}) {
             Text("Lol")
+        }
+
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
+
+        ToskBadge(
+            color = ToskBadgeColor.info1()
+        ) {
+            Text(text = "NOMINATIVE")
+        }
+
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
+
+        ToskBadge(
+            color = ToskBadgeColor.info2()
+        ) {
+            Text(text = "ACCUSATIVE")
+        }
+
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
+
+        ToskBadge(
+            color = ToskBadgeColor.info3()
+        ) {
+            Text(text = "GENITIVE")
+        }
+
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
+
+        ToskBadge(
+            color = ToskBadgeColor.info4()
+        ) {
+            Text(text = "DATIVE")
+        }
+
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
+
+        ToskBadge(
+            color = ToskBadgeColor.info5()
+        ) {
+            Text(text = "ABLATIVE")
         }
     }
 }

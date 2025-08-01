@@ -4,6 +4,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 object ToskSpacing {
+    val XXS: Dp = 2.dp
+
     val XS: Dp = 4.dp
 
     val S: Dp = 8.dp
