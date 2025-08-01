@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -15,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.VisualTransformation
 import com.cheatshqip.tosk.ToskTheme
+import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldColors
 import com.cheatshqip.tosk.tokens.primitive.ToskBorderSize
-import com.cheatshqip.tosk.tokens.primitive.ToskPalette
 import com.cheatshqip.tosk.tokens.semantic.ToskShape
 
 
@@ -41,24 +42,29 @@ fun ToskTextField(
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
+    colors: ToskTextFieldColors = ToskTextFieldColors.default()
 ) {
-    val colors = TextFieldDefaults.colors(
-        errorIndicatorColor = ToskPalette.crimson,
-        errorContainerColor = ToskTheme.colors.background.secondary,
-        errorTextColor = ToskTheme.colors.text.primary,
-        focusedIndicatorColor = ToskTheme.colors.border.accent,
-        focusedContainerColor = ToskTheme.colors.background.secondary,
-        focusedTextColor = ToskTheme.colors.text.primary,
-        unfocusedIndicatorColor = ToskTheme.colors.border.secondary,
-        unfocusedContainerColor = ToskTheme.colors.background.secondary,
-        unfocusedTextColor = ToskTheme.colors.text.primary,
-        disabledIndicatorColor = ToskTheme.colors.border.secondary,
-        disabledContainerColor = ToskTheme.colors.background.secondary,
-        disabledTextColor = ToskTheme.colors.text.primary, // TODO pour disabled
+    val materialColors = TextFieldDefaults.colors(
+        errorIndicatorColor = colors.errorIndicatorColor,
+        errorContainerColor = colors.errorContainerColor,
+        errorTextColor = colors.errorTextColor,
+        focusedIndicatorColor = colors.focusedIndicatorColor,
+        focusedContainerColor = colors.focusedContainerColor,
+        focusedTextColor = colors.focusedTextColor,
+        unfocusedIndicatorColor = colors.unfocusedIndicatorColor,
+        unfocusedContainerColor = colors.unfocusedContainerColor,
+        unfocusedTextColor = colors.unfocusedTextColor,
+        disabledIndicatorColor = colors.disabledIndicatorColor,
+        disabledContainerColor = colors.disabledContainerColor,
+        disabledTextColor = colors.disabledTextColor,
     )
     val interactionSource = remember { MutableInteractionSource() }
+    val textSelectionColors = TextSelectionColors(
+        handleColor = ToskTheme.colors.text.primary,
+        backgroundColor = ToskTheme.colors.text.primary.copy(alpha = 0.4f)
+    )
 
-    CompositionLocalProvider(LocalTextSelectionColors provides colors.textSelectionColors) {
+    CompositionLocalProvider(LocalTextSelectionColors provides textSelectionColors) {
         BasicTextField(
             value = value,
             modifier =
@@ -96,16 +102,16 @@ fun ToskTextField(
                         enabled = enabled,
                         isError = isError,
                         interactionSource = interactionSource,
-                        colors = colors,
+                        colors = materialColors,
                         container = {
                             OutlinedTextFieldDefaults.Container(
                                 enabled = enabled,
                                 isError = isError,
                                 interactionSource = interactionSource,
-                                colors = colors,
+                                colors = materialColors,
                                 shape = ToskShape.Medium,
-                                unfocusedBorderThickness = ToskBorderSize.Medium,
-                                focusedBorderThickness = ToskBorderSize.Medium,
+                                unfocusedBorderThickness = ToskBorderSize.M,
+                                focusedBorderThickness = ToskBorderSize.M,
                             )
                         }
                     )

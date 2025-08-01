@@ -10,7 +10,7 @@ sealed class ToskChipSize(
 ) {
     data object Medium : ToskChipSize(
         minHeight = 40.dp,
-        borderSize = ToskBorderSize.Medium,
+        borderSize = ToskBorderSize.M,
     )
 }
 

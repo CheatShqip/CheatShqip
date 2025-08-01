@@ -14,11 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.button.ToskButton
 import com.cheatshqip.tosk.button.tokens.ToskButtonColor
 import com.cheatshqip.tosk.chip.ToskChip
+import com.cheatshqip.tosk.textfield.ToskTextField
+import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +43,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp),
+            .padding(ToskSpacing.M),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -50,7 +51,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             modifier = modifier
         )
 
-        Spacer(modifier = Modifier.padding(10.0.dp))
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
 
         ToskButton(
             enabled = true,
@@ -59,7 +60,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             onClick = { },
         ) { Text("Singular Definite") }
 
-        Spacer(modifier = Modifier.padding(10.0.dp))
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
 
         ToskButton(
             enabled = true,
@@ -67,13 +68,31 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             onClick = { },
         ) { Text("Singular Indefinite") }
 
-        Spacer(modifier = Modifier.padding(10.0.dp))
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
 
         ToskChip(
             enabled = true,
             contentDescription = "Singular Indefinite",
             onClick = { },
         ) { Text("Singular Indefinite") }
+
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
+
+        ToskTextField(
+            modifier = Modifier,
+            value = "Word",
+            onValueChange = {  },
+            placeholder = { Text("Word") }
+        )
+
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
+
+        ToskTextField(
+            modifier = Modifier,
+            value = "Verb",
+            onValueChange = {  },
+            placeholder = { Text("Verb") }
+        )
     }
 }
 
