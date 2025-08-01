@@ -6,20 +6,17 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
-import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.VisualTransformation
-import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldColors
-import com.cheatshqip.tosk.tokens.primitive.ToskBorderSize
+import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldSize
+import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldTextStyle
 import com.cheatshqip.tosk.tokens.semantic.ToskShape
-
 
 @Composable
 fun ToskTextField(
@@ -44,25 +41,9 @@ fun ToskTextField(
     minLines: Int = 1,
     colors: ToskTextFieldColors = ToskTextFieldColors.default()
 ) {
-    val materialColors = TextFieldDefaults.colors(
-        errorIndicatorColor = colors.errorIndicatorColor,
-        errorContainerColor = colors.errorContainerColor,
-        errorTextColor = colors.errorTextColor,
-        focusedIndicatorColor = colors.focusedIndicatorColor,
-        focusedContainerColor = colors.focusedContainerColor,
-        focusedTextColor = colors.focusedTextColor,
-        unfocusedIndicatorColor = colors.unfocusedIndicatorColor,
-        unfocusedContainerColor = colors.unfocusedContainerColor,
-        unfocusedTextColor = colors.unfocusedTextColor,
-        disabledIndicatorColor = colors.disabledIndicatorColor,
-        disabledContainerColor = colors.disabledContainerColor,
-        disabledTextColor = colors.disabledTextColor,
-    )
+    val materialColors = colors.textFieldColors()
     val interactionSource = remember { MutableInteractionSource() }
-    val textSelectionColors = TextSelectionColors(
-        handleColor = ToskTheme.colors.text.primary,
-        backgroundColor = ToskTheme.colors.text.primary.copy(alpha = 0.4f)
-    )
+    val textSelectionColors = colors.textSelectionColors()
 
     CompositionLocalProvider(LocalTextSelectionColors provides textSelectionColors) {
         BasicTextField(
@@ -70,14 +51,14 @@ fun ToskTextField(
             modifier =
                 modifier
                     .defaultMinSize(
-                        minWidth = OutlinedTextFieldDefaults.MinWidth,
-                        minHeight = OutlinedTextFieldDefaults.MinHeight
+                        minWidth = ToskTextFieldSize.minWidth,
+                        minHeight = ToskTextFieldSize.minHeight,
                     ),
             onValueChange = onValueChange,
             enabled = enabled,
             readOnly = readOnly,
-            textStyle = ToskTheme.typography.label2,
-            cursorBrush = SolidColor(ToskTheme.colors.text.primary),
+            textStyle = ToskTextFieldTextStyle.default,
+            cursorBrush = SolidColor(colors.cursorBrushColor),
             visualTransformation = visualTransformation,
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
@@ -110,8 +91,8 @@ fun ToskTextField(
                                 interactionSource = interactionSource,
                                 colors = materialColors,
                                 shape = ToskShape.Medium,
-                                unfocusedBorderThickness = ToskBorderSize.M,
-                                focusedBorderThickness = ToskBorderSize.M,
+                                unfocusedBorderThickness = ToskTextFieldSize.borderSize,
+                                focusedBorderThickness = ToskTextFieldSize.borderSize,
                             )
                         }
                     )
