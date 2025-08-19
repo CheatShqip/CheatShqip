@@ -9,8 +9,6 @@ dependencies {
     compileOnly(files(gradle.serviceOf<DependenciesAccessors>().classes.asFiles))
 }
 
-group = "com.cheatshqip.build-logic"
-
 gradlePlugin {
     plugins {
         register("moduleAndroidPresentation") {
