@@ -20,7 +20,6 @@ retrofitVersion = "3.0.0"
 junit = "4.13.2"
 
 [libraries]
-android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agpVersion" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityComposeVersion" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBomVersion" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }

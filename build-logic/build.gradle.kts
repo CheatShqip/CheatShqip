@@ -6,12 +6,8 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
-
-    gradle.serviceOf<DependenciesAccessors>().classes.asFiles.forEach {
-        compileOnly(files(it.absolutePath))
-    }
+    compileOnly(files(gradle.serviceOf<DependenciesAccessors>().classes.asFiles))
 }
 
 group = "com.cheatshqip.build-logic"
