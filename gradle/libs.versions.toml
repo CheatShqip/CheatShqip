@@ -45,7 +45,6 @@ junit-juniper-params = { group = "org.junit.jupiter", name = "junit-jupiter-para
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinVersion" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinVersion" }
-kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlinVersion" }
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koinVersion" }
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationJsonVersion" }
 mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkitTranslateVersion" }

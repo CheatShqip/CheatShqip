@@ -6,7 +6,6 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(files(gradle.serviceOf<DependenciesAccessors>().classes.asFiles))
 }
 
