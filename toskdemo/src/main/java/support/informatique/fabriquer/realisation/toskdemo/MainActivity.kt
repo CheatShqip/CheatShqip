@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(ToskSpacing.M)
             .verticalScroll(rememberScrollState()),
@@ -90,7 +90,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         ToskTextField(
             modifier = Modifier,
             value = "Word",
-            onValueChange = {  },
+            onValueChange = { },
             placeholder = { Text("Word") }
         )
 
@@ -99,7 +99,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         ToskTextField(
             modifier = Modifier,
             value = "Verb",
-            onValueChange = {  },
+            onValueChange = { },
             placeholder = { Text("Verb") }
         )
 
