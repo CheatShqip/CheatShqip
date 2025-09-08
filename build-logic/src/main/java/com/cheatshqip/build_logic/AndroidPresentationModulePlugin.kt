@@ -26,9 +26,16 @@ class AndroidPresentationModulePlugin : Plugin<Project> {
                 implementation(libs.androidx.ui.graphics)
                 implementation(libs.androidx.ui.material3)
                 implementation(libs.androidx.ui.tooling.preview)
+
+                debugImplementation(libs.androidx.ui.tooling)
+                debugImplementation(libs.androidx.ui.test.manifest)
             }
         }
     }
+}
+
+private fun DependencyHandler.debugImplementation(dependencyNotation: Any) {
+    add("debugImplementation", dependencyNotation)
 }
 
 private fun DependencyHandler.implementation(dependencyNotation: Any) {
