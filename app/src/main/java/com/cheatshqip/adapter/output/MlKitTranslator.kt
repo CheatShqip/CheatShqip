@@ -6,42 +6,37 @@ import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.first
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 class MlKitTranslator : GetAlbanianTranslationOfEnglishWordPort {
     override suspend fun getAlbanianTranslationOfEnglishWord(englishWord: Word): Word {
         return translate(englishWord)
-            .first()
     }
 
-    private fun translate(englishWord: Word) = callbackFlow {
+    private suspend fun translate(englishWord: Word): Word = suspendCancellableCoroutine { continuation ->
         val options = TranslatorOptions.Builder()
             .setSourceLanguage(TranslateLanguage.ENGLISH)
             .setTargetLanguage(TranslateLanguage.ALBANIAN)
             .build()
         val englishAlbanianTranslator = Translation.getClient(options)
 
-        val conditions = DownloadConditions.Builder()
-            .build()
+        continuation.invokeOnCancellation {
+            englishAlbanianTranslator.close()
+        }
+
+        val conditions = DownloadConditions.Builder().build()
 
         englishAlbanianTranslator
             .downloadModelIfNeeded(conditions)
             .addOnSuccessListener {
                 englishAlbanianTranslator.translate(englishWord.value)
                     .addOnSuccessListener { translatedText ->
-                        trySend(Word(translatedText))
+                        continuation.resume(Word(translatedText))
                     }
-                    .addOnFailureListener { exception ->
-                        throw (exception)
-                    }
+                    .addOnFailureListener(continuation::resumeWithException)
             }
-            .addOnFailureListener { exception ->
-                throw (exception)
-            }
-        awaitClose {
-            // does nothing as we can't cancel the mlkit tasks
-        }
+            .addOnFailureListener(continuation::resumeWithException)
     }
 }
