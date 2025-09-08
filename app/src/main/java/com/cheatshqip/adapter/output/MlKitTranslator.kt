@@ -16,20 +16,18 @@ class MlKitTranslator : GetAlbanianTranslationOfEnglishWordPort {
             .first()
     }
 
-    private fun translate(englishWord: Word) =
-        callbackFlow<Word> {
-        val options =
-            TranslatorOptions.Builder()
+    private fun translate(englishWord: Word) = callbackFlow {
+        val options = TranslatorOptions.Builder()
             .setSourceLanguage(TranslateLanguage.ENGLISH)
             .setTargetLanguage(TranslateLanguage.ALBANIAN)
             .build()
         val englishAlbanianTranslator = Translation.getClient(options)
 
-        var conditions =
-            DownloadConditions.Builder()
+        val conditions = DownloadConditions.Builder()
             .build()
 
-        englishAlbanianTranslator.downloadModelIfNeeded(conditions)
+        englishAlbanianTranslator
+            .downloadModelIfNeeded(conditions)
             .addOnSuccessListener {
                 englishAlbanianTranslator.translate(englishWord.value)
                     .addOnSuccessListener { translatedText ->
