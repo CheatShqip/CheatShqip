@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.cheatshqip.tosk.card.tokens.ToskCardColor
 import com.cheatshqip.tosk.card.tokens.ToskCardElevation
 import com.cheatshqip.tosk.card.tokens.ToskCardSize
@@ -50,4 +52,14 @@ fun ToskCard(
             }
         },
     )
+}
+
+@Preview
+@Composable
+private fun ToskCardPreview() {
+    ToskCard(onClick = {}) {
+        Text(
+            text = "This is a card",
+        )
+    }
 }
