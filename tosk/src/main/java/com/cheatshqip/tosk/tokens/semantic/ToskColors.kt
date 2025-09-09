@@ -23,6 +23,7 @@ sealed class ToskColors(
             textOnInfo3 = ToskPalette.forestGreen,
             textOnInfo4 = ToskPalette.brown,
             textOnInfo5 = ToskPalette.rust,
+            error = ToskPalette.crimson,
         ),
         background = ToskColorsBackground(
             primary = ToskPalette.crimson,
@@ -45,9 +46,39 @@ sealed class ToskColors(
     )
 
     data object Dark : ToskColors(
-        text = TODO(),
-        background = TODO(),
-        border = TODO()
+        text = ToskColorsText(
+            primary = ToskPalette.alabaster,
+            textOnPrimary = ToskPalette.alabaster,
+            textOnPrimaryDisabled = ToskPalette.alabaster,
+            secondary = ToskPalette.alabaster,
+            textOnSecondaryDisabled = ToskPalette.alabaster,
+            accent = ToskPalette.purple,
+            textOnAccentDisabled = ToskPalette.alabaster,
+            textOnInfo1 = ToskPalette.salmonPink,
+            textOnInfo2 = ToskPalette.aliceBlue,
+            textOnInfo3 = ToskPalette.honeydew,
+            textOnInfo4 = ToskPalette.lemonChiffon,
+            textOnInfo5 = ToskPalette.papayaWhip,
+            error = ToskPalette.crimson,
+        ),
+        background = ToskColorsBackground(
+            primary = ToskPalette.crimson,
+            primaryDisabled = ToskPalette.fireBrick,
+            secondary = ToskPalette.charcoal,
+            secondaryDisabled = ToskPalette.jet,
+            accent = ToskPalette.darkPurple,
+            accentDisabled = ToskPalette.jet,
+            info1 = ToskPalette.maroon,
+            info2 = ToskPalette.navy,
+            info3 = ToskPalette.darkGreen,
+            info4 = ToskPalette.darkGoldenrod,
+            info5 = ToskPalette.saddleBrown,
+        ),
+        border = ToskColorsBorder(
+            primary = ToskPalette.fireBrick,
+            secondary = ToskPalette.jet,
+            accent = ToskPalette.darkPurple,
+        )
     )
 }
 
@@ -68,6 +99,7 @@ data class ToskColorsText(
     val textOnInfo3: Color,
     val textOnInfo4: Color,
     val textOnInfo5: Color,
+    val error: Color,
 )
 
 data class ToskColorsBackground(

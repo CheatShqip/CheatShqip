@@ -17,38 +17,35 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
 import com.cheatshqip.domain.Translation
-import com.cheatshqip.domain.Word
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.button.ToskButton
 import com.cheatshqip.tosk.card.ToskCard
 import com.cheatshqip.tosk.textfield.ToskTextField
 import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 import com.cheatshqip.tosk.topappbar.ToskTopAppBar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreenRoute(
+    modifier: Modifier = Modifier,
     innerPadding: PaddingValues = PaddingValues(ToskTheme.spacing.None),
-    homeScreenViewModel: HomeScreenViewModel = koinViewModel()
+    homeScreenViewModel: HomeScreenViewModel = koinViewModel(),
 ) {
     val homeScreenUIState: HomeScreenUIState by homeScreenViewModel.state.collectAsStateWithLifecycle()
 
     HomeScreen(
-        homeScreenUIState,
-        innerPadding,
-        homeScreenViewModel::onSearch
+        homeScreenUIState = homeScreenUIState,
+        innerPadding = innerPadding,
+        onSearchChanged = homeScreenViewModel::onSearchChanged,
+        onSearch = homeScreenViewModel::onSearch,
+        modifier = modifier,
     )
 }
 
@@ -56,36 +53,38 @@ fun HomeScreenRoute(
 private fun HomeScreen(
     homeScreenUIState: HomeScreenUIState,
     innerPadding: PaddingValues,
-    onSearch: (String) -> Unit = {},
+    onSearchChanged: (String) -> Unit,
+    onSearch: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    var searchInput by remember { mutableStateOf("") }
-
     Column(
         modifier =
-            Modifier
+            modifier
                 .padding(innerPadding)
                 .padding(ToskSpacing.S),
         verticalArrangement = Arrangement.spacedBy(ToskSpacing.S)
     ) {
         val containerModifier = Modifier.fillMaxWidth()
 
-        ToskTextField(
-            modifier = containerModifier,
-            value = searchInput,
-            onValueChange = { searchInput = it },
-            placeholder = { Text("Word") }
-        )
+        if (homeScreenUIState is WithSearch) {
+            ToskTextField(
+                modifier = containerModifier,
+                value = homeScreenUIState.search,
+                onValueChange = onSearchChanged,
+                placeholder = { Text("Word") }
+            )
 
-        ToskButton(
-            modifier = containerModifier,
-            contentDescription = stringResource(R.string.translate),
-            onClick = { onSearch(searchInput) }
-        ) {
-            Text(stringResource(R.string.translate))
-        }
+            ToskButton(
+                modifier = containerModifier,
+                contentDescription = stringResource(R.string.translate),
+                onClick = { onSearch() }
+            ) {
+                Text(stringResource(R.string.translate))
+            }
 
-        if (homeScreenUIState is HomeScreenUIState.WithTranslationSuggestions) {
-            TranslationSuggestions(containerModifier, homeScreenUIState.translationSuggestions)
+            if (homeScreenUIState is HomeScreenUIState.WithTranslationSuggestions) {
+                TranslationSuggestions(containerModifier, homeScreenUIState.translationSuggestions)
+            }
         }
     }
 }
@@ -128,7 +127,7 @@ private fun TranslationSuggestions(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
+@PreviewLightDark
 @Composable
 fun HomeScreenPreview() {
     ToskTheme {
@@ -142,27 +141,18 @@ fun HomeScreenPreview() {
                 )
             },
         ) { innerPadding ->
-            HomeScreenRoute(
+            HomeScreen(
                 innerPadding = innerPadding,
-                homeScreenViewModel = homeScreenViewModelWithSearchAndTranslations()
-            )
-        }
-    }
-} // TODO : 1. Add a preview for HomeScreen with loading state
-// TODO : 2. Add a preview for HomeScreen with error state
-// TODO : 3. Add a preview for HomeScreen with empty state
-
-private fun homeScreenViewModelWithSearchAndTranslations() =
-    HomeScreenViewModel(
-        coroutineDispatcher = Dispatchers.Default,
-        getWordTranslationSuggestionsUseCase =
-            object : GetWordTranslationSuggestionsUseCase {
-                override suspend fun getWorldTranslationSuggestions(word: Word): List<Translation> {
-                    return listOf(
+                homeScreenUIState = HomeScreenUIState.WithTranslationSuggestions(
+                    search = "test",
+                    translationSuggestions = listOf(
                         Translation("test"),
                         Translation("test2")
                     )
-                }
-            },
-        search = MutableStateFlow("test"),
-    )
+                ),
+                onSearch = {},
+                onSearchChanged = {},
+            )
+        }
+    }
+}

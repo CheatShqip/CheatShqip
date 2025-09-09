@@ -3,6 +3,8 @@ package com.cheatshqip.tosk.tokens.primitive
 import androidx.compose.ui.graphics.Color
 
 object ToskPalette {
+    val jet: Color = Color(0xFF343434)
+    val charcoal: Color = Color(0xFF36454F)
     val black = Color(0xFF000000)
     val slateGray = Color(0xFF4B5563)
     val silver = Color(0xFF9CA3AF)
@@ -26,4 +28,10 @@ object ToskPalette {
     val papayaWhip = Color(0xFFFFEDD5)
     val pinkLace = Color(0xFFFAD7D5)
     val transparent = Color(0x00000000)
+    val darkPurple = Color(0xFF301934)
+    val maroon = Color(0xFF800000)
+    val navy = Color(0xFF000080)
+    val darkGreen = Color(0xFF006400)
+    val darkGoldenrod = Color(0xFFB8860B)
+    val saddleBrown = Color(0xFF8B4513)
 }

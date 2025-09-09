@@ -6,7 +6,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.cheatshqip.tosk.ToskTheme
-import com.cheatshqip.tosk.tokens.primitive.ToskPalette
 
 data class ToskTextFieldColor(
     val errorIndicatorColor: Color,
@@ -26,25 +25,33 @@ data class ToskTextFieldColor(
     val cursorBrushColor: Color,
 ) {
     @Composable
-    fun textFieldColors() : TextFieldColors {
+    fun textFieldColors(): TextFieldColors {
         return TextFieldDefaults.colors(
-            errorIndicatorColor = errorIndicatorColor,
+            errorCursorColor = errorIndicatorColor,
             errorContainerColor = errorContainerColor,
             errorTextColor = errorTextColor,
-            focusedIndicatorColor = focusedIndicatorColor,
             focusedContainerColor = focusedContainerColor,
             focusedTextColor = focusedTextColor,
-            unfocusedIndicatorColor = unfocusedIndicatorColor,
             unfocusedContainerColor = unfocusedContainerColor,
-            unfocusedTextColor = unfocusedTextColor,
-            disabledIndicatorColor = disabledIndicatorColor,
+            unfocusedTextColor = focusedTextColor,
             disabledContainerColor = disabledContainerColor,
-            disabledTextColor = disabledTextColor,
+            disabledTextColor = focusedTextColor,
+            cursorColor = cursorBrushColor,
+            focusedPlaceholderColor = focusedTextColor,
+            unfocusedPlaceholderColor = focusedTextColor,
+            disabledPlaceholderColor = focusedTextColor,
+            focusedSupportingTextColor = focusedTextColor,
+            unfocusedSupportingTextColor = focusedTextColor,
+            disabledSupportingTextColor = focusedTextColor,
+            errorSupportingTextColor = focusedTextColor,
+            focusedLabelColor = focusedTextColor,
+            disabledLabelColor = focusedTextColor,
+
         )
     }
 
     @Composable
-    fun textSelectionColors() : TextSelectionColors {
+    fun textSelectionColors(): TextSelectionColors {
         return TextSelectionColors(
             handleColor = textSelectionHandleColor,
             backgroundColor = textSelectionBackgroundColor,
@@ -56,9 +63,9 @@ data class ToskTextFieldColor(
         @Composable
         fun default(): ToskTextFieldColor {
             return ToskTextFieldColor(
-                errorIndicatorColor = ToskPalette.crimson,
+                errorIndicatorColor = ToskTheme.colors.text.error,
                 errorContainerColor = ToskTheme.colors.background.secondary,
-                errorTextColor = ToskTheme.colors.text.primary,
+                errorTextColor = ToskTheme.colors.text.error,
                 focusedIndicatorColor = ToskTheme.colors.border.accent,
                 focusedContainerColor = ToskTheme.colors.background.secondary,
                 focusedTextColor = ToskTheme.colors.text.primary,

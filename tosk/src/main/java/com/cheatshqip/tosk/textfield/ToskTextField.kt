@@ -7,12 +7,15 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldColor
 import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldSize
 import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldTextStyle
@@ -57,7 +60,9 @@ fun ToskTextField(
             onValueChange = onValueChange,
             enabled = enabled,
             readOnly = readOnly,
-            textStyle = ToskTextFieldTextStyle.default,
+            textStyle = ToskTextFieldTextStyle.default.copy(
+                color = materialColors.textColor(enabled, isError),
+            ),
             cursorBrush = SolidColor(colors.cursorBrushColor),
             visualTransformation = visualTransformation,
             keyboardOptions = keyboardOptions,
@@ -99,4 +104,24 @@ fun ToskTextField(
                 }
         )
     }
+}
+
+private fun TextFieldColors.textColor(
+    enabled: Boolean,
+    isError: Boolean
+): Color {
+    return when {
+        !enabled -> disabledTextColor
+        isError -> errorTextColor
+        else -> focusedTextColor
+    }
+}
+
+@PreviewLightDark
+@Composable
+fun ToskTextFieldPreview() {
+    ToskTextField(
+        value = "Test",
+        onValueChange = { },
+    )
 }

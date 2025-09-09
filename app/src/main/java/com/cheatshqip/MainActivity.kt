@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                 ) { innerPadding ->
-                    HomeScreenRoute(innerPadding)
+                    HomeScreenRoute(innerPadding = innerPadding)
                 }
             }
         }

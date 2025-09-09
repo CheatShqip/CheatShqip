@@ -3,41 +3,25 @@ package com.cheatshqip
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
-import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeScreenViewModel(
     private val coroutineDispatcher: CoroutineDispatcher,
     private val getWordTranslationSuggestionsUseCase: GetWordTranslationSuggestionsUseCase,
-    private val search: MutableStateFlow<String> = MutableStateFlow(""),
 ) : ViewModel() {
-    private val worldTranslationSuggestions: Flow<List<Translation>> = search.map {
-        getWordTranslationSuggestionsUseCase.getWorldTranslationSuggestions(Word(it))
-    }
-
-    val state = search.flatMapLatest { searchQuery ->
-        if (searchQuery.isBlank()) {
-            flowOf(HomeScreenUIState.Initial)
-        } else {
-            worldTranslationSuggestions
-                .map { suggestions -> HomeScreenUIState.WithTranslationSuggestions(suggestions) }
-        }
-    }.stateIn(
+    private val _state = MutableStateFlow<HomeScreenUIState>(HomeScreenUIState.Initial())
+    val state = _state.stateIn(
         scope = viewModelScope,
-        initialValue = HomeScreenUIState.Initial,
+        initialValue = HomeScreenUIState.Initial(),
         started =
             SharingStarted.WhileSubscribed(
                 stopTimeoutMillis = 1.seconds.inWholeMilliseconds,
@@ -45,9 +29,26 @@ class HomeScreenViewModel(
             ),
     )
 
-    fun onSearch(search: String) = viewModelScope.launch(coroutineDispatcher) {
-        this@HomeScreenViewModel.search.update {
-            search
-        }
+    fun onSearch() = viewModelScope.launch(coroutineDispatcher) {
+        val currentState = _state.value
+        check(currentState is WithSearch)
+
+        getWordTranslationSuggestionsUseCase
+            .getWorldTranslationSuggestions(Word(currentState.search))
+            .let { translations ->
+                _state.update {
+                    HomeScreenUIState.WithTranslationSuggestions(
+                        translationSuggestions = translations,
+                        search = currentState.search
+                    )
+                }
+            }
+    }
+
+    fun onSearchChanged(search: String) {
+        val currentState = _state.value
+        check(currentState is WithSearch)
+
+        _state.update { currentState.onSearchChanged(search) }
     }
 }
