@@ -37,8 +37,6 @@ object ToskTheme {
         @Composable
         @ReadOnlyComposable
         get() = if (LocalInspectionMode.current) {
-            // when in preview mode return a default typography object to ensure previews work
-            // without wrapping it in another composable
             ToskTypography.Default
         } else {
             LocalToskTypography.current
@@ -48,14 +46,13 @@ object ToskTheme {
         @Composable
         @ReadOnlyComposable
         get() = if (LocalInspectionMode.current) {
-            // when in preview mode return a default colour object to ensure previews work
-            // without wrapping it in another composable
             if (isSystemInDarkTheme()) ToskColors.Dark else ToskColors.Light
         } else {
             LocalToskColors.current
         }
 
     val spacing: ToskSpacing
+        @ReadOnlyComposable
         @Composable
         get() = ToskSpacing
 }
