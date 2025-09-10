@@ -22,7 +22,7 @@ import com.cheatshqip.tosk.textfield.ToskTextField
 import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 
 @Composable
-fun MainScreen(name: String, modifier: Modifier = Modifier) {
+fun MainScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -30,13 +30,6 @@ fun MainScreen(name: String, modifier: Modifier = Modifier) {
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier
-        )
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
         ToskButton(
             enabled = true,
             color = ToskButtonColor.secondary(),
@@ -130,6 +123,6 @@ fun MainScreen(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun MainScreenPreview() {
     ToskTheme {
-        MainScreen("Android")
+        MainScreen()
     }
 }
