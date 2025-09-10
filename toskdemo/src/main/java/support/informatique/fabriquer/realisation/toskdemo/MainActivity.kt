@@ -36,125 +36,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     containerColor = ToskTheme.colors.background.secondary,
                 ) { innerPadding ->
-                    Greeting(
+                    MainScreen(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(ToskSpacing.M)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier
-        )
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
-        ToskButton(
-            enabled = true,
-            color = ToskButtonColor.secondary(),
-            contentDescription = "Singular Definite",
-            onClick = { },
-        ) { Text("Singular Definite") }
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
-        ToskButton(
-            enabled = true,
-            contentDescription = "Singular Indefinite",
-            onClick = { },
-        ) { Text("Singular Indefinite") }
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
-        ToskChip(
-            enabled = true,
-            contentDescription = "Singular Indefinite",
-            onClick = { },
-        ) { Text("Singular Indefinite") }
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
-        ToskTextField(
-            modifier = Modifier,
-            value = "Word",
-            onValueChange = { },
-            placeholder = { Text("Word") }
-        )
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
-        ToskTextField(
-            modifier = Modifier,
-            value = "Verb",
-            onValueChange = { },
-            placeholder = { Text("Verb") }
-        )
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
-        ToskCard(onClick = {}) {
-            Text("Lol")
-        }
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
-        ToskBadge(
-            color = ToskBadgeColor.info1()
-        ) {
-            Text(text = "NOMINATIVE")
-        }
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
-        ToskBadge(
-            color = ToskBadgeColor.info2()
-        ) {
-            Text(text = "ACCUSATIVE")
-        }
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
-        ToskBadge(
-            color = ToskBadgeColor.info3()
-        ) {
-            Text(text = "GENITIVE")
-        }
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
-        ToskBadge(
-            color = ToskBadgeColor.info4()
-        ) {
-            Text(text = "DATIVE")
-        }
-
-        Spacer(modifier = Modifier.padding(ToskSpacing.M))
-
-        ToskBadge(
-            color = ToskBadgeColor.info5()
-        ) {
-            Text(text = "ABLATIVE")
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ToskTheme {
-        Greeting("Android")
     }
 }
