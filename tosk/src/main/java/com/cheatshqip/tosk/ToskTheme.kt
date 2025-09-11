@@ -10,10 +10,10 @@ import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 import com.cheatshqip.tosk.tokens.semantic.ToskColors
 import com.cheatshqip.tosk.tokens.semantic.ToskTypography
 
-private val LocalToskTypography = staticCompositionLocalOf<ToskTypography> {
+val LocalToskTypography = staticCompositionLocalOf<ToskTypography> {
     error("Wrap you content with ToskTheme {} to get access to Tosk typography")
 }
-private val LocalToskColors = staticCompositionLocalOf<ToskColors> {
+val LocalToskColors = staticCompositionLocalOf<ToskColors> {
     error("Wrap you content with ToskTheme {} to get access to Tosk colors")
 }
 
@@ -51,6 +51,7 @@ object ToskTheme {
         } else {
             LocalToskTypography.current
         }
+
     val colors: ToskColors
         @Composable
         @ReadOnlyComposable
@@ -59,6 +60,7 @@ object ToskTheme {
         } else {
             LocalToskColors.current
         }
+
     val spacing: ToskSpacing
         @ReadOnlyComposable
         @Composable
