@@ -1,4 +1,4 @@
-package support.informatique.fabriquer.realisation.toskdemo
+package com.cheatshqip.toskdemo
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

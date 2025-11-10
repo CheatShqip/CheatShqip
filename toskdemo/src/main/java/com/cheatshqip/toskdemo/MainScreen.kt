@@ -1,4 +1,4 @@
-package support.informatique.fabriquer.realisation.toskdemo
+package com.cheatshqip.toskdemo
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

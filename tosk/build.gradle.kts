@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "support.informatique.fabriquer.realisation.tosk"
+    namespace = "com.cheatshqip.realisation.tosk"
     compileSdk = 36
 
     defaultConfig {

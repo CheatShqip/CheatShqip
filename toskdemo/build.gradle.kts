@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "support.informatique.fabriquer.realisation.toskdemo"
+    namespace = "com.cheatshqip.realisation.toskdemo"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "support.informatique.fabriquer.realisation.toskdemo"
+        applicationId = "com.cheatshqip.realisation.toskdemo"
         minSdk = 21
         targetSdk = 36
         versionCode = 1
