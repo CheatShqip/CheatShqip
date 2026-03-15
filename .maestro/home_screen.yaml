@@ -5,3 +5,4 @@ appId: com.cheatshqip
 - assertVisible: "CheatShqip"
 - assertVisible: "Word"
 - assertVisible: "Translate"
+- takeScreenshot: home_screen_initial

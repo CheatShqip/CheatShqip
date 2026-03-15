@@ -41,6 +41,10 @@ Key package layout under `com.cheatshqip`:
 - **Min SDK**: 24 (app), 21 (tosk) — note: toskdemo was bumped to 23 for navigationevent compat
 - **Target/Compile SDK**: 36
 
+## Agent Preferences
+
+- Use `deep-explore` subagent type for all codebase exploration tasks.
+
 ## Testing
 
 Always run tests in a subagent. Report only pass/fail counts and failure details back to the main conversation.
