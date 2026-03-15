@@ -1,0 +1,7 @@
+appId: com.cheatshqip
+---
+- launchApp:
+    clearState: true
+- assertVisible: "CheatShqip"
+- assertVisible: "Word"
+- assertVisible: "Translate"

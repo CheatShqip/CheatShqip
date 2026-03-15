@@ -1,0 +1,10 @@
+appId: com.cheatshqip
+---
+- launchApp:
+    clearState: true
+- tapOn: "Word"
+- inputText: "card"
+- tapOn: "Translate"
+- extendedWaitUntil:
+    visible: "kartë"
+    timeout: 15000
