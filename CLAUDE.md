@@ -60,6 +60,51 @@ Test results (XML) are located at:
 - UI tests in `src/androidTest/` use `createAndroidComposeRule<MainActivity>()`
 - Async tests use `runTest` with up to 15s timeout
 
+### Connected (Instrumented) Tests — Mock Flavor
+
+UI/connected tests run against the `mockDebug` build variant, which uses a fully offline app:
+- `MockWebServer` serves canned REST responses (see `app/src/mock/java/com/cheatshqip/fixtures/KarteJsonResponse.kt`)
+- `FakeAlbanianTranslationOutputAdapter` replaces ML Kit (maps `"card"` → `"karte"`)
+- Both are wired via `mockModule` in `app/src/mock/java/com/cheatshqip/CheatShqipApplication.kt`
+
+Run connected tests (requires a running emulator or device):
+```bash
+./gradlew connectedMockDebugAndroidTest
+```
+
+To add support for a new word in connected tests, add its mapping in both:
+1. `app/src/mock/java/com/cheatshqip/FakeAlbanianTranslationOutputAdapter.kt` — translation mapping
+2. `app/src/mock/java/com/cheatshqip/CheatShqipApplication.kt` dispatcher — REST stub for `/define/<translated-word>`
+
+### Maestro E2E Tests
+
+Flows live in `.maestro/` and target `com.cheatshqip`. Screenshots are saved under `.maestro/screenshots/`.
+
+| Flow | File | Description |
+|---|---|---|
+| Home screen | `home_screen.yaml` | Asserts initial UI elements are visible, takes screenshot |
+| Translate word | `translate_word.yaml` | Types "card", taps Translate, waits for "kartë", takes screenshot |
+
+**Run all Maestro flows** (requires `mockDebug` APK installed, emulator running):
+```bash
+maestro test .maestro/
+```
+
+**Screenshot tests** (builds + installs mock APK, runs flows, diffs against baselines):
+```bash
+./.maestro/screenshot_test.sh
+```
+
+Update baselines after intentional UI changes:
+```bash
+./.maestro/screenshot_test.sh --update-baselines
+```
+
+Screenshot diff threshold is 100 pixels (override with `SCREENSHOT_THRESHOLD=<n>`).
+Baselines are stored in `.maestro/screenshots/baselines/`, diffs in `.maestro/screenshots/diffs/`.
+
+Prerequisites: `maestro` CLI installed, `imagemagick` (`magick` at `/opt/homebrew/bin/magick`), emulator running with `mockDebug` APK or let the script install it.
+
 ## API
 
 - Backend: AWS API Gateway (eu-central-1)

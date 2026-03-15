@@ -1,0 +1,56 @@
+package com.cheatshqip.fixtures
+
+const val KARTE_JSON_RESPONSE = """
+    {
+        "searchedWord": "karte",
+        "exactMatches": [
+            {
+                "word": "kartë",
+                "word2": "karte",
+                "word5": "kár/të",
+                "wordOrig": "sh. -a(t)",
+                "wordDefinition": "kár/të,-ta emër i gjinisë femërore; numri shumës; -a(t) fletë e trashë letre ose kartoni me të dhëna të caktuara; biletë: kartë krediti; kartë identiteti.",
+                "wordDer1": "karta",
+                "wordDer2": "kartë",
+                "wordDer3": "kartat",
+                "wordDer4": "",
+                "wordDer5": "",
+                "wordDer6": "",
+                "wordDer7": "",
+                "wordDer8": "",
+                "wordDer9": "",
+                "derivedWordMatch": true,
+                "exactMatch": true,
+                "canonicalWord": "kartë",
+                "verb": null,
+                "antonyms": [],
+                "synonyms": ["biletë"]
+            }
+        ],
+        "fuzzyMatches": [
+            {
+                "word": "karrem",
+                "word2": "karrem",
+                "word5": "kárr/em",
+                "wordOrig": "",
+                "wordDefinition": "kárr/em,-ehem folje.",
+                "wordDer1": "",
+                "wordDer2": "",
+                "wordDer3": "",
+                "wordDer4": "",
+                "wordDer5": "",
+                "wordDer6": "",
+                "wordDer7": "",
+                "wordDer8": "",
+                "wordDer9": "",
+                "derivedWordMatch": false,
+                "exactMatch": false,
+                "canonicalWord": "karrem",
+                "verb": null,
+                "antonyms": [],
+                "synonyms": []
+            }
+        ],
+        "firstCanonicalWord": null
+    }
+"""

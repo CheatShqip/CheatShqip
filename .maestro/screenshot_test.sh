@@ -34,6 +34,9 @@ mkdir -p "$ACTUAL_DIR" "$DIFFS_DIR"
 echo "Enabling Android demo mode..."
 enable_demo_mode
 
+echo "Building and installing mock APK..."
+cd "$SCRIPT_DIR/.." && ./gradlew installMockDebug
+
 echo "Running Maestro flows..."
 maestro test "$SCRIPT_DIR/"
 

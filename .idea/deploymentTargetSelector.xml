@@ -19,9 +19,6 @@
       <SelectionState runConfigName="Dark - ToskTextFieldPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="HomeScreenTitleTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="Tests in 'com.cheatshqip'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

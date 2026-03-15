@@ -7,5 +7,5 @@ appId: com.cheatshqip
 - tapOn: "Translate"
 - extendedWaitUntil:
     visible: "kartë"
-    timeout: 15000
+    timeout: 3000
 - takeScreenshot: translate_word_results
