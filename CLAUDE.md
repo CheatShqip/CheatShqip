@@ -63,7 +63,8 @@ Test results (XML) are located at:
 ### Connected (Instrumented) Tests — Mock Flavor
 
 UI/connected tests run against the `mockDebug` build variant, which uses a fully offline app:
-- `MockWebServer` serves canned REST responses (see `app/src/mock/java/com/cheatshqip/fixtures/KarteJsonResponse.kt`)
+- WireMock standalone (running on the host) serves REST responses from `.wiremock/`
+- The app points to `http://10.0.2.2:9090/` (emulator → host alias, stock Android emulator only)
 - `FakeAlbanianTranslationOutputAdapter` replaces ML Kit (maps `"card"` → `"karte"`)
 - Both are wired via `mockModule` in `app/src/mock/java/com/cheatshqip/CheatShqipApplication.kt`
 
@@ -73,24 +74,47 @@ Run connected tests (requires a running emulator or device):
 ```
 
 To add support for a new word in connected tests, add its mapping in both:
-1. `app/src/mock/java/com/cheatshqip/FakeAlbanianTranslationOutputAdapter.kt` — translation mapping
-2. `app/src/mock/java/com/cheatshqip/CheatShqipApplication.kt` dispatcher — REST stub for `/define/<translated-word>`
+1. `app/src/mock/java/com/cheatshqip/FakeAlbanianTranslationOutputAdapter.kt` — add entry to the `translations` map
+2. `.wiremock/mappings/` — add a new stub JSON file for `GET /define/<translated-word>`
+3. `.wiremock/__files/` — add the response body JSON file
+
+### WireMock Stub Structure
+
+```
+.wiremock/
+  mappings/
+    define-karte-200.json   # priority 1: GET /define/karte → 200
+    define-any-404.json     # priority 10: catch-all → 404
+  __files/
+    karte-response.json     # response body for karte
+```
+
+Start WireMock manually (port 9090 by default):
+```bash
+java -jar .wiremock/wiremock-standalone.jar --port 9090 --root-dir .wiremock
+```
+
+The JAR is checked in at `.wiremock/wiremock-standalone.jar` (excluded from git via `.gitignore`).
+
+> **Note**: `10.0.2.2` is the host alias only on the stock Android emulator. Genymotion and physical devices require a different address.
 
 ### Maestro E2E Tests
 
 Flows live in `.maestro/` and target `com.cheatshqip`. Screenshots are saved under `.maestro/screenshots/`.
+Flows call `runScript: scripts/wiremock-reset.js` before `launchApp` to ensure clean WireMock state.
 
 | Flow | File | Description |
 |---|---|---|
 | Home screen | `home_screen.yaml` | Asserts initial UI elements are visible, takes screenshot |
 | Translate word | `translate_word.yaml` | Types "card", taps Translate, waits for "kartë", takes screenshot |
+| Translate word error | `translate_word_error.yaml` | Injects a 500 stub mid-flow, verifies error UI |
 
-**Run all Maestro flows** (requires `mockDebug` APK installed, emulator running):
+**Run all Maestro flows** (requires `mockDebug` APK installed, emulator running, WireMock running):
 ```bash
 maestro test .maestro/
 ```
 
-**Screenshot tests** (builds + installs mock APK, runs flows, diffs against baselines):
+**Screenshot tests** (builds + installs mock APK, starts/stops WireMock automatically, diffs against baselines):
 ```bash
 ./.maestro/screenshot_test.sh
 ```
@@ -101,9 +125,42 @@ Update baselines after intentional UI changes:
 ```
 
 Screenshot diff threshold is 100 pixels (override with `SCREENSHOT_THRESHOLD=<n>`).
+WireMock port defaults to 9090 (override with `WIREMOCK_PORT=<n>`).
 Baselines are stored in `.maestro/screenshots/baselines/`, diffs in `.maestro/screenshots/diffs/`.
 
-Prerequisites: `maestro` CLI installed, `imagemagick` (`magick` at `/opt/homebrew/bin/magick`), emulator running with `mockDebug` APK or let the script install it.
+Prerequisites: `maestro` CLI installed, `imagemagick` (`magick` at `/opt/homebrew/bin/magick`), `java` (for WireMock JAR), emulator running with `mockDebug` APK or let the script install it.
+
+### Maestro JavaScript HTTP API
+
+Decompiled from `~/.maestro/lib/maestro-client.jar` (`maestro.js.GraalJsHttp`).
+
+**Signatures:**
+```
+http.post(url: String)
+http.post(url: String, options: Map)
+http.get(url: String)
+http.get(url: String, options: Map)
+// same pattern for put, delete, request
+```
+
+**Options map keys:** `body` (String), `headers` (Object), `multipartForm`, `method`
+
+**Rules:**
+- `http.post(url)` → OkHttp throws "method POST must have a request body"
+- `http.post(url, {})` → same error (no `body` key)
+- There is **no** 3-arg overload `post(url, body, headers)`
+
+**Correct usage:**
+```js
+// POST with body (body content ignored by server, but required by OkHttp)
+http.post('http://localhost:9090/__admin/reset', { body: '{}' });
+
+// POST with body + headers
+http.post('http://localhost:9090/__admin/mappings', {
+  body: JSON.stringify({ ... }),
+  headers: { 'Content-Type': 'application/json' }
+});
+```
 
 ## API
 

@@ -1,0 +1,14 @@
+{
+    "priority": 1,
+    "request": {
+        "method": "GET",
+        "urlPathPattern": "/define/karte"
+    },
+    "response": {
+        "status": 200,
+        "bodyFileName": "karte-response.json",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}

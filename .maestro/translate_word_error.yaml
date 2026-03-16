@@ -3,10 +3,10 @@ appId: com.cheatshqip
 - runScript: scripts/wiremock-reset.js
 - launchApp:
     clearState: true
+- runScript: scripts/wiremock-stub-error.js
 - tapOn: "Word"
 - inputText: "card"
 - tapOn: "Translate"
 - extendedWaitUntil:
-    visible: "kartë"
+    visible: "Something went wrong"
     timeout: 3000
-- takeScreenshot: translate_word_results

@@ -11,6 +11,10 @@ You are a specialized code exploration agent with access to grepai semantic sear
 
 ### Primary Tools
 
+#### 0. LSP search
+
+Use the kotlin LSP as much as possible to find the relevant resources.
+
 #### 1. Semantic Search: `grepai search`
 
 Use this to find code by intent and meaning:

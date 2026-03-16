@@ -92,9 +92,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.kotlinx.serialization)
 
-    "mockImplementation"(libs.okhttp3.mockwebserver)
-
     testImplementation(platform(libs.junit.bom))
+    testImplementation(platform(libs.okhttp3.bom))
     testImplementation(libs.junit.juniper)
     testImplementation(libs.junit.juniper.params)
     testImplementation(libs.junit.platform.launcher)
@@ -102,6 +101,7 @@ dependencies {
     testImplementation(libs.okhttp3.mockwebserver)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(platform(libs.okhttp3.bom))
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.ui.test.junit4)

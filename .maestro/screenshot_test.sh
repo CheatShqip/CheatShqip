@@ -8,13 +8,22 @@ ACTUAL_DIR="$SCREENSHOTS_DIR/actual"
 DIFFS_DIR="$SCREENSHOTS_DIR/diffs"
 MAGICK="/opt/homebrew/bin/magick"
 SCREENSHOT_THRESHOLD="${SCREENSHOT_THRESHOLD:-100}"
+WIREMOCK_PORT="${WIREMOCK_PORT:-9090}"
 UPDATE_BASELINES=false
+WIREMOCK_PID=""
 
 for arg in "$@"; do
   if [[ "$arg" == "--update-baselines" ]]; then
     UPDATE_BASELINES=true
   fi
 done
+
+WIREMOCK_JAR="$SCRIPT_DIR/../.wiremock/wiremock-standalone.jar"
+
+if [[ ! -f "$WIREMOCK_JAR" ]]; then
+  echo "ERROR: WireMock JAR not found at $WIREMOCK_JAR"
+  exit 1
+fi
 
 enable_demo_mode() {
   adb shell settings put global sysui_demo_allowed 1
@@ -29,7 +38,23 @@ disable_demo_mode() {
   adb shell am broadcast -a com.android.systemui.demo -e command exit || true
 }
 
+cleanup() {
+  disable_demo_mode
+  [[ -n "${WIREMOCK_PID:-}" ]] && kill "$WIREMOCK_PID" 2>/dev/null || true
+}
+trap cleanup EXIT
+
 mkdir -p "$ACTUAL_DIR" "$DIFFS_DIR"
+
+echo "Starting WireMock on port $WIREMOCK_PORT..."
+java -jar "$WIREMOCK_JAR" --port "$WIREMOCK_PORT" --root-dir "$SCRIPT_DIR/../.wiremock" &
+WIREMOCK_PID=$!
+
+echo "Waiting for WireMock to be ready..."
+for i in $(seq 1 20); do
+  curl -s "http://localhost:${WIREMOCK_PORT}/__admin/mappings" > /dev/null 2>&1 && break
+  sleep 0.5
+done
 
 echo "Enabling Android demo mode..."
 enable_demo_mode

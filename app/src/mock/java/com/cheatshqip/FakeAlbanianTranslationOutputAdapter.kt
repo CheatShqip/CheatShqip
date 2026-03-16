@@ -4,11 +4,13 @@ import com.cheatshqip.application.port.output.GetAlbanianTranslationOfEnglishWor
 import com.cheatshqip.domain.Word
 
 class FakeAlbanianTranslationOutputAdapter : GetAlbanianTranslationOfEnglishWordPort {
-    override suspend fun getAlbanianTranslationOfEnglishWord(englishWord: Word): Word {
-        if (englishWord.value == "card") {
-            return Word("karte")
-        }
 
-        throw IllegalArgumentException("No translation found for ${englishWord.value}")
+    private val translations = mapOf("card" to "karte")
+
+    override suspend fun getAlbanianTranslationOfEnglishWord(englishWord: Word): Word {
+        return Word(
+            translations[englishWord.value]
+                ?: throw IllegalArgumentException("No translation found for ${englishWord.value}")
+        )
     }
 }

@@ -17,3 +17,5 @@ local.properties
 *.aab
 .maestro/screenshots/actual/
 .maestro/screenshots/diffs/
+/screenshots/
+.wiremock/*.jar
