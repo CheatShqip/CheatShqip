@@ -5,3 +5,10 @@ if [ $? -ne 0 ]; then
   echo "Detekt failed. Fix the violations before committing."
   exit 1
 fi
+
+echo "Running Android Lint..."
+./gradlew lint
+if [ $? -ne 0 ]; then
+  echo "Lint failed. Fix the violations before committing."
+  exit 1
+fi
