@@ -47,7 +47,7 @@ Key package layout under `com.cheatshqip`:
 
 ## Testing
 
-Always run tests in a subagent. Report only pass/fail counts and failure details back to the main conversation.
+Always run tests and Detekt in a subagent after any code change. Use `./gradlew :app:testDebugUnitTest detekt` (adjust module prefix as needed). Report only pass/fail counts, Detekt violations, and failure details back to the main conversation.
 
 Test results (XML) are located at:
 - `<module>/build/test-results/testDebugUnitTest/TEST-*.xml`
