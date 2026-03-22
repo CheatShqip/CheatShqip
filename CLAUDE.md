@@ -47,7 +47,14 @@ Key package layout under `com.cheatshqip`:
 
 ## Testing
 
-Always run tests and Detekt in a subagent after any code change. Use `./gradlew :app:testDebugUnitTest detekt` (adjust module prefix as needed). Report only pass/fail counts, Detekt violations, and failure details back to the main conversation.
+Detekt 1.23.8 is incompatible with JDK 25 — run tests and Detekt separately:
+
+```bash
+./gradlew :app:testMockDebugUnitTest :app:testProdDebugUnitTest
+JAVA_HOME=~/.sdkman/candidates/java/21.0.7-zulu ./gradlew :app:detekt
+```
+
+Adjust module prefix as needed. Report only pass/fail counts, Detekt violations, and failure details back to the main conversation.
 
 Test results (XML) are located at:
 - `<module>/build/test-results/testDebugUnitTest/TEST-*.xml`

@@ -18,7 +18,8 @@ sealed class HomeScreenUIState {
 
     data object Loading : HomeScreenUIState()
     data class WithTranslationSuggestions(
-        val translationSuggestions: List<Translation>, override val search: String
+        val translationSuggestions: List<Translation>,
+        override val search: String,
     ) : HomeScreenUIState(), WithSearch {
         override fun onSearchChanged(search: String): HomeScreenUIState {
             return this.copy(search = search)
