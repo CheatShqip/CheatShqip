@@ -11,6 +11,12 @@ naming:
     packagePattern: '[a-z]+(\.[a-z][A-Za-z_0-9]*)*'
 
 style:
+  UnusedPrivateMember:
+    active: true
+  UnusedPrivateProperty:
+    active: true
+  UnusedParameter:
+    active: true
   MaxLineLength:
     excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
     excludeCommentStatements: true

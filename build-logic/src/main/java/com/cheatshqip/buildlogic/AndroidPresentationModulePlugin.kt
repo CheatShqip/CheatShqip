@@ -1,4 +1,4 @@
-package com.cheatshqip.build_logic
+package com.cheatshqip.buildlogic
 
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
@@ -40,12 +40,4 @@ private fun DependencyHandler.debugImplementation(dependencyNotation: Any) {
 
 private fun DependencyHandler.implementation(dependencyNotation: Any) {
     add("implementation", dependencyNotation)
-}
-
-private fun DependencyHandler.testImplementation(dependencyNotation: Any) {
-    add("testImplementation", dependencyNotation)
-}
-
-private fun DependencyHandler.androidTestImplementation(dependencyNotation: Any) {
-    add("androidTestImplementation", dependencyNotation)
 }

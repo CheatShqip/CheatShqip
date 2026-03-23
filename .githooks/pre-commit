@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "Running Detekt..."
-./gradlew detekt
+./gradlew detekt :build-logic:detektMain
 if [ $? -ne 0 ]; then
   echo "Detekt failed. Fix the violations before committing."
   exit 1
