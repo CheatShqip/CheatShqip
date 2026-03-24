@@ -76,20 +76,6 @@ detekt {
     config.setFrom("$rootDir/detekt-config.yml")
 }
 
-tasks.register<io.gitlab.arturbosch.detekt.Detekt>("detektMain") {
-    description = "Run detekt with type resolution for main sources"
-    buildUponDefaultConfig = true
-    allRules = true
-    autoCorrect = false
-    config.setFrom("$rootDir/detekt-config.yml")
-    setSource(files("src/main/java"))
-    classpath.setFrom(
-        tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileMockDebugKotlin")
-            .map { it.libraries },
-    )
-    include("**/*.kt")
-}
-
 dependencies {
     implementation(project(":tosk"))
 
