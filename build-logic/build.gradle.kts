@@ -8,7 +8,9 @@ plugins {
 
 dependencies {
     compileOnly(files(gradle.serviceOf<DependenciesAccessors>().classes.asFiles))
+    compileOnly(libs.detekt.api)
     detektPlugins(libs.detekt.formatting)
+   // detektPlugins(files("build/libs/build-logic.jar"))
 }
 
 detekt {
