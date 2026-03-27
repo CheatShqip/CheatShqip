@@ -1,7 +1,7 @@
 [versions]
 activityComposeVersion = "1.13.0"
 agpVersion = "9.1.0"
-composeBomVersion = "2026.03.00"
+composeBomVersion = "2026.03.01"
 coreKtxVersion = "1.18.0"
 coroutinesVersion = "1.10.2"
 detektVersion = "1.23.8"

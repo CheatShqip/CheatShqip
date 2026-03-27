@@ -1,21 +1,53 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+# Gradle
+.gradle/
+**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# Android
 local.properties
 *.apk
 *.aab
+*.ap_
+*.dex
+
+# IntelliJ / Android Studio
+*.iml
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/.name
+.idea/compiler.xml
+.idea/deploymentTargetDropDown.xml
+.idea/migrations.xml
+.idea/render.experimental.xml
+
+# Native build
+.externalNativeBuild/
+.cxx/
+
+# Profiling & captures
+captures/
+/screenshots/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Kotlin
+*.class
+
+# Test artifacts
 .maestro/screenshots/actual/
 .maestro/screenshots/diffs/
-/screenshots/
+
+# WireMock
 .wiremock/*.jar
+
+# Qodana
+.qodana/
+.envrc
