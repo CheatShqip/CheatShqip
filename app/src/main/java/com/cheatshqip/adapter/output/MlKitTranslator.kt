@@ -11,9 +11,8 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 class MlKitTranslator : GetAlbanianTranslationOfEnglishWordPort {
-    override suspend fun getAlbanianTranslationOfEnglishWord(englishWord: Word): Word {
-        return translate(englishWord)
-    }
+    override suspend fun getAlbanianTranslationOfEnglishWord(englishWord: Word): Word =
+        translate(englishWord)
 
     private suspend fun translate(englishWord: Word): Word = suspendCancellableCoroutine { continuation ->
         val options = TranslatorOptions.Builder()

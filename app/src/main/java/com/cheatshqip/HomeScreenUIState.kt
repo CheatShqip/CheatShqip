@@ -11,9 +11,7 @@ interface WithSearch {
 @Immutable
 sealed class HomeScreenUIState {
     data class Initial(override val search: String = "") : HomeScreenUIState(), WithSearch {
-        override fun onSearchChanged(search: String): HomeScreenUIState {
-            return this.copy(search = search)
-        }
+        override fun onSearchChanged(search: String): HomeScreenUIState = this.copy(search = search)
     }
 
     data object Loading : HomeScreenUIState()
@@ -21,9 +19,7 @@ sealed class HomeScreenUIState {
         val translationSuggestions: List<Translation>,
         override val search: String,
     ) : HomeScreenUIState(), WithSearch {
-        override fun onSearchChanged(search: String): HomeScreenUIState {
-            return this.copy(search = search)
-        }
+        override fun onSearchChanged(search: String): HomeScreenUIState = this.copy(search = search)
     }
 
     data class Error(val name: String, val error: Throwable) : HomeScreenUIState()
