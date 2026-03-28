@@ -1,0 +1,131 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Run unit tests
+        run: ./gradlew :app:testMockDebugUnitTest :app:testProdDebugUnitTest
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: app/build/test-results/
+
+  detekt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Run Detekt
+        run: ./gradlew :app:detekt
+
+      - name: Upload Detekt report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: detekt-report
+          path: app/build/reports/detekt/
+
+  screenshot-tests:
+    needs: [unit-tests, detekt]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+
+      - name: Install Maestro
+        run: |
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+
+      - name: Download WireMock JAR
+        run: |
+          WIREMOCK_VERSION="${{ vars.WIREMOCK_VERSION || '3.10.0' }}"
+          curl -fsSL -o .wiremock/wiremock-standalone.jar \
+            "https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/${WIREMOCK_VERSION}/wiremock-standalone-${WIREMOCK_VERSION}.jar"
+
+      - name: Download baselines from R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          LATEST_TAG="$(git tag --sort=-v:refname --list 'v*' | head -1)"
+          if [[ -z "$LATEST_TAG" ]]; then
+            echo "ERROR: no v* tags found — run update-baselines first"
+            exit 1
+          fi
+          echo "Using baselines from tag: $LATEST_TAG"
+
+          mkdir -p .maestro/screenshots/baselines
+          aws s3 sync "s3://${{ secrets.R2_BUCKET_NAME }}/${LATEST_TAG}/" \
+            .maestro/screenshots/baselines/ \
+            --endpoint-url "${{ secrets.R2_ENDPOINT_URL }}"
+
+      - name: Run screenshot tests
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          MAGICK: magick
+          MAESTRO_DRIVER_STARTUP_TIMEOUT: 120000
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: pixel_6
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          disable-animations: true
+          script: .maestro/screenshot_test.sh
+
+      - name: Upload screenshot artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot-results
+          path: |
+            .maestro/screenshots/actual/
+            .maestro/screenshots/diffs/
