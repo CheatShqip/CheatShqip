@@ -41,6 +41,10 @@ Key package layout under `com.cheatshqip`:
 - **Min SDK**: 24 (app), 21 (tosk) — note: toskdemo was bumped to 23 for navigationevent compat
 - **Target/Compile SDK**: 36
 
+## Code Quality
+
+Always load the `code-smells` skill when writing or editing any Kotlin (or other) code in this project.
+
 ## Agent Preferences
 
 - Use `deep-explore` subagent type for all codebase exploration tasks.
