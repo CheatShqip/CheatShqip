@@ -55,17 +55,12 @@ jobs:
           script: .maestro/screenshot_test.sh --update-baselines
 
       - name: Upload baselines to R2
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: |
-          aws s3 sync .maestro/screenshots/baselines/ \
-            "s3://${{ secrets.R2_BUCKET_NAME }}/${{ github.event.inputs.version }}/" \
-            --endpoint-url "${{ secrets.R2_ENDPOINT_URL }}" \
-            --delete
-
-      - name: Upload baselines as artifact
-        uses: actions/upload-artifact@v4
+        uses: ./.github/actions/upload-to-r2
         with:
-          name: baselines-${{ github.event.inputs.version }}
-          path: .maestro/screenshots/baselines/
+          local-path: .maestro/screenshots/baselines/
+          r2-path: ${{ github.event.inputs.version }}
+          access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          bucket-name: ${{ secrets.R2_BUCKET_NAME }}
+          endpoint-url: ${{ secrets.R2_ENDPOINT_URL }}
+          delete: 'true'

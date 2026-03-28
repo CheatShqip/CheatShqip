@@ -1,0 +1,45 @@
+name: Upload to R2
+description: Sync a local directory to Cloudflare R2
+
+inputs:
+  local-path:
+    description: Local directory to upload
+    required: true
+  r2-path:
+    description: Destination path in the R2 bucket (e.g. "baselines/v0.0.3")
+    required: true
+  access-key-id:
+    description: R2 access key ID
+    required: true
+  secret-access-key:
+    description: R2 secret access key
+    required: true
+  bucket-name:
+    description: R2 bucket name
+    required: true
+  endpoint-url:
+    description: R2 endpoint URL
+    required: true
+  delete:
+    description: Delete files in R2 that do not exist locally
+    required: false
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    - name: Upload to R2
+      shell: bash
+      env:
+        AWS_ACCESS_KEY_ID: ${{ inputs.access-key-id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.secret-access-key }}
+      run: |
+        DELETE_FLAG=""
+        if [[ "${{ inputs.delete }}" == "true" ]]; then
+          DELETE_FLAG="--delete"
+        fi
+
+        aws s3 sync "${{ inputs.local-path }}" \
+          "s3://${{ inputs.bucket-name }}/${{ inputs.r2-path }}/" \
+          --endpoint-url "${{ inputs.endpoint-url }}" \
+          $DELETE_FLAG

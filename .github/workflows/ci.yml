@@ -26,12 +26,16 @@ jobs:
       - name: Run unit tests
         run: ./gradlew :app:testMockDebugUnitTest :app:testProdDebugUnitTest
 
-      - name: Upload test results
+      - name: Upload test results to R2
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: ./.github/actions/upload-to-r2
         with:
-          name: test-results
-          path: app/build/test-results/
+          local-path: app/build/test-results/
+          r2-path: ci/${{ github.run_id }}/test-results
+          access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          bucket-name: ${{ secrets.R2_BUCKET_NAME }}
+          endpoint-url: ${{ secrets.R2_ENDPOINT_URL }}
 
   detekt:
     runs-on: ubuntu-latest
@@ -48,12 +52,16 @@ jobs:
       - name: Run Detekt
         run: ./gradlew :app:detekt
 
-      - name: Upload Detekt report
+      - name: Upload Detekt report to R2
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: ./.github/actions/upload-to-r2
         with:
-          name: detekt-report
-          path: app/build/reports/detekt/
+          local-path: app/build/reports/detekt/
+          r2-path: ci/${{ github.run_id }}/detekt-report
+          access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          bucket-name: ${{ secrets.R2_BUCKET_NAME }}
+          endpoint-url: ${{ secrets.R2_ENDPOINT_URL }}
 
   screenshot-tests:
     needs: [unit-tests, detekt]
@@ -121,11 +129,13 @@ jobs:
           disable-animations: true
           script: .maestro/screenshot_test.sh
 
-      - name: Upload screenshot artifacts
+      - name: Upload screenshot results to R2
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: ./.github/actions/upload-to-r2
         with:
-          name: screenshot-results
-          path: |
-            .maestro/screenshots/actual/
-            .maestro/screenshots/diffs/
+          local-path: .maestro/screenshots/
+          r2-path: ci/${{ github.run_id }}/screenshots
+          access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          bucket-name: ${{ secrets.R2_BUCKET_NAME }}
+          endpoint-url: ${{ secrets.R2_ENDPOINT_URL }}

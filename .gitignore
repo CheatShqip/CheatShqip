@@ -43,6 +43,7 @@ captures/
 
 # Test artifacts
 .maestro/screenshots/actual/
+.maestro/screenshots/baselines/
 .maestro/screenshots/diffs/
 
 # WireMock
