@@ -1,4 +1,2 @@
 appId: com.cheatshqip
 testOutputDir: screenshots/actual
-excludeFlows:
-  - translate_word_error.yaml
