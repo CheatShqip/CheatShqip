@@ -11,6 +11,9 @@ class CustomRuleSetProvider : RuleSetProvider {
 
     override fun instance(config: Config): RuleSet = RuleSet(
         ruleSetId,
-        listOf(UnusedPublicMember(config.subConfig("UnusedPublicMember"))),
+        listOf(
+            //UnusedPublicMember(config.subConfig("UnusedPublicMember")),
+            PublicBeforePrivate(config.subConfig("PublicBeforePrivate")),
+        ),
     )
 }

@@ -8,7 +8,6 @@ plugins {
 
 dependencies {
     compileOnly(files(gradle.serviceOf<DependenciesAccessors>().classes.asFiles))
-    compileOnly(libs.detekt.api)
     detektPlugins(libs.detekt.formatting)
 }
 
@@ -24,6 +23,10 @@ gradlePlugin {
         register("moduleAndroidPresentation") {
             id = "com.cheatshqip.module.android.presentation"
             implementationClass = "com.cheatshqip.buildlogic.AndroidPresentationModulePlugin"
+        }
+        register("sonarReport") {
+            id = "com.cheatshqip.sonar.report"
+            implementationClass = "com.cheatshqip.buildlogic.SonarReportPlugin"
         }
     }
 }

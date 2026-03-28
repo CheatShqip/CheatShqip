@@ -120,4 +120,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     detektPlugins(libs.detekt.formatting)
+    detektPlugins(project(":detekt-rules"))
 }

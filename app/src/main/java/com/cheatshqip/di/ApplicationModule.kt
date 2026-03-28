@@ -23,11 +23,6 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 private const val HTTP_APPLICATION_JSON = "application/json"
 
-private val jsonBuilder = Json {
-    ignoreUnknownKeys = true
-    isLenient = true
-}
-
 val applicationModule = module {
     single<OkHttpClient> {
         OkHttpClient.Builder()
@@ -83,4 +78,9 @@ val applicationModule = module {
             coroutineDispatcher = get()
         )
     }
+}
+
+private val jsonBuilder = Json {
+    ignoreUnknownKeys = true
+    isLenient = true
 }

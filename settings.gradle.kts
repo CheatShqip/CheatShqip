@@ -17,6 +17,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
@@ -24,3 +25,4 @@ rootProject.name = "Cheat Shqip"
 include(":app")
 include(":tosk")
 include(":toskdemo")
+include(":detekt-rules")
