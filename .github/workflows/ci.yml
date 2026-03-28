@@ -129,13 +129,10 @@ jobs:
           disable-animations: true
           script: .maestro/screenshot_test.sh
 
-      - name: Upload screenshot results to R2
+      - name: Upload screenshot results
         if: always()
-        uses: ./.github/actions/upload-to-r2
+        uses: actions/upload-artifact@v4
         with:
-          local-path: .maestro/screenshots/
-          r2-path: ci/${{ github.run_id }}/screenshots
-          access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          bucket-name: ${{ secrets.R2_BUCKET_NAME }}
-          endpoint-url: ${{ secrets.R2_ENDPOINT_URL }}
+          name: screenshot-results
+          path: .maestro/screenshots/
+          retention-days: 1
