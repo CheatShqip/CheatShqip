@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  BASELINES_PATH: .maestro/generated/baselines
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -110,9 +113,9 @@ jobs:
           fi
           echo "Using baselines from tag: $LATEST_TAG"
 
-          mkdir -p .maestro/generated/baselines
+          mkdir -p ${{ env.BASELINES_PATH }}
           aws s3 sync "s3://${{ secrets.R2_BUCKET_NAME }}/${LATEST_TAG}/" \
-            .maestro/generated/baselines/ \
+            ${{ env.BASELINES_PATH }}/ \
             --endpoint-url "${{ secrets.R2_ENDPOINT_URL }}"
 
       - name: Run screenshot tests
