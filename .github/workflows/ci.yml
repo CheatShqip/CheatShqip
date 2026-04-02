@@ -110,9 +110,9 @@ jobs:
           fi
           echo "Using baselines from tag: $LATEST_TAG"
 
-          mkdir -p .maestro/screenshots/baselines
+          mkdir -p .maestro/generated/baselines
           aws s3 sync "s3://${{ secrets.R2_BUCKET_NAME }}/${LATEST_TAG}/" \
-            .maestro/screenshots/baselines/ \
+            .maestro/generated/baselines/ \
             --endpoint-url "${{ secrets.R2_ENDPOINT_URL }}"
 
       - name: Run screenshot tests

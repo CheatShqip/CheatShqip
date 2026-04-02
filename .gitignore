@@ -42,9 +42,7 @@ captures/
 *.class
 
 # Test artifacts
-.maestro/screenshots/actual/
-.maestro/screenshots/baselines/
-.maestro/screenshots/diffs/
+.maestro/generated
 
 # WireMock
 .wiremock/*.jar

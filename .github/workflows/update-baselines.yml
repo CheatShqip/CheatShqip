@@ -57,7 +57,7 @@ jobs:
       - name: Upload baselines to R2
         uses: ./.github/actions/upload-to-r2
         with:
-          local-path: .maestro/screenshots/baselines/
+          local-path: .maestro/generated/baselines/
           r2-path: ${{ github.event.inputs.version }}
           access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}

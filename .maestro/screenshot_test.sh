@@ -2,10 +2,11 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCREENSHOTS_DIR="$SCRIPT_DIR/screenshots"
-BASELINES_DIR="$SCREENSHOTS_DIR/baselines"
-ACTUAL_DIR="$SCREENSHOTS_DIR/actual"
-DIFFS_DIR="$SCREENSHOTS_DIR/diffs"
+GENERATED_DIR="$SCRIPT_DIR/generated"
+SCREENSHOTS_DIR="$GENERATED_DIR/screenshots"
+BASELINES_DIR="$GENERATED_DIR/baselines"
+ACTUAL_DIR="$GENERATED_DIR/actual"
+DIFFS_DIR="$GENERATED_DIR/diffs"
 MAGICK="/opt/homebrew/bin/magick"
 SCREENSHOT_THRESHOLD="${SCREENSHOT_THRESHOLD:-100}"
 WIREMOCK_PORT="${WIREMOCK_PORT:-9090}"
@@ -44,8 +45,6 @@ cleanup() {
 }
 trap cleanup EXIT
 
-mkdir -p "$ACTUAL_DIR" "$DIFFS_DIR"
-
 echo "Starting WireMock on port $WIREMOCK_PORT..."
 java -jar "$WIREMOCK_JAR" --port "$WIREMOCK_PORT" --root-dir "$SCRIPT_DIR/../.wiremock" &
 WIREMOCK_PID=$!
@@ -67,6 +66,11 @@ maestro test "$SCRIPT_DIR/"
 
 echo "Disabling Android demo mode..."
 disable_demo_mode
+
+mkdir -p "$ACTUAL_DIR" "$BASELINES_DIR" "$DIFFS_DIR"
+
+echo "Organizing actual screenshots..."
+mv "$SCREENSHOTS_DIR/"*.png "$ACTUAL_DIR/" 2>/dev/null || true
 
 if [[ "$UPDATE_BASELINES" == true ]]; then
   echo "Updating baselines..."
@@ -92,9 +96,11 @@ for actual in "$ACTUAL_DIR"/*.png; do
 
   pixel_diff=$("$MAGICK" compare -metric AE "$baseline" "$actual" "$diff_out" 2>&1 || true)
 
-  if ! [[ "$pixel_diff" =~ ^[0-9]+$ ]]; then
-    echo "WARN: unexpected output from magick compare for $name: $pixel_diff"
-    pixel_diff=0
+  pixel_diff=$(echo "$pixel_diff" | grep -oE '^[0-9]+' || echo "")
+  if [[ -z "$pixel_diff" ]]; then
+    echo "WARN: unexpected output from magick compare for $name, treating as failure"
+    FAILURES=$((FAILURES + 1))
+    continue
   fi
 
   if [[ "$pixel_diff" -gt "$SCREENSHOT_THRESHOLD" ]]; then
