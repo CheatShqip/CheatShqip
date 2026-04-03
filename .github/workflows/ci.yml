@@ -120,7 +120,7 @@ jobs:
             ${{ env.BASELINES_DIR_PATH }}/ \
             --endpoint-url "${{ secrets.R2_ENDPOINT_URL }}"
 
-      - name: Run screenshot tests
+      - name: Run Maestro flows
         uses: reactivecircus/android-emulator-runner@v2
         env:
           MAESTRO_DRIVER_STARTUP_TIMEOUT: 120000
@@ -131,7 +131,11 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           disable-animations: true
-          script: .maestro/screenshot_test.sh
+          script: .maestro/screenshot_test.sh --skip-compare
+
+      - name: Compare screenshots
+        if: always()
+        run: .maestro/screenshot_test.sh --compare-only
 
       - name: Upload screenshot results
         if: always()

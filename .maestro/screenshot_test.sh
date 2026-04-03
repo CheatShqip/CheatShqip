@@ -10,13 +10,70 @@ DIFFS_DIR="$GENERATED_DIR/diffs"
 SCREENSHOT_THRESHOLD="${SCREENSHOT_THRESHOLD:-100}"
 WIREMOCK_PORT="${WIREMOCK_PORT:-9090}"
 UPDATE_BASELINES=false
+SKIP_COMPARE=false
+COMPARE_ONLY=false
 WIREMOCK_PID=""
 
 for arg in "$@"; do
   if [[ "$arg" == "--update-baselines" ]]; then
     UPDATE_BASELINES=true
+  elif [[ "$arg" == "--skip-compare" ]]; then
+    SKIP_COMPARE=true
+  elif [[ "$arg" == "--compare-only" ]]; then
+    COMPARE_ONLY=true
   fi
 done
+
+run_compare() {
+  mkdir -p "$ACTUAL_DIR" "$BASELINES_DIR" "$DIFFS_DIR"
+  echo "Diffing screenshots against baselines..."
+  local failures=0
+
+  for actual in "$ACTUAL_DIR"/*.png; do
+    [[ -f "$actual" ]] || continue
+    local name
+    name="$(basename "$actual")"
+    local baseline="$BASELINES_DIR/$name"
+    local diff_out="$DIFFS_DIR/$name"
+
+    if [[ ! -f "$baseline" ]]; then
+      echo "MISSING BASELINE: $name — run with --update-baselines to create it"
+      failures=$((failures + 1))
+      continue
+    fi
+
+    local pixel_diff
+    pixel_diff=$(compare -metric AE "$baseline" "$actual" "$diff_out" 2>&1 || true)
+    pixel_diff=$(echo "$pixel_diff" | grep -oE '^[0-9]+' || echo "")
+
+    if [[ -z "$pixel_diff" ]]; then
+      echo "WARN: unexpected output from compare for $name, treating as failure"
+      failures=$((failures + 1))
+      continue
+    fi
+
+    if [[ "$pixel_diff" -gt "$SCREENSHOT_THRESHOLD" ]]; then
+      echo "FAIL: $name — $pixel_diff pixels differ (threshold: $SCREENSHOT_THRESHOLD). Diff: $diff_out"
+      failures=$((failures + 1))
+    else
+      echo "PASS: $name — $pixel_diff pixels differ"
+    fi
+  done
+
+  if [[ "$failures" -gt 0 ]]; then
+    echo ""
+    echo "$failures screenshot test(s) failed."
+    return 1
+  fi
+
+  echo ""
+  echo "All screenshot tests passed."
+}
+
+if [[ "$COMPARE_ONLY" == true ]]; then
+  run_compare
+  exit $?
+fi
 
 WIREMOCK_JAR="$SCRIPT_DIR/../.wiremock/wiremock-standalone.jar"
 
@@ -78,43 +135,9 @@ if [[ "$UPDATE_BASELINES" == true ]]; then
   exit 0
 fi
 
-echo "Diffing screenshots against baselines..."
-FAILURES=0
-
-for actual in "$ACTUAL_DIR"/*.png; do
-  [[ -f "$actual" ]] || continue
-  name="$(basename "$actual")"
-  baseline="$BASELINES_DIR/$name"
-  diff_out="$DIFFS_DIR/$name"
-
-  if [[ ! -f "$baseline" ]]; then
-    echo "MISSING BASELINE: $name — run with --update-baselines to create it"
-    FAILURES=$((FAILURES + 1))
-    continue
-  fi
-
-  pixel_diff=$(compare -metric AE "$baseline" "$actual" "$diff_out" 2>&1 || true)
-
-  pixel_diff=$(echo "$pixel_diff" | grep -oE '^[0-9]+' || echo "")
-  if [[ -z "$pixel_diff" ]]; then
-    echo "WARN: unexpected output from magick compare for $name, treating as failure"
-    FAILURES=$((FAILURES + 1))
-    continue
-  fi
-
-  if [[ "$pixel_diff" -gt "$SCREENSHOT_THRESHOLD" ]]; then
-    echo "FAIL: $name — $pixel_diff pixels differ (threshold: $SCREENSHOT_THRESHOLD). Diff: $diff_out"
-    FAILURES=$((FAILURES + 1))
-  else
-    echo "PASS: $name — $pixel_diff pixels differ"
-  fi
-done
-
-if [[ "$FAILURES" -gt 0 ]]; then
-  echo ""
-  echo "$FAILURES screenshot test(s) failed."
-  exit 1
+if [[ "$SKIP_COMPARE" == true ]]; then
+  echo "Skipping comparison (--skip-compare)."
+  exit 0
 fi
 
-echo ""
-echo "All screenshot tests passed."
+run_compare
