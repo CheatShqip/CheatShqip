@@ -49,6 +49,11 @@ enable_demo_mode() {
 
     result=$(adb shell dumpsys statusbar | grep -o 'mDemoMode=true' || true)
     [[ "$result" == "mDemoMode=true" ]] && break
+
+    if [[ "$i" -eq 20 ]]; then
+      echo "ERROR: demo mode not supported on this emulator image (mDemoMode never became true)"
+      exit 1
+    fi
     sleep 0.5
   done
 }
