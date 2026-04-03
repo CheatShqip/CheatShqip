@@ -1,7 +1,7 @@
 name: Update Screenshot Baselines
 
 env:
-  BASELINES_PATH: .maestro/generated/baselines
+  BASELINES_DIR_PATH: .maestro/generated/baselines
 
 on:
   workflow_dispatch:
@@ -59,7 +59,7 @@ jobs:
       - name: Upload baselines to R2
         uses: ./.github/actions/upload-to-r2
         with:
-          local-path: ${{ env.BASELINES_PATH }}/
+          local-path: ${{ env.BASELINES_DIR_PATH }}/
           r2-path: ${{ github.event.inputs.version }}
           access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}

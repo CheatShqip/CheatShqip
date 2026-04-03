@@ -8,7 +8,7 @@ on:
 
 env:
     GENERATED_DIR_PATH: .maestro/generated
-    BASELINES_DIR_PATH: $GENERATED_DIR_PATH/baselines
+    BASELINES_DIR_PATH: .maestro/generated/baselines
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -115,9 +115,9 @@ jobs:
           fi
           echo "Using baselines from tag: $LATEST_TAG"
 
-          mkdir -p ${{ env.BASELINES_PATH }}
+          mkdir -p ${{ env.BASELINES_DIR_PATH }}
           aws s3 sync "s3://${{ secrets.R2_BUCKET_NAME }}/${LATEST_TAG}/" \
-            ${{ env.BASELINES_PATH }}/ \
+            ${{ env.BASELINES_DIR_PATH }}/ \
             --endpoint-url "${{ secrets.R2_ENDPOINT_URL }}"
 
       - name: Run screenshot tests
@@ -138,5 +138,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshot-results
-          path: $GENERATED_DIR_PATH
+          path: ${{ env.GENERATED_DIR_PATH }}
           retention-days: 1
