@@ -9,4 +9,5 @@ appId: com.cheatshqip
 - extendedWaitUntil:
     visible: "kartë"
     timeout: 3000
+- hideKeyboard
 - takeScreenshot: translate_word_results
