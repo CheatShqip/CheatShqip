@@ -7,7 +7,8 @@ on:
     branches: [main]
 
 env:
-  BASELINES_PATH: .maestro/generated/baselines
+    GENERATED_DIR_PATH: .maestro/generated
+    BASELINES_DIR_PATH: $GENERATED_DIR_PATH/baselines
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -137,5 +138,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshot-results
-          path: .maestro/screenshots/
+          path: $GENERATED_DIR_PATH
           retention-days: 1
