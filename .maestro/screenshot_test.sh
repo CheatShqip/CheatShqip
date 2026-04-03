@@ -30,7 +30,7 @@ enable_demo_mode() {
   adb shell am broadcast -a com.android.systemui.demo -e command enter
   adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1200
   adb shell am broadcast -a com.android.systemui.demo -e command battery -e level 100 -e plugged false
-  adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4
+  adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4 -e mobile show -e level 4 -e datatype none
   adb shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
 }
 
