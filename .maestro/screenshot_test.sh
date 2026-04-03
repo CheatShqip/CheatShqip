@@ -27,6 +27,11 @@ fi
 
 enable_demo_mode() {
   adb shell settings put global sysui_demo_allowed 1
+  allowed=$(adb shell settings get global sysui_demo_allowed 2>/dev/null || true)
+  if [[ "$allowed" != "1" ]]; then
+    echo "ERROR: demo mode is not available on this device/image"
+    exit 1
+  fi
 
   echo "Waiting for SystemUI to be ready..."
   for i in $(seq 1 40); do
