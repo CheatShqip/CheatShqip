@@ -27,11 +27,25 @@ fi
 
 enable_demo_mode() {
   adb shell settings put global sysui_demo_allowed 1
-  adb shell am broadcast -a com.android.systemui.demo -e command enter
-  adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1200
-  adb shell am broadcast -a com.android.systemui.demo -e command battery -e level 100 -e plugged false
-  adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4 -e mobile show -e level 4 -e datatype none
-  adb shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
+
+  echo "Waiting for SystemUI to be ready..."
+  for i in $(seq 1 40); do
+    adb shell pidof com.android.systemui > /dev/null 2>&1 && break
+    sleep 0.5
+  done
+
+  echo "Applying demo mode..."
+  for i in $(seq 1 20); do
+    adb shell am broadcast -a com.android.systemui.demo -e command enter
+    adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1200
+    adb shell am broadcast -a com.android.systemui.demo -e command battery -e level 100 -e plugged false
+    adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4 -e mobile show -e level 4 -e datatype none
+    adb shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
+
+    result=$(adb shell dumpsys statusbar | grep -o 'mDemoMode=true' || true)
+    [[ "$result" == "mDemoMode=true" ]] && break
+    sleep 0.5
+  done
 }
 
 disable_demo_mode() {
