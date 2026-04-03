@@ -122,7 +122,6 @@ jobs:
       - name: Run screenshot tests
         uses: reactivecircus/android-emulator-runner@v2
         env:
-          MAGICK: magick
           MAESTRO_DRIVER_STARTUP_TIMEOUT: 120000
         with:
           api-level: 31

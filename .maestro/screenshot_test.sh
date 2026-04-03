@@ -7,7 +7,6 @@ SCREENSHOTS_DIR="$GENERATED_DIR/screenshots"
 BASELINES_DIR="$GENERATED_DIR/baselines"
 ACTUAL_DIR="$GENERATED_DIR/actual"
 DIFFS_DIR="$GENERATED_DIR/diffs"
-MAGICK="/opt/homebrew/bin/magick"
 SCREENSHOT_THRESHOLD="${SCREENSHOT_THRESHOLD:-100}"
 WIREMOCK_PORT="${WIREMOCK_PORT:-9090}"
 UPDATE_BASELINES=false
@@ -94,7 +93,7 @@ for actual in "$ACTUAL_DIR"/*.png; do
     continue
   fi
 
-  pixel_diff=$("$MAGICK" compare -metric AE "$baseline" "$actual" "$diff_out" 2>&1 || true)
+  pixel_diff=$(magick compare -metric AE "$baseline" "$actual" "$diff_out" 2>&1 || true)
 
   pixel_diff=$(echo "$pixel_diff" | grep -oE '^[0-9]+' || echo "")
   if [[ -z "$pixel_diff" ]]; then
