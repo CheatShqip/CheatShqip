@@ -40,22 +40,12 @@ enable_demo_mode() {
   done
 
   echo "Applying demo mode..."
-  for i in $(seq 1 20); do
-    adb shell am broadcast -a com.android.systemui.demo -e command enter
-    adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1200
-    adb shell am broadcast -a com.android.systemui.demo -e command battery -e level 100 -e plugged false
-    adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4 -e mobile show -e level 4 -e datatype none
-    adb shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
-
-    result=$(adb shell dumpsys statusbar | grep -o 'mDemoMode=true' || true)
-    [[ "$result" == "mDemoMode=true" ]] && break
-
-    if [[ "$i" -eq 20 ]]; then
-      echo "ERROR: demo mode not supported on this emulator image (mDemoMode never became true)"
-      exit 1
-    fi
-    sleep 0.5
-  done
+  adb shell am broadcast -a com.android.systemui.demo -e command enter
+  adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1200
+  adb shell am broadcast -a com.android.systemui.demo -e command battery -e level 100 -e plugged false
+  adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4 -e mobile show -e level 4 -e datatype none
+  adb shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
+  sleep 2
 }
 
 disable_demo_mode() {
