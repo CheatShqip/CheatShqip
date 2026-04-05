@@ -89,13 +89,8 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Install ImageMagick and Xvfb
-        run: sudo apt-get update && sudo apt-get install -y imagemagick xvfb
-
-      - name: Start virtual display
-        run: |
-          Xvfb :99 -screen 0 1280x800x24 &
-          echo "DISPLAY=:99" >> "$GITHUB_ENV"
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
 
       - name: Install Maestro
         run: |
@@ -130,12 +125,12 @@ jobs:
         env:
           MAESTRO_DRIVER_STARTUP_TIMEOUT: 120000
         with:
-          api-level: 31
+          api-level: 36
           arch: x86_64
-          target: google_apis
+          target: google_apis_playstore
           profile: pixel_6
           force-avd-creation: false
-          emulator-options: -no-snapshot-save -gpu swiftshader_indirect -noaudio -no-boot-anim
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           disable-animations: true
           script: .maestro/screenshot_test.sh
 
