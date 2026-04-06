@@ -118,10 +118,6 @@ if [[ "$wiremock_ready" != "true" ]]; then
   exit 1
 fi
 
-echo "Rooting adb..."
-adb root
-adb wait-for-device
-
 echo "Waiting for Maestro driver to initialize..."
 adb forward tcp:7001 tcp:7001 2>/dev/null || true
 for i in $(seq 1 40); do
@@ -129,6 +125,10 @@ for i in $(seq 1 40); do
   sleep 0.5
 done
 adb forward --remove tcp:7001 2>/dev/null || true
+
+echo "Rooting adb..."
+adb root
+adb wait-for-device
 
 echo "Enabling Android demo mode..."
 enable_demo_mode
