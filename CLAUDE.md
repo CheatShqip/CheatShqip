@@ -75,7 +75,7 @@ Test results (XML) are located at:
 
 UI/connected tests run against the `mockDebug` build variant, which uses a fully offline app:
 - WireMock standalone (running on the host) serves REST responses from `.wiremock/`
-- The app points to `http://10.0.2.2:9090/` (emulator → host alias, stock Android emulator only)
+- The app points to `http://localhost:9090/` — `screenshot_test.sh` sets up `adb reverse tcp:9090 tcp:9090` so the emulator tunnels to the host port
 - `FakeAlbanianTranslationOutputAdapter` replaces ML Kit (maps `"card"` → `"karte"`)
 - Both are wired via `mockModule` in `app/src/mock/java/com/cheatshqip/CheatShqipApplication.kt`
 
@@ -107,7 +107,7 @@ java -jar .wiremock/wiremock-standalone.jar --port 9090 --root-dir .wiremock
 
 The JAR is checked in at `.wiremock/wiremock-standalone.jar` (excluded from git via `.gitignore`).
 
-> **Note**: `10.0.2.2` is the host alias only on the stock Android emulator. Genymotion and physical devices require a different address.
+> **Note**: `localhost` works via `adb reverse`, which is set up by `screenshot_test.sh`. For manual runs without the script, run `adb reverse tcp:9090 tcp:9090` before starting the app.
 
 ### Maestro E2E Tests
 

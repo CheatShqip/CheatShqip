@@ -58,21 +58,35 @@ cleanup() {
 }
 trap cleanup EXIT
 
+echo "Freeing port $WIREMOCK_PORT if already in use..."
+lsof -ti:"${WIREMOCK_PORT}" | xargs -r kill -9 2>/dev/null || true
+
 echo "Starting WireMock on port $WIREMOCK_PORT..."
 java -jar "$WIREMOCK_JAR" --port "$WIREMOCK_PORT" --root-dir "$SCRIPT_DIR/../.wiremock" &
 WIREMOCK_PID=$!
 
 echo "Waiting for WireMock to be ready..."
+wiremock_ready=false
 for i in $(seq 1 20); do
-  curl -s "http://localhost:${WIREMOCK_PORT}/__admin/mappings" > /dev/null 2>&1 && break
+  if curl -s "http://localhost:${WIREMOCK_PORT}/__admin/mappings" > /dev/null 2>&1; then
+    wiremock_ready=true
+    break
+  fi
   sleep 0.5
 done
+if [[ "$wiremock_ready" != "true" ]]; then
+  echo "ERROR: WireMock failed to start on port $WIREMOCK_PORT"
+  exit 1
+fi
 
 echo "Enabling Android demo mode..."
 enable_demo_mode
 
 echo "Building and installing mock APK..."
 cd "$SCRIPT_DIR/.." && ./gradlew installMockDebug
+
+echo "Setting up ADB reverse tunnel for WireMock..."
+adb reverse tcp:${WIREMOCK_PORT} tcp:${WIREMOCK_PORT}
 
 echo "Running Maestro flows..."
 maestro test "$SCRIPT_DIR/"

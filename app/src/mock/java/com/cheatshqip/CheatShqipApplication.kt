@@ -13,19 +13,18 @@ class CheatShqipApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val mockModule = module {
-            single<ApiBaseURL> {
-                ApiBaseURL("http://10.0.2.2:9090/")
-            }
-            single<GetAlbanianTranslationOfEnglishWordPort> {
-                FakeAlbanianTranslationOutputAdapter()
-            }
-        }
-
         startKoin {
-            allowOverride(true)
             androidContext(this@CheatShqipApplication)
             modules(applicationModule, mockModule)
         }
+    }
+}
+
+private val mockModule = module {
+    single<ApiBaseURL> {
+        ApiBaseURL("http://localhost:9090/")
+    }
+    single<GetAlbanianTranslationOfEnglishWordPort> {
+        FakeAlbanianTranslationOutputAdapter()
     }
 }
