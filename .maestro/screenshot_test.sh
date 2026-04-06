@@ -66,7 +66,7 @@ enable_demo_mode() {
 
   # Enter demo mode with a clean status bar
   adb shell am broadcast -a com.android.systemui.demo -e command enter
-  adb shell am broadcast -a com.android.systemui.demo -e command battery -e visible false
+  adb shell am broadcast -a com.android.systemui.demo -e command battery -e visible false -e plugged false
   adb shell am broadcast -a com.android.systemui.demo -e command network -e airplane hide
   adb shell am broadcast -a com.android.systemui.demo -e command network -e mobile hide
   adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi hide
@@ -82,6 +82,9 @@ enable_demo_mode() {
   adb shell am broadcast -a com.android.systemui.demo -e command status -e eri hide
   adb shell am broadcast -a com.android.systemui.demo -e command status -e mute hide
   adb shell am broadcast -a com.android.systemui.demo -e command status -e speakerphone hide
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e usb hide
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e cdma_eri hide
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e managed_profile hide
   sleep 2
 }
 
