@@ -68,6 +68,12 @@ for i in $(seq 1 20); do
   sleep 0.5
 done
 
+echo "Dismissing device setup..."
+adb shell settings put global device_provisioned 1
+adb shell settings put secure user_setup_complete 1
+adb shell pm disable-user --user 0 com.google.android.setupwizard 2>/dev/null || true
+adb shell input keyevent KEYCODE_HOME
+
 echo "Enabling Android demo mode..."
 enable_demo_mode
 
