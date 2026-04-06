@@ -44,8 +44,6 @@ enable_demo_mode() {
   adb shell svc data disable
 
   echo "Fixing system date and time..."
-  adb root
-  sleep 1
   adb shell cmd time_detector set_auto_detection_enabled false
   ELAPSED_MS=$(adb shell cat /proc/uptime | awk '{printf "%d", $1*1000}')
   adb shell cmd time_detector suggest_manual_time --elapsed_realtime "$ELAPSED_MS" --unix_epoch_time 1735732800000
@@ -119,6 +117,10 @@ if [[ "$wiremock_ready" != "true" ]]; then
   echo "ERROR: WireMock failed to start on port $WIREMOCK_PORT"
   exit 1
 fi
+
+echo "Rooting adb..."
+adb root
+adb wait-for-device
 
 echo "Waiting for Maestro driver to initialize..."
 adb forward tcp:7001 tcp:7001 2>/dev/null || true
