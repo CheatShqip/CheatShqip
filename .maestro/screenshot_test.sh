@@ -39,6 +39,10 @@ enable_demo_mode() {
     sleep 0.5
   done
 
+  echo "Disabling network interfaces..."
+  adb shell svc wifi disable
+  adb shell svc data disable
+
   echo "Applying demo mode..."
   adb shell am broadcast -a com.android.systemui.demo -e command enter
   adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1200
