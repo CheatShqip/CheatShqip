@@ -47,8 +47,9 @@ enable_demo_mode() {
   echo "Fixing system date and time..."
   adb root
   sleep 1
-  adb shell settings put global auto_time 0
-  adb shell settings put global auto_time_zone 0
+  adb shell cmd time_detector set_auto_detection_enabled false
+  ELAPSED_MS=$(adb shell cat /proc/uptime | awk '{printf "%d", $1*1000}')
+  adb shell cmd time_detector suggest_manual_time --elapsed_realtime "$ELAPSED_MS" --unix_epoch_time 1735732800000
   adb shell date 010112002025
 
   echo "Fixing battery state..."
