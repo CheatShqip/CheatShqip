@@ -26,13 +26,6 @@ if [[ ! -f "$WIREMOCK_JAR" ]]; then
 fi
 
 enable_demo_mode() {
-  adb shell su root settings put global sysui_demo_allowed 1
-  allowed=$(adb shell settings get global sysui_demo_allowed 2>/dev/null || true)
-  if [[ "$allowed" != "1" ]]; then
-    echo "ERROR: demo mode is not available on this device/image"
-    exit 1
-  fi
-
   echo "Waiting for SystemUI to be ready..."
   for i in $(seq 1 40); do
     adb shell pidof com.android.systemui > /dev/null 2>&1 && break
@@ -146,6 +139,21 @@ mkdir -p "$ACTUAL_DIR" "$BASELINES_DIR" "$DIFFS_DIR"
 echo "Organizing actual screenshots..."
 mv "$SCREENSHOTS_DIR/"*.png "$ACTUAL_DIR/" 2>/dev/null || true
 
+echo "Cropping system UI from screenshots..."
+SCREEN_SIZE=$(adb shell wm size | grep -oE '[0-9]+x[0-9]+$')
+SCREEN_W=$(echo "$SCREEN_SIZE" | cut -dx -f1)
+SCREEN_H=$(echo "$SCREEN_SIZE" | cut -dx -f2)
+ROTATION0=$(adb shell dumpsys window displays | grep "ROTATION_0=")
+OVERRIDE=$(echo "$ROTATION0" | grep -o 'overrideNonDecorInsets=\[[^]]*\]\[[^]]*\]')
+TOP_INSET=$(echo "$OVERRIDE" | cut -d',' -f2 | cut -d']' -f1)
+BOTTOM_INSET=$(echo "$OVERRIDE" | cut -d',' -f3 | cut -d']' -f1)
+CONTENT_H=$((SCREEN_H - TOP_INSET - BOTTOM_INSET))
+echo "Screen: ${SCREEN_W}x${SCREEN_H}, top inset: ${TOP_INSET}, bottom inset: ${BOTTOM_INSET}, crop: ${SCREEN_W}x${CONTENT_H}+0+${TOP_INSET}"
+for img in "$ACTUAL_DIR"/*.png; do
+  [[ -f "$img" ]] || continue
+  magick "$img" -crop "${SCREEN_W}x${CONTENT_H}+0+${TOP_INSET}" +repage "$img"
+done
+
 if [[ "$UPDATE_BASELINES" == true ]]; then
   echo "Updating baselines..."
   cp "$ACTUAL_DIR/"*.png "$BASELINES_DIR/" 2>/dev/null || true
@@ -168,7 +176,7 @@ for actual in "$ACTUAL_DIR"/*.png; do
     continue
   fi
 
-  pixel_diff=$(compare -metric AE "$baseline" "$actual" "$diff_out" 2>&1 || true)
+  pixel_diff=$(magick compare -metric AE "$baseline" "$actual" "$diff_out" 2>&1 || true)
 
   pixel_diff=$(echo "$pixel_diff" | grep -oE '^[0-9]+' || echo "")
   if [[ -z "$pixel_diff" ]]; then
