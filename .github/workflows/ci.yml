@@ -27,6 +27,9 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Run unit tests
         run: ./gradlew :app:testMockDebugUnitTest :app:testProdDebugUnitTest
 
@@ -52,6 +55,9 @@ jobs:
           java-version: '21'
 
       - uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
       - name: Run Detekt
         run: ./gradlew :app:detekt
