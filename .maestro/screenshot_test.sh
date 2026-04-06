@@ -42,7 +42,6 @@ enable_demo_mode() {
   echo "Disabling network interfaces..."
   adb shell svc wifi disable
   adb shell svc data disable
-  adb shell cmd connectivity airplane-mode enable
 
   echo "Fixing system date and time..."
   adb root
@@ -60,11 +59,29 @@ enable_demo_mode() {
   adb shell dumpsys battery set status 4
 
   echo "Applying demo mode..."
+  adb shell settings put system text_cursor_blink_rate 0
+
+  # Enable demo mode
+  adb shell settings put global sysui_demo_allowed 1
+
+  # Enter demo mode with a clean status bar
   adb shell am broadcast -a com.android.systemui.demo -e command enter
-  adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1200
-  adb shell am broadcast -a com.android.systemui.demo -e command battery -e level 100 -e plugged false
-  adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi hide -e mobile hide -e nosim hide
+  adb shell am broadcast -a com.android.systemui.demo -e command battery -e visible false
+  adb shell am broadcast -a com.android.systemui.demo -e command network -e airplane hide
+  adb shell am broadcast -a com.android.systemui.demo -e command network -e mobile hide
+  adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi hide
+  adb shell am broadcast -a com.android.systemui.demo -e command network -e nosim hide
   adb shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
+  adb shell am broadcast -a com.android.systemui.demo -e command clock -e visible false
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e volume hide
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e bluetooth hide
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e location hide
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e alarm hide
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e sync hide
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e tty hide
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e eri hide
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e mute hide
+  adb shell am broadcast -a com.android.systemui.demo -e command status -e speakerphone hide
   sleep 2
 }
 
