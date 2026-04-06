@@ -45,6 +45,8 @@ enable_demo_mode() {
   adb shell cmd connectivity airplane-mode enable
 
   echo "Fixing system date and time..."
+  adb root
+  sleep 1
   adb shell settings put global auto_time 0
   adb shell settings put global auto_time_zone 0
   adb shell date 010112002025
