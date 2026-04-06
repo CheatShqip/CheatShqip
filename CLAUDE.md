@@ -75,9 +75,8 @@ Test results (XML) are located at:
 
 UI/connected tests run against the `mockDebug` build variant, which uses a fully offline app:
 - WireMock standalone (running on the host) serves REST responses from `.wiremock/`
-- The app points to `http://localhost:9090/` — `screenshot_test.sh` sets up `adb reverse tcp:9090 tcp:9090` so the emulator tunnels to the host port
-- `FakeAlbanianTranslationOutputAdapter` replaces ML Kit (maps `"card"` → `"karte"`)
-- Both are wired via `mockModule` in `app/src/mock/java/com/cheatshqip/CheatShqipApplication.kt`
+- The app points to `http://localhost:9090/` — `screenshot_test.sh` sets up `adb reverse tcp:9090 tcp:9090` so the emulator tunnels to the host port (works in CI and locally; no dependency on `10.0.2.2`)
+- `FakeAlbanianTranslationOutputAdapter` replaces ML Kit (maps `"card"` → `"karte"`) — wired in `app/src/mock/java/com/cheatshqip/CheatShqipApplication.kt` via a flavor-specific `mockModule`; `applicationModule` does not register `MlKitTranslator` at all, so ML Kit is never instantiated in the mock flavor
 
 Run connected tests (requires a running emulator or device):
 ```bash
@@ -137,9 +136,18 @@ Update baselines after intentional UI changes:
 
 Screenshot diff threshold is 100 pixels (override with `SCREENSHOT_THRESHOLD=<n>`).
 WireMock port defaults to 9090 (override with `WIREMOCK_PORT=<n>`).
-Baselines are stored in `.maestro/screenshots/baselines/`, diffs in `.maestro/screenshots/diffs/`.
+Baselines are stored in `.maestro/generated/baselines/`, actuals in `.maestro/generated/actual/`, diffs in `.maestro/generated/diffs/`.
 
-Prerequisites: `maestro` CLI installed, `imagemagick` (`magick` at `/opt/homebrew/bin/magick`), `java` (for WireMock JAR), emulator running with `mockDebug` APK or let the script install it.
+Prerequisites: `maestro` CLI installed, `imagemagick`, `java` (for WireMock JAR), emulator running with `mockDebug` APK or let the script install it.
+
+**Emulator configuration** (must match between CI and baseline generation):
+- API level: 36, arch: x86_64, target: `google_apis` (not `google_apis_playstore`)
+- `google_apis_playstore` must not be used: Google Play Services overrides SystemUI demo mode and causes non-deterministic network indicators
+
+**Deterministic status bar** — `screenshot_test.sh` applies the following before each run:
+- `svc wifi disable` + `svc data disable` + `cmd connectivity airplane-mode enable` — kills radio state so no network icon survives
+- Demo mode broadcasts: clock fixed at 12:00, battery 100%, network hidden, notifications hidden
+- `adb reverse tcp:9090 tcp:9090` — tunnels emulator → host WireMock after APK install
 
 ### Maestro JavaScript HTTP API
 
