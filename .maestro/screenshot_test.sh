@@ -120,6 +120,14 @@ if [[ "$wiremock_ready" != "true" ]]; then
   exit 1
 fi
 
+echo "Waiting for Maestro driver to initialize..."
+adb forward tcp:7001 tcp:7001 2>/dev/null || true
+for i in $(seq 1 40); do
+  nc -z localhost 7001 2>/dev/null && break
+  sleep 0.5
+done
+adb forward --remove tcp:7001 2>/dev/null || true
+
 echo "Enabling Android demo mode..."
 enable_demo_mode
 
