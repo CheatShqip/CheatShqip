@@ -42,6 +42,7 @@ enable_demo_mode() {
   echo "Disabling network interfaces..."
   adb shell svc wifi disable
   adb shell svc data disable
+  adb shell cmd connectivity airplane-mode enable
 
   echo "Applying demo mode..."
   adb shell am broadcast -a com.android.systemui.demo -e command enter
