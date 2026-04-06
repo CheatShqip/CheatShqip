@@ -126,10 +126,6 @@ for i in $(seq 1 40); do
 done
 adb forward --remove tcp:7001 2>/dev/null || true
 
-echo "Rooting adb..."
-adb root
-adb wait-for-device
-
 echo "Enabling Android demo mode..."
 enable_demo_mode
 
