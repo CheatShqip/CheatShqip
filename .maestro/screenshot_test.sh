@@ -9,6 +9,13 @@ ACTUAL_DIR="$GENERATED_DIR/actual"
 DIFFS_DIR="$GENERATED_DIR/diffs"
 SCREENSHOT_THRESHOLD="${SCREENSHOT_THRESHOLD:-100}"
 WIREMOCK_PORT="${WIREMOCK_PORT:-9090}"
+if command -v magick > /dev/null 2>&1; then
+  MAGICK_CONVERT="magick"
+  MAGICK_COMPARE="magick compare"
+else
+  MAGICK_CONVERT="convert"
+  MAGICK_COMPARE="compare"
+fi
 UPDATE_BASELINES=false
 WIREMOCK_PID=""
 
