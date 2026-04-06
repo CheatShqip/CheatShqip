@@ -43,7 +43,7 @@ enable_demo_mode() {
   adb shell am broadcast -a com.android.systemui.demo -e command enter
   adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1200
   adb shell am broadcast -a com.android.systemui.demo -e command battery -e level 100 -e plugged false
-  adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4 -e mobile show -e level 4 -e datatype none
+  adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi hide -e mobile hide -e nosim hide
   adb shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
   sleep 2
 }
@@ -67,12 +67,6 @@ for i in $(seq 1 20); do
   curl -s "http://localhost:${WIREMOCK_PORT}/__admin/mappings" > /dev/null 2>&1 && break
   sleep 0.5
 done
-
-echo "Dismissing device setup..."
-adb shell settings put global device_provisioned 1
-adb shell settings put secure user_setup_complete 1
-adb shell pm disable-user --user 0 com.google.android.setupwizard 2>/dev/null || true
-adb shell input keyevent KEYCODE_HOME
 
 echo "Enabling Android demo mode..."
 enable_demo_mode
