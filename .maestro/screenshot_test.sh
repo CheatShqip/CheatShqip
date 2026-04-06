@@ -26,7 +26,7 @@ if [[ ! -f "$WIREMOCK_JAR" ]]; then
 fi
 
 enable_demo_mode() {
-  adb shell settings put global sysui_demo_allowed 1
+  adb shell su root settings put global sysui_demo_allowed 1
   allowed=$(adb shell settings get global sysui_demo_allowed 2>/dev/null || true)
   if [[ "$allowed" != "1" ]]; then
     echo "ERROR: demo mode is not available on this device/image"
@@ -40,27 +40,27 @@ enable_demo_mode() {
   done
 
   echo "Disabling network interfaces..."
-  adb shell svc wifi disable
-  adb shell svc data disable
+  adb shell su root svc wifi disable
+  adb shell su root svc data disable
 
   echo "Fixing system date and time..."
-  adb shell cmd time_detector set_auto_detection_enabled false
+  adb shell su root cmd time_detector set_auto_detection_enabled false
   ELAPSED_MS=$(adb shell cat /proc/uptime | awk '{printf "%d", $1*1000}')
-  adb shell cmd time_detector suggest_manual_time --elapsed_realtime "$ELAPSED_MS" --unix_epoch_time 1735732800000
-  adb shell date 010112002025
+  adb shell su root cmd time_detector suggest_manual_time --elapsed_realtime "$ELAPSED_MS" --unix_epoch_time 1735732800000
+  adb shell su root date 010112002025
 
   echo "Fixing battery state..."
-  adb shell dumpsys battery set level 100
-  adb shell dumpsys battery set ac 0
-  adb shell dumpsys battery set usb 0
-  adb shell dumpsys battery set wireless 0
-  adb shell dumpsys battery set status 4
+  adb shell su root dumpsys battery set level 100
+  adb shell su root dumpsys battery set ac 0
+  adb shell su root dumpsys battery set usb 0
+  adb shell su root dumpsys battery set wireless 0
+  adb shell su root dumpsys battery set status 4
 
   echo "Applying demo mode..."
-  adb shell settings put system text_cursor_blink_rate 0
+  adb shell su root settings put system text_cursor_blink_rate 0
 
   # Enable demo mode
-  adb shell settings put global sysui_demo_allowed 1
+  adb shell su root settings put global sysui_demo_allowed 1
 
   # Enter demo mode with a clean status bar
   adb shell am broadcast -a com.android.systemui.demo -e command enter
