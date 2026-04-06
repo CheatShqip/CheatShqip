@@ -44,6 +44,18 @@ enable_demo_mode() {
   adb shell svc data disable
   adb shell cmd connectivity airplane-mode enable
 
+  echo "Fixing system date and time..."
+  adb shell settings put global auto_time 0
+  adb shell settings put global auto_time_zone 0
+  adb shell date 010112002025
+
+  echo "Fixing battery state..."
+  adb shell dumpsys battery set level 100
+  adb shell dumpsys battery set ac 0
+  adb shell dumpsys battery set usb 0
+  adb shell dumpsys battery set wireless 0
+  adb shell dumpsys battery set status 4
+
   echo "Applying demo mode..."
   adb shell am broadcast -a com.android.systemui.demo -e command enter
   adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1200
@@ -55,6 +67,7 @@ enable_demo_mode() {
 
 disable_demo_mode() {
   adb shell am broadcast -a com.android.systemui.demo -e command exit || true
+  adb shell dumpsys battery reset || true
 }
 
 cleanup() {
