@@ -141,7 +141,7 @@ Baselines are stored in `.maestro/generated/baselines/`, actuals in `.maestro/ge
 Prerequisites: `maestro` CLI installed, `imagemagick`, `java` (for WireMock JAR), emulator running with `mockDebug` APK or let the script install it.
 
 **Emulator configuration** (must match between CI and baseline generation):
-- API level: 36, arch: x86_64, target: `google_apis` (not `google_apis_playstore`)
+- API level: 36, arch: x86_64, target: `default` (AOSP — rooted by default, no overlay issues, no Google APIs needed since mock flavor uses fakes)
 - `google_apis_playstore` must not be used: Google Play Services overrides SystemUI demo mode and causes non-deterministic network indicators
 
 **Deterministic status bar** — `screenshot_test.sh` applies the following before each run:
