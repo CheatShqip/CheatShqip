@@ -158,7 +158,7 @@ CONTENT_H=$((SCREEN_H - TOP_INSET - BOTTOM_INSET))
 echo "Screen: ${SCREEN_W}x${SCREEN_H}, top inset: ${TOP_INSET}, bottom inset: ${BOTTOM_INSET}, crop: ${SCREEN_W}x${CONTENT_H}+0+${TOP_INSET}"
 for img in "$ACTUAL_DIR"/*.png; do
   [[ -f "$img" ]] || continue
-  magick "$img" -crop "${SCREEN_W}x${CONTENT_H}+0+${TOP_INSET}" +repage "$img"
+  $MAGICK_CONVERT "$img" -crop "${SCREEN_W}x${CONTENT_H}+0+${TOP_INSET}" +repage "$img"
 done
 
 if [[ "$UPDATE_BASELINES" == true ]]; then
@@ -183,7 +183,7 @@ for actual in "$ACTUAL_DIR"/*.png; do
     continue
   fi
 
-  pixel_diff=$(magick compare -metric AE "$baseline" "$actual" "$diff_out" 2>&1 || true)
+  pixel_diff=$($MAGICK_COMPARE -metric AE "$baseline" "$actual" "$diff_out" 2>&1 || true)
 
   pixel_diff=$(echo "$pixel_diff" | grep -oE '^[0-9]+' || echo "")
   if [[ -z "$pixel_diff" ]]; then
