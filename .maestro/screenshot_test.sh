@@ -98,10 +98,10 @@ cleanup() {
 trap cleanup EXIT
 
 echo "Freeing port $WIREMOCK_PORT if already in use..."
-lsof -ti:"${WIREMOCK_PORT}" | xargs -r kill -9 2>/dev/null || true
+pgrep -f "wiremock-standalone" | xargs kill -9 2>/dev/null || true
 
 echo "Starting WireMock on port $WIREMOCK_PORT..."
-java -jar "$WIREMOCK_JAR" --port "$WIREMOCK_PORT" --root-dir "$SCRIPT_DIR/../.wiremock" &
+java -jar "$WIREMOCK_JAR" --port "$WIREMOCK_PORT" --root-dir "$SCRIPT_DIR/../.wiremock" > /tmp/wiremock.log 2>&1 &
 WIREMOCK_PID=$!
 
 echo "Waiting for WireMock to be ready..."
