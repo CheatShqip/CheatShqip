@@ -194,6 +194,43 @@ Components: Button, Card, TextField, Badge, Chip, TopAppBar.
 Supports light/dark theme via Compose MaterialTheme wrapper.
 
 
+## Maestro MCP
+
+The project ships a `.mcp.json` that exposes the `maestro` MCP server (`maestro mcp`). These tools let Claude interact with a running Android emulator without leaving the conversation.
+
+### Typical workflow
+
+```
+list_devices → start_device (if needed) → launch_app → inspect_view_hierarchy → tap_on / input_text → take_screenshot
+```
+
+### Tool reference
+
+| Tool | Required params | Notes |
+|---|---|---|
+| `mcp__maestro__list_devices` | — | Lists available emulators/devices |
+| `mcp__maestro__start_device` | `platform: "android"` or `device_id` | Starts an emulator; returns its `device_id` |
+| `mcp__maestro__launch_app` | `device_id`, `appId` | App ID for mock flavor: `com.cheatshqip` |
+| `mcp__maestro__stop_app` | `device_id`, `appId` | Stops the app process |
+| `mcp__maestro__take_screenshot` | `device_id` | Returns current screen image |
+| `mcp__maestro__inspect_view_hierarchy` | `device_id` | CSV of UI elements with bounds, text, IDs — use before tapping |
+| `mcp__maestro__tap_on` | `device_id` + `text` or `id` | Fuzzy match by default; set `use_fuzzy_matching: false` for exact |
+| `mcp__maestro__input_text` | `device_id`, `text` | Types into the currently focused field |
+| `mcp__maestro__back` | `device_id` | Presses the hardware back button |
+| `mcp__maestro__run_flow` | `device_id`, `flow_yaml` | Ad-hoc YAML commands; no temp file needed |
+| `mcp__maestro__run_flow_files` | `device_id`, `flow_files` | Runs existing `.maestro/*.yaml` files |
+| `mcp__maestro__check_flow_syntax` | `flow_yaml` | Validates YAML before running |
+| `mcp__maestro__query_docs` | `question` | Queries Maestro docs |
+| `mcp__maestro__cheat_sheet` | — | Returns full Maestro command reference |
+
+### Project-specific notes
+
+- Always use the `mockDebug` variant (`com.cheatshqip`) for E2E tests — it replaces ML Kit and uses WireMock.
+- WireMock must be running on port 9090 **and** `adb reverse tcp:9090 tcp:9090` must be set before launching the app, otherwise network calls fail silently.
+- Call `inspect_view_hierarchy` before any `tap_on` — never guess element IDs.
+- Prefer `run_flow` for ad-hoc exploration; use `run_flow_files` to execute the committed flows in `.maestro/`.
+- The emulator must be API 36 / x86_64 / AOSP (`default` target, not `google_apis_playstore`) to match screenshot baselines.
+
 ## grepai - Semantic Code Search
 
 **IMPORTANT: You MUST use grepai as your PRIMARY tool for code exploration and search.**
