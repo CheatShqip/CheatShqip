@@ -138,7 +138,17 @@ Screenshot diff threshold is 100 pixels (override with `SCREENSHOT_THRESHOLD=<n>
 WireMock port defaults to 9090 (override with `WIREMOCK_PORT=<n>`).
 Baselines are stored in `.maestro/generated/baselines/`, actuals in `.maestro/generated/actual/`, diffs in `.maestro/generated/diffs/`.
 
-Prerequisites: `maestro` CLI installed, `imagemagick`, `java` (for WireMock JAR), emulator running with `mockDebug` APK or let the script install it.
+**Prerequisites** — must be satisfied before running the script, otherwise it will hang or fail:
+
+1. **Exactly one emulator running** — `Pixel_6` (API 36, x86_64, AOSP `default` target). Use MCP to start it:
+   ```
+   mcp__maestro__list_devices → verify Pixel_6 is connected
+   mcp__maestro__start_device(device_id: "Pixel_6")  ← if not already running
+   adb devices  ← must show exactly one device
+   ```
+   If multiple emulators are running, `adb` commands in the script will fail with "more than one device/emulator".
+
+2. `maestro` CLI installed, `imagemagick`, `java` (for WireMock JAR).
 
 **Emulator configuration** (must match between CI and baseline generation):
 - API level: 36, arch: x86_64, target: `default` (AOSP — rooted by default, no overlay issues, no Google APIs needed since mock flavor uses fakes)
