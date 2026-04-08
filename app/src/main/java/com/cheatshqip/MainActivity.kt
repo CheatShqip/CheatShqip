@@ -7,7 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.res.stringResource
+import com.cheatshqip.tosk.LocalToskShowCursor
 import com.cheatshqip.tosk.ToskTheme
 import com.cheatshqip.tosk.topappbar.ToskTopAppBar
 
@@ -17,18 +19,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ToskTheme {
-                Scaffold(
-                    containerColor = ToskTheme.colors.background.secondary,
-                    topBar = {
-                        ToskTopAppBar(
-                            title = {
-                                Text(stringResource(R.string.app_name))
-                            }
-                        )
-                    },
-                ) { innerPadding ->
-                    HomeScreenRoute(innerPadding = innerPadding)
+            CompositionLocalProvider(LocalToskShowCursor provides SHOW_CURSOR) {
+                ToskTheme {
+                    Scaffold(
+                        containerColor = ToskTheme.colors.background.secondary,
+                        topBar = {
+                            ToskTopAppBar(
+                                title = {
+                                    Text(stringResource(R.string.app_name))
+                                }
+                            )
+                        },
+                    ) { innerPadding ->
+                        HomeScreenRoute(innerPadding = innerPadding)
+                    }
                 }
             }
         }

@@ -16,6 +16,7 @@ val LocalToskTypography = staticCompositionLocalOf<ToskTypography> {
 val LocalToskColors = staticCompositionLocalOf<ToskColors> {
     error("Wrap you content with ToskTheme {} to get access to Tosk colors")
 }
+val LocalToskShowCursor = staticCompositionLocalOf { true }
 
 @ReadOnlyComposable
 @Composable
