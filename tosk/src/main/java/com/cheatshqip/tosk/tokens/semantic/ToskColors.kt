@@ -26,7 +26,7 @@ sealed class ToskColors(
             error = ToskPalette.crimson,
         ),
         background = ToskColorsBackground(
-            primary = ToskPalette.royalBlue,
+            primary = ToskPalette.crimson,
             primaryDisabled = ToskPalette.salmonPink,
             secondary = ToskPalette.alabaster,
             secondaryDisabled = ToskPalette.lightGray,
