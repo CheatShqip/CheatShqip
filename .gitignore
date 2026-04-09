@@ -27,6 +27,11 @@ local.properties
 .idea/androidTestResultsUserPreferences.xml
 .idea/migrations.xml
 .idea/render.experimental.xml
+.idea/AndroidProjectSystem.xml
+.idea/ChatHistory_schema_v2.xml
+.idea/copilot.data.migration.agent.xml
+.idea/deviceManager.xml
+.idea/markdown.xml
 
 # Native build
 .externalNativeBuild/
