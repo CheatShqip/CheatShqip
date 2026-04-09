@@ -23,6 +23,8 @@ local.properties
 .idea/.name
 .idea/compiler.xml
 .idea/deploymentTargetDropDown.xml
+.idea/deploymentTargetSelector.xml
+.idea/androidTestResultsUserPreferences.xml
 .idea/migrations.xml
 .idea/render.experimental.xml
 
