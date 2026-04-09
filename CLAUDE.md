@@ -1,3 +1,17 @@
+## Git Conventions
+
+Commits use gitmoji text codes as the subject prefix (the text form, not the Unicode character):
+
+| Code | Meaning |
+|---|---|
+| `:sparkles:` | New feature |
+| `:bug:` | Bug fix |
+| `:art:` | Code style / formatting / structure |
+| `:wrench:` | Configuration / build files |
+| `:white_check_mark:` | Add or update tests |
+| `:memo:` | Documentation |
+| `:note:` | Documentation (informal alias) |
+
 ## Project Overview
 
 CheatShqip is an Android app for English → Albanian word translation and grammatical lookup.
