@@ -4,6 +4,7 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
+@Suppress("ObjectPropertyNaming")
 internal object ToskLineHeight {
     internal val XS: TextUnit = 16.0.sp
 

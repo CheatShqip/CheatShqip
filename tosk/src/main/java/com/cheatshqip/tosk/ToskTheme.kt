@@ -18,16 +18,6 @@ val LocalToskColors = staticCompositionLocalOf<ToskColors> {
 }
 val LocalToskShowCursor = staticCompositionLocalOf { true }
 
-@ReadOnlyComposable
-@Composable
-private fun lightDarkColors(): ToskColors {
-    return if (isSystemInDarkTheme()) {
-        ToskColors.Dark
-    } else {
-        ToskColors.Light
-    }
-}
-
 @Composable
 fun ToskTheme(
     content: @Composable () -> Unit,
@@ -43,7 +33,6 @@ fun ToskTheme(
 }
 
 object ToskTheme {
-
     val typography: ToskTypography
         @Composable
         @ReadOnlyComposable
@@ -66,4 +55,14 @@ object ToskTheme {
         @ReadOnlyComposable
         @Composable
         get() = ToskSpacing
+}
+
+@ReadOnlyComposable
+@Composable
+private fun lightDarkColors(): ToskColors {
+    return if (isSystemInDarkTheme()) {
+        ToskColors.Dark
+    } else {
+        ToskColors.Light
+    }
 }

@@ -10,6 +10,7 @@ import com.cheatshqip.tosk.tokens.primitive.defaultLineHeightStyle
 
 val defaultFontFamily = FontFamily.SansSerif
 
+@Suppress("LongParameterList")
 sealed class ToskTypography(
     val body: TextStyle,
     val caption: TextStyle,

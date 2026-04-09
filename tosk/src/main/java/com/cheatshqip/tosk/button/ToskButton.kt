@@ -16,7 +16,6 @@ import com.cheatshqip.tosk.button.tokens.ToskButtonSize
 import com.cheatshqip.tosk.button.tokens.ToskButtonTextStyle
 import com.cheatshqip.tosk.tokens.semantic.ToskShape
 
-
 @Composable
 fun ToskButton(
     modifier: Modifier = Modifier,

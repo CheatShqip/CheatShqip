@@ -13,4 +13,3 @@ sealed class ToskChipSize(
         borderSize = ToskBorderSize.M,
     )
 }
-

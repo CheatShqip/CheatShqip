@@ -54,6 +54,7 @@ fun ToskCard(
     )
 }
 
+@Suppress("UnusedPrivateMember")
 @PreviewLightDark
 @Composable
 private fun ToskCardPreview() {

@@ -14,9 +14,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import com.cheatshqip.tosk.LocalToskShowCursor
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import com.cheatshqip.tosk.LocalToskShowCursor
 import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldColor
 import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldSize
 import com.cheatshqip.tosk.textfield.tokens.ToskTextFieldTextStyle

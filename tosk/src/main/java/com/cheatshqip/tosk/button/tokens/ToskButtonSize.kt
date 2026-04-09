@@ -16,4 +16,3 @@ sealed class ToskButtonSize(
 ) {
     data object Medium : ToskButtonSize(minHeight = MINIMUM_BUTTON_HEIGHT.dp)
 }
-

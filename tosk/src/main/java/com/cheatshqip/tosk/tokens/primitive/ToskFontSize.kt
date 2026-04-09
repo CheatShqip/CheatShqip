@@ -3,6 +3,7 @@ package com.cheatshqip.tosk.tokens.primitive
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
+@Suppress("ObjectPropertyNaming")
 internal object ToskFontSize {
     internal val XS: TextUnit = 12.0.sp
 

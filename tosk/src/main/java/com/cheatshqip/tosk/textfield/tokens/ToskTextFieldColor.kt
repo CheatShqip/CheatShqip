@@ -46,7 +46,6 @@ data class ToskTextFieldColor(
             errorSupportingTextColor = focusedTextColor,
             focusedLabelColor = focusedTextColor,
             disabledLabelColor = focusedTextColor,
-
         )
     }
 
@@ -57,7 +56,6 @@ data class ToskTextFieldColor(
             backgroundColor = textSelectionBackgroundColor,
         )
     }
-
 
     companion object Companion {
         @Composable

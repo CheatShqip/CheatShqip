@@ -11,18 +11,21 @@ import com.cheatshqip.tosk.topappbar.tokens.ToskTopAppBarTextStyle
 @Composable
 fun ToskTopAppBar(
     color: ToskTopAppBarColor = ToskTopAppBarColor.default(),
-    title: @Composable () -> Unit
+    navigationIcon: @Composable () -> Unit = {},
+    title: @Composable () -> Unit,
 ) {
     TopAppBar(
         colors =
             TopAppBarDefaults.topAppBarColors(
                 containerColor = color.containerColor,
                 titleContentColor = color.titleContentColor,
+                navigationIconContentColor = color.titleContentColor,
             ),
+        navigationIcon = navigationIcon,
         title = {
             CompositionLocalProvider(LocalTextStyle provides ToskTopAppBarTextStyle.default) {
                 title()
             }
-        }
+        },
     )
 }
