@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.cheatshqip.module.android.presentation)
+    alias(libs.plugins.detekt)
 }
 
 android {
@@ -34,4 +35,16 @@ kotlin {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
         freeCompilerArgs.add("-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api")
     }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    allRules = true
+    autoCorrect = false
+    config.setFrom("$rootDir/detekt-config.yml")
+}
+
+dependencies {
+    detektPlugins(libs.detekt.formatting)
+    detektPlugins(project(":detekt-rules"))
 }
