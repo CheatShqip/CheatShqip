@@ -39,6 +39,10 @@ complexity:
     active: true
     threshold: 160
 
+custom:
+  TestHelpersAfterTests:
+    active: true
+
 formatting:
   active: true
   android: true

@@ -1,3 +1,3 @@
 package com.cheatshqip
 
-val SHOW_CURSOR = true
+const val SHOW_CURSOR = true

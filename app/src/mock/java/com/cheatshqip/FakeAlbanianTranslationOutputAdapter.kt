@@ -4,7 +4,6 @@ import com.cheatshqip.application.port.output.GetAlbanianTranslationOfEnglishWor
 import com.cheatshqip.domain.Word
 
 class FakeAlbanianTranslationOutputAdapter : GetAlbanianTranslationOfEnglishWordPort {
-
     private val translations = mapOf("card" to "karte")
 
     override suspend fun getAlbanianTranslationOfEnglishWord(englishWord: Word): Word {

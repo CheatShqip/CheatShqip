@@ -74,6 +74,13 @@ detekt {
     allRules = true
     autoCorrect = false
     config.setFrom("$rootDir/detekt-config.yml")
+    source.setFrom(
+        "src/main/java",
+        "src/test/java",
+        "src/androidTest/java",
+        "src/mock/java",
+        "src/prod/java",
+    )
 }
 
 dependencies {
