@@ -21,6 +21,22 @@ class InMemoryAlbanianWordDetailOutputAdapter : GetAlbanianWordDetailPort {
 
     private companion object {
         val wordDetails: Map<Word, AlbanianWordDetail> = mapOf(
+            Word("dhurate") to AlbanianWordDetail(
+                word = Word("dhuratë"),
+                kind = WordKind.Name,
+                gender = WordGender.Feminine,
+                grammaticalDisplay = GrammaticalDisplay(
+                    singular = SingularGrammaticalDisplay("dhurát/ë,-a"),
+                    plural = PluralGrammaticalDisplay("dhurát/a,-at"),
+                ),
+                singularDefiniteDeclensions = AlbanianDeclensions(
+                    nominative = NominativeDeclension("dhurata"),
+                    genitive = GenitiveDeclension("dhurëtës"),
+                    dative = DativeDeclension("dhuratës"),
+                    accusative = AccusativeDeclension("dhuratën"),
+                    ablative = AblativeDeclension("dhuratës"),
+                ),
+            ),
             Word("karte") to AlbanianWordDetail(
                 word = Word("kartë"),
                 kind = WordKind.Name,
