@@ -2,11 +2,16 @@ package com.cheatshqip.di
 
 import com.cheatshqip.BuildConfig
 import com.cheatshqip.HomeScreenViewModel
+import com.cheatshqip.WordDetailViewModel
 import com.cheatshqip.adapter.output.ApiBaseURL
+import com.cheatshqip.adapter.output.InMemoryAlbanianWordDetailOutputAdapter
 import com.cheatshqip.adapter.output.RESTWordSuggestionsOutputAdapter
 import com.cheatshqip.adapter.output.ShqipRESTService
+import com.cheatshqip.application.AlbanianWordService
 import com.cheatshqip.application.TranslationService
+import com.cheatshqip.application.port.input.GetAlbanianWordDetailUseCase
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
+import com.cheatshqip.application.port.output.GetAlbanianWordDetailPort
 import com.cheatshqip.application.port.output.GetWordSuggestionsPort
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -66,10 +71,26 @@ val applicationModule = module {
         )
     }
 
+    single<GetAlbanianWordDetailPort> {
+        InMemoryAlbanianWordDetailOutputAdapter()
+    }
+
+    single<GetAlbanianWordDetailUseCase> {
+        AlbanianWordService(getAlbanianWordDetailPort = get())
+    }
+
     viewModel {
         HomeScreenViewModel(
             getWordTranslationSuggestionsUseCase = get(),
             coroutineDispatcher = get()
+        )
+    }
+
+    viewModel {
+        WordDetailViewModel(
+            savedStateHandle = get(),
+            getAlbanianWordDetailUseCase = get(),
+            coroutineDispatcher = get(),
         )
     }
 }

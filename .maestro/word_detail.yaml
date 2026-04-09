@@ -1,0 +1,29 @@
+appId: com.cheatshqip
+---
+- runScript: scripts/wiremock-reset.js
+- launchApp:
+    clearState: true
+- tapOn: "Word"
+- inputText: "card"
+- tapOn: "Translate"
+- extendedWaitUntil:
+    visible: "kartë"
+    timeout: 3000
+- hideKeyboard
+- tapOn: "kartë"
+- extendedWaitUntil:
+    visible: "Nominative"
+    timeout: 3000
+- assertVisible: "kartë"
+- assertVisible: "Name"
+- assertVisible: "Feminine"
+- assertVisible: "kár/të,-ta"
+- assertVisible: "Nominative"
+- assertVisible: "karta"
+- assertVisible: "Genitive"
+- assertVisible: "kartës"
+- assertVisible: "Dative"
+- assertVisible: "Accusative"
+- assertVisible: "kartën"
+- assertVisible: "Ablative"
+- takeScreenshot: word_detail_screen

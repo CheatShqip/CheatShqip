@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">CheatShqip</string>
     <string name="translate">Translate</string>
+    <string name="back">Back</string>
+    <string name="singular">Singular</string>
+    <string name="plural">Plural</string>
+    <string name="declensions">Declensions</string>
+    <string name="nominative">Nominative</string>
+    <string name="genitive">Genitive</string>
+    <string name="dative">Dative</string>
+    <string name="accusative">Accusative</string>
+    <string name="ablative">Ablative</string>
+    <string name="word_detail_error">Could not load word details.</string>
 </resources>

@@ -1,8 +1,6 @@
 package com.cheatshqip
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,10 +12,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,21 +28,32 @@ import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 import com.cheatshqip.tosk.topappbar.ToskTopAppBar
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenRoute(
+    onTranslationClicked: (Translation) -> Unit,
     modifier: Modifier = Modifier,
-    innerPadding: PaddingValues = PaddingValues(ToskTheme.spacing.None),
     homeScreenViewModel: HomeScreenViewModel = koinViewModel(),
 ) {
     val homeScreenUIState: HomeScreenUIState by homeScreenViewModel.state.collectAsStateWithLifecycle()
 
-    HomeScreen(
-        homeScreenUIState = homeScreenUIState,
-        innerPadding = innerPadding,
-        onSearchChanged = homeScreenViewModel::onSearchChanged,
-        onSearch = homeScreenViewModel::onSearch,
+    Scaffold(
         modifier = modifier,
-    )
+        containerColor = ToskTheme.colors.background.secondary,
+        topBar = {
+            ToskTopAppBar(
+                title = { Text(stringResource(R.string.app_name)) },
+            )
+        },
+    ) { innerPadding ->
+        HomeScreen(
+            homeScreenUIState = homeScreenUIState,
+            innerPadding = innerPadding,
+            onSearchChanged = homeScreenViewModel::onSearchChanged,
+            onSearch = homeScreenViewModel::onSearch,
+            onTranslationClicked = onTranslationClicked,
+        )
+    }
 }
 
 @Composable
@@ -55,14 +62,14 @@ private fun HomeScreen(
     innerPadding: PaddingValues,
     onSearchChanged: (String) -> Unit,
     onSearch: () -> Unit,
+    onTranslationClicked: (Translation) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier =
-            modifier
-                .padding(innerPadding)
-                .padding(ToskSpacing.S),
-        verticalArrangement = Arrangement.spacedBy(ToskSpacing.S)
+        modifier = modifier
+            .padding(innerPadding)
+            .padding(ToskSpacing.S),
+        verticalArrangement = Arrangement.spacedBy(ToskSpacing.S),
     ) {
         val containerModifier = Modifier.fillMaxWidth()
 
@@ -71,19 +78,23 @@ private fun HomeScreen(
                 modifier = containerModifier,
                 value = homeScreenUIState.search,
                 onValueChange = onSearchChanged,
-                placeholder = { Text("Word") }
+                placeholder = { Text("Word") },
             )
 
             ToskButton(
                 modifier = containerModifier,
                 contentDescription = stringResource(R.string.translate),
-                onClick = { onSearch() }
+                onClick = { onSearch() },
             ) {
                 Text(stringResource(R.string.translate))
             }
 
             if (homeScreenUIState is HomeScreenUIState.WithTranslationSuggestions) {
-                TranslationSuggestions(containerModifier, homeScreenUIState.translationSuggestions)
+                TranslationSuggestions(
+                    modifier = containerModifier,
+                    translationSuggestions = homeScreenUIState.translationSuggestions,
+                    onTranslationClicked = onTranslationClicked,
+                )
             }
         }
     }
@@ -92,25 +103,17 @@ private fun HomeScreen(
 @Composable
 private fun TranslationSuggestions(
     modifier: Modifier,
-    translationSuggestions: List<Translation>
+    translationSuggestions: List<Translation>,
+    onTranslationClicked: (Translation) -> Unit,
 ) {
     HorizontalDivider(
-        modifier =
-            modifier
-                .background(ToskTheme.colors.background.primary)
+        modifier = modifier.background(ToskTheme.colors.background.primary),
     )
 
     for (translation in translationSuggestions) {
         ToskCard(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .clickable(
-                        onClick = { /*onTranslationClicked(translation)*/ },
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = ripple()
-                    ),
-            onClick = {},
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { onTranslationClicked(translation) },
             enabled = true,
         ) {
             Row(
@@ -118,9 +121,7 @@ private fun TranslationSuggestions(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = translation.value
-                )
+                Text(text = translation.value)
             }
         }
     }
@@ -135,9 +136,7 @@ fun HomeScreenPreview() {
             containerColor = ToskTheme.colors.background.secondary,
             topBar = {
                 ToskTopAppBar(
-                    title = {
-                        Text(stringResource(R.string.app_name))
-                    }
+                    title = { Text(stringResource(R.string.app_name)) },
                 )
             },
         ) { innerPadding ->
@@ -147,11 +146,12 @@ fun HomeScreenPreview() {
                     search = "test",
                     translationSuggestions = listOf(
                         Translation("test"),
-                        Translation("test2")
-                    )
+                        Translation("test2"),
+                    ),
                 ),
                 onSearch = {},
                 onSearchChanged = {},
+                onTranslationClicked = {},
             )
         }
     }

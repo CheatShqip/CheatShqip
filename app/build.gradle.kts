@@ -79,11 +79,13 @@ detekt {
 dependencies {
     implementation(project(":tosk"))
 
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(platform(libs.okhttp3.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation)
-    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -96,7 +98,6 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     implementation(libs.kotlin.serialization.json)
     implementation(libs.mlkit.translate)
-    implementation(platform(libs.okhttp3.bom))
     implementation(libs.okhttp3)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.kotlinx.serialization)
