@@ -124,40 +124,25 @@ Flows call `runScript: scripts/wiremock-reset.js` before `launchApp` to ensure c
 maestro test .maestro/
 ```
 
-**Screenshot tests** (builds + installs mock APK, starts/stops WireMock automatically, diffs against baselines):
+**Screenshot tests** — always use the script; never replicate its steps manually:
 ```bash
-./.maestro/screenshot_test.sh
+./.maestro/screenshot_test.sh                  # run and diff
+./.maestro/screenshot_test.sh --update-baselines  # update baselines after intentional UI changes
 ```
 
-Update baselines after intentional UI changes:
-```bash
-./.maestro/screenshot_test.sh --update-baselines
-```
+The script handles everything internally: build + install APK, start/stop WireMock, `adb reverse`, demo mode (clock, battery, network), screenshot capture, crop, and pixel diff. Do not manually start WireMock, apply demo mode broadcasts, or set up `adb reverse` before calling it.
 
 Screenshot diff threshold is 100 pixels (override with `SCREENSHOT_THRESHOLD=<n>`).
 WireMock port defaults to 9090 (override with `WIREMOCK_PORT=<n>`).
 Baselines are stored in `.maestro/generated/baselines/`, actuals in `.maestro/generated/actual/`, diffs in `.maestro/generated/diffs/`.
 
-**Prerequisites** — must be satisfied before running the script, otherwise it will hang or fail:
-
-1. **Exactly one emulator running** — `Pixel_6` (API 36, x86_64, AOSP `default` target). Use MCP to start it:
-   ```
-   mcp__maestro__list_devices → verify Pixel_6 is connected
-   mcp__maestro__start_device(device_id: "Pixel_6")  ← if not already running
-   adb devices  ← must show exactly one device
-   ```
-   If multiple emulators are running, `adb` commands in the script will fail with "more than one device/emulator".
-
-2. `maestro` CLI installed, `imagemagick`, `java` (for WireMock JAR).
-
-**Emulator configuration** (must match between CI and baseline generation):
-- API level: 36, arch: x86_64, target: `default` (AOSP — rooted by default, no overlay issues, no Google APIs needed since mock flavor uses fakes)
-- `google_apis_playstore` must not be used: Google Play Services overrides SystemUI demo mode and causes non-deterministic network indicators
-
-**Deterministic status bar** — `screenshot_test.sh` applies the following before each run:
-- `svc wifi disable` + `svc data disable` + `cmd connectivity airplane-mode enable` — kills radio state so no network icon survives
-- Demo mode broadcasts: clock fixed at 12:00, battery 100%, network hidden, notifications hidden
-- `adb reverse tcp:9090 tcp:9090` — tunnels emulator → host WireMock after APK install
+**Only prerequisite:** exactly one emulator running — `Pixel_6` (API 36, x86_64, AOSP `default` target):
+```
+mcp__maestro__list_devices → verify Pixel_6 is connected
+mcp__maestro__start_device(device_id: "Pixel_6")  ← if not already running
+adb devices  ← must show exactly one device
+```
+`google_apis_playstore` target must not be used (Google Play Services overrides demo mode).
 
 ### Maestro JavaScript HTTP API
 
@@ -240,6 +225,7 @@ list_devices → start_device (if needed) → launch_app → inspect_view_hierar
 - Call `inspect_view_hierarchy` before any `tap_on` — never guess element IDs.
 - Prefer `run_flow` for ad-hoc exploration; use `run_flow_files` to execute the committed flows in `.maestro/`.
 - The emulator must be API 36 / x86_64 / AOSP (`default` target, not `google_apis_playstore`) to match screenshot baselines.
+- If `screenshot_test.sh` fails with "Unable to launch app com.cheatshqip" after a previous run, the Maestro driver process is stale. Kill it before retrying: `kill $(pgrep -f "maestro.cli.AppKt mcp") 2>/dev/null`
 
 ## grepai - Semantic Code Search
 
