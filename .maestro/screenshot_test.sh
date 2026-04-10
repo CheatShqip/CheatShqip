@@ -88,7 +88,15 @@ enable_demo_mode() {
 
 disable_demo_mode() {
   adb shell am broadcast -a com.android.systemui.demo -e command exit || true
+  adb shell su root settings put global sysui_demo_allowed 0 || true
   adb shell dumpsys battery reset || true
+  CURRENT_ELAPSED_MS=$(adb shell cat /proc/uptime | awk '{printf "%d", $1*1000}')
+  CURRENT_UNIX_MS=$(date -u +%s)000
+  adb shell su root cmd time_detector suggest_manual_time --elapsed_realtime "$CURRENT_ELAPSED_MS" --unix_epoch_time "$CURRENT_UNIX_MS" || true
+  adb shell su root cmd time_detector set_auto_detection_enabled true || true
+  adb shell su root cmd connectivity airplane-mode disable || true
+  adb shell su root svc wifi enable || true
+  adb shell su root svc data enable || true
 }
 
 cleanup() {
