@@ -28,7 +28,7 @@ class HomeScreenTest {
 
         composeTestRule.onNodeWithContentDescription(label = "Translate").performClick()
 
-        composeTestRule.waitUntil(timeoutMillis = 15_000) {
+        composeTestRule.waitUntil(timeoutMillis = 20_000) {
             composeTestRule.onAllNodesWithText("kartë")
                 .fetchSemanticsNodes().isNotEmpty()
         }

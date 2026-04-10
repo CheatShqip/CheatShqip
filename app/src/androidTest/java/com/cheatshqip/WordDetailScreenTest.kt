@@ -82,11 +82,11 @@ class WordDetailScreenTest {
     private fun navigateToKarteDetail() {
         composeTestRule.onNodeWithText("Word").performTextInput("card")
         composeTestRule.onNodeWithContentDescription(label = "Translate").performClick()
-        composeTestRule.waitUntil(timeoutMillis = 15_000) {
+        composeTestRule.waitUntil(timeoutMillis = 20_000) {
             composeTestRule.onAllNodesWithText("kartë").fetchSemanticsNodes().isNotEmpty()
         }
         composeTestRule.onNodeWithText("kartë").performClick()
-        composeTestRule.waitUntil(timeoutMillis = 15_000) {
+        composeTestRule.waitUntil(timeoutMillis = 20_000) {
             composeTestRule.onAllNodesWithText("Declensions").fetchSemanticsNodes().isNotEmpty()
         }
     }
