@@ -183,7 +183,7 @@ for actual in "$ACTUAL_DIR"/*.png; do
     continue
   fi
 
-  pixel_diff=$($MAGICK_COMPARE -metric AE "$baseline" "$actual" "$diff_out" 2>&1 || true)
+  pixel_diff=$($MAGICK_COMPARE -metric AE -highlight-color "#00FF00" -lowlight-color "#1A1A1A" "$baseline" "$actual" "$diff_out" 2>&1 || true)
 
   pixel_diff=$(echo "$pixel_diff" | grep -oE '^[0-9]+' || echo "")
   if [[ -z "$pixel_diff" ]]; then
