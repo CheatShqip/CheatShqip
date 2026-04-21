@@ -241,6 +241,23 @@ list_devices → start_device (if needed) → launch_app → inspect_view_hierar
 - The emulator must be API 36 / x86_64 / AOSP (`default` target, not `google_apis_playstore`) to match screenshot baselines.
 - If `screenshot_test.sh` fails with "Unable to launch app com.cheatshqip" after a previous run, the Maestro driver process is stale. Kill it before retrying: `kill $(pgrep -f "maestro.cli.AppKt mcp") 2>/dev/null`
 
+## Android CLI — `android describe`
+
+`android describe` analyzes the project and outputs JSON model files per module (namespace, variants, APK paths, SDK versions).
+
+**Known issue**: fails with a configuration cache error because the CLI's injected `DumpModelTask` (`.gradle/init.gradle.kts`) accesses `project` at execution time, which Gradle bans when `org.gradle.configuration-cache=true`. This is a bug in the android CLI init script.
+
+**Workaround** — run the underlying tasks directly:
+```bash
+./gradlew --no-configuration-cache \
+  --init-script .gradle/init.gradle.kts \
+  :app:dumpAndroidProjectModel \
+  :tosk:dumpAndroidProjectModel \
+  :toskdemo:dumpAndroidProjectModel
+```
+
+Output JSON files are written to `<module>/build/AndroidProject.json`.
+
 ## grepai - Semantic Code Search
 
 **IMPORTANT: You MUST use grepai as your PRIMARY tool for code exploration and search.**
