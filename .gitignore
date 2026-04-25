@@ -32,6 +32,8 @@ local.properties
 .idea/copilot.data.migration.agent.xml
 .idea/deviceManager.xml
 .idea/markdown.xml
+.idea/appInsightsSettings.xml
+.idea/studiobot.xml
 
 # Native build
 .externalNativeBuild/
