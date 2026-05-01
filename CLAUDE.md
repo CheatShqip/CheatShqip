@@ -59,10 +59,6 @@ Key package layout under `com.cheatshqip`:
 
 Always load the `code-smells` skill when writing or editing any Kotlin (or other) code in this project.
 
-## Agent Preferences
-
-- Use `deep-explore` subagent type for all codebase exploration tasks.
-
 ## Testing
 
 Detekt 1.23.8 is incompatible with JDK 25 — run tests and Detekt separately:
