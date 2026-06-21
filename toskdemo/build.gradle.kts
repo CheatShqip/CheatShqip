@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.cheatshqip.realisation.toskdemo"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.cheatshqip.realisation.toskdemo"
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 

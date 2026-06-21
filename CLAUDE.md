@@ -53,7 +53,40 @@ Key package layout under `com.cheatshqip`:
 - **Testing**: JUnit 5 (Jupiter) 6.0.3, MockWebServer, Koin Test, Compose UI Test
 - **Lint**: Detekt 1.23.8
 - **Min SDK**: 24 (app), 21 (tosk) — note: toskdemo was bumped to 23 for navigationevent compat
-- **Target/Compile SDK**: 36
+- **Target/Compile SDK**: 37
+
+## Build Troubleshooting
+
+### Plugin/dependency "not found" after a version bump
+
+Gradle caches a negative lookup when a dependency or plugin version can't be found in a repository, so it won't hit the network again on the next build. If a version was just published (or there was a brief network blip), the stale "not found" result can persist even though the version genuinely exists upstream — e.g. `Plugin [id: 'com.android.application', version: '9.2.1'] was not found`.
+
+**Fix, in order of cost:**
+
+1. Re-run with `--refresh-dependencies` — forces re-resolution, bypassing the cached negative result:
+   ```bash
+   ./gradlew <task> --refresh-dependencies
+   ```
+2. If that doesn't clear it, delete the cached entry for just that module:
+   ```bash
+   rm -rf ~/.gradle/caches/modules-2/files-2.1/<group>/<artifact>
+   rm -rf ~/.gradle/caches/modules-2/metadata-*/descriptors/<group>/<artifact>
+   ```
+   e.g. for the AGP plugin marker: `~/.gradle/caches/modules-2/files-2.1/com.android.application/com.android.application.gradle.plugin`
+3. Nuclear option — stop the daemon (it can hold stale metadata in memory even past a cache clear) and wipe the whole dependency cache:
+   ```bash
+   ./gradlew --stop
+   rm -rf ~/.gradle/caches/modules-2
+   ```
+
+Before assuming a version doesn't exist, verify it independently (e.g. check `https://dl.google.com/dl/android/maven2/<group-path>/maven-metadata.xml` for AGP/AndroidX artifacts) rather than trusting the first Gradle failure.
+
+### AndroidX version bumps requiring a newer compileSdk
+
+Newer `androidx.core`/`androidx.lifecycle` releases can require a higher `compileSdk` than the project currently targets, failing at `:app:checkProdDebugAarMetadata` with "requires libraries and applications that depend on it to compile against version N or later." Install the required platform before bumping `compileSdk`/`targetSdk`:
+```bash
+sdkmanager "platforms;android-<N>.0"
+```
 
 ## Code Quality
 
