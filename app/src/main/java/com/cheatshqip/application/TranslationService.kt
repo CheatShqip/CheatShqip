@@ -1,25 +1,18 @@
 package com.cheatshqip.application
 
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
-import com.cheatshqip.application.port.output.GetAlbanianTranslationOfEnglishWordPort
-import com.cheatshqip.application.port.output.GetWordSuggestionsPort
+import com.cheatshqip.application.port.output.GetEnglishToAlbanianTranslationsPort
 import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
-import kotlin.collections.take
 
 private const val MAX_NUMBER_OF_RESULTS = 5
 
 class TranslationService(
-    private val getAlbanianTranslationOfEnglishWordPort: GetAlbanianTranslationOfEnglishWordPort,
-    private val getWordSuggestionsPort: GetWordSuggestionsPort,
+    private val getEnglishToAlbanianTranslationsPort: GetEnglishToAlbanianTranslationsPort,
 ) : GetWordTranslationSuggestionsUseCase {
     override suspend fun getWorldTranslationSuggestions(word: Word): List<Translation> {
-        val albanianTranslation =
-            getAlbanianTranslationOfEnglishWordPort
-            .getAlbanianTranslationOfEnglishWord(word)
-
-        return getWordSuggestionsPort
-            .getWordSuggestionsOf(albanianTranslation.normalize())
+        return getEnglishToAlbanianTranslationsPort
+            .getTranslationsForEnglishWord(word.normalize())
             .take(MAX_NUMBER_OF_RESULTS)
     }
 }

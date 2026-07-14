@@ -2,7 +2,6 @@ package com.cheatshqip
 
 import com.cheatshqip.application.TranslationService
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
-import com.cheatshqip.application.port.output.GetWordSuggestionsPort
 import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
 import kotlinx.coroutines.test.runTest
@@ -21,9 +20,8 @@ class GetWordTranslationSuggestionsUseCaseTest {
     ) = runTest {
         val useCase: GetWordTranslationSuggestionsUseCase =
             TranslationService(
-            getAlbanianTranslationOfEnglishWordPort = FakeAlbanianTranslationOutputAdapter(),
-            getWordSuggestionsPort = FakeWordSuggestionsOutputAdapter(),
-        )
+                getEnglishToAlbanianTranslationsPort = FakeEnglishToAlbanianOutputAdapter()
+            )
 
         val result = useCase.getWorldTranslationSuggestions(Word(word))
 
@@ -36,102 +34,70 @@ class GetWordTranslationSuggestionsUseCaseTest {
     @Test
     fun `given some characters, the maximum number of proposed translations is 5`() =
         runTest {
-        val useCase: GetWordTranslationSuggestionsUseCase =
-            TranslationService(
-            getAlbanianTranslationOfEnglishWordPort = FakeAlbanianTranslationOutputAdapter(),
-            getWordSuggestionsPort =
-                object : GetWordSuggestionsPort {
-                override suspend fun getWordSuggestionsOf(word: Word): List<Translation> {
-                    return listOf(
-                        Translation("punë"),
-                        Translation("pufe"),
-                        Translation("pure"),
-                        Translation("arne"),
-                        Translation("buçe"),
-                        Translation("puf"),
-                        Translation("pufi"),
-                        Translation("pufni"),
-                        Translation("pufu"),
-                        Translation("pufur"),
-                        Translation("pufut"),
-                    )
-                }
-            }
-        )
+            val useCase: GetWordTranslationSuggestionsUseCase =
+                TranslationService(
+                    getEnglishToAlbanianTranslationsPort =
+                        FakeEnglishToAlbanianOutputAdapterWithManyResults()
+                )
 
-        val result = useCase.getWorldTranslationSuggestions(Word("work"))
+            val result = useCase.getWorldTranslationSuggestions(Word("work"))
 
-        assertEquals(
-            listOf(
-                Translation("punë"),
-                Translation("pufe"),
-                Translation("pure"),
-                Translation("arne"),
-                Translation("buçe"),
-            ),
-            result
-        )
-    }
+            assertEquals(
+                listOf(
+                    Translation("punë"),
+                    Translation("pufe"),
+                    Translation("pure"),
+                    Translation("arne"),
+                    Translation("buçe"),
+                ),
+                result
+            )
+        }
 
     @Test
     fun `given some characters, they should be normalized to work`() =
         runTest {
-        val useCase: GetWordTranslationSuggestionsUseCase =
-            TranslationService(
-            getAlbanianTranslationOfEnglishWordPort = FakeAlbanianTranslationOutputAdapter(),
-            getWordSuggestionsPort =
-                object : GetWordSuggestionsPort {
-                override suspend fun getWordSuggestionsOf(word: Word): List<Translation> {
-                    if (word.value == "pune") {
-                        return listOf(
-                            Translation("punë"),
-                            Translation("pufe"),
-                            Translation("pure"),
-                            Translation("arne"),
-                            Translation("buçe"),
-                        )
-                    }
-                    throw IllegalArgumentException("No translation found for ${word.value}")
-                }
-            }
-        )
+            val useCase: GetWordTranslationSuggestionsUseCase =
+                TranslationService(
+                    getEnglishToAlbanianTranslationsPort = FakeEnglishToAlbanianOutputAdapter()
+                )
 
-        val result = useCase.getWorldTranslationSuggestions(Word("work"))
+            val result = useCase.getWorldTranslationSuggestions(Word("work"))
 
-        assertEquals(
-            listOf(
-                Translation("punë"),
-                Translation("pufe"),
-                Translation("pure"),
-                Translation("arne"),
-                Translation("buçe"),
-            ),
-            result
-        )
-    }
+            assertEquals(
+                listOf(
+                    Translation("punë"),
+                    Translation("pufe"),
+                    Translation("pure"),
+                    Translation("arne"),
+                    Translation("buçe"),
+                ),
+                result
+            )
+        }
 
     companion object {
         @Suppress("unused")
         @JvmStatic
         private fun provideArguments() =
             listOf(
-            Arguments.of(
-                "work",
-                listOf(
-                    Translation("punë"),
-                    Translation("pufe"),
-                    Translation("pure"),
-                    Translation("arne"),
-                    Translation("buçe")
-                )
-            ),
-            Arguments.of(
-                "gift",
-                listOf(
-                    Translation("dhuratë"),
-                    Translation("dhurëti"),
+                Arguments.of(
+                    "work",
+                    listOf(
+                        Translation("punë"),
+                        Translation("pufe"),
+                        Translation("pure"),
+                        Translation("arne"),
+                        Translation("buçe")
+                    )
+                ),
+                Arguments.of(
+                    "gift",
+                    listOf(
+                        Translation("dhuratë"),
+                        Translation("dhurëti"),
+                    )
                 )
             )
-        )
     }
 }

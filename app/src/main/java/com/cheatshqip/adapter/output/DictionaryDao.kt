@@ -38,4 +38,7 @@ interface DictionaryDao {
      */
     @RawQuery
     suspend fun searchFts(query: SupportSQLiteQuery): List<EntryEntity>
+
+    @RawQuery
+    suspend fun searchByEnglishToken(query: SupportSQLiteQuery): List<EntryEntity>
 }

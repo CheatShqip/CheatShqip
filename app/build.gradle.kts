@@ -26,11 +26,7 @@ android {
         )
     }
 
-    flavorDimensions += "environment"
-    productFlavors {
-        create("prod") { dimension = "environment" }
-        create("mock") { dimension = "environment" }
-    }
+
 
     buildTypes {
         release {
@@ -83,8 +79,6 @@ detekt {
         "src/main/java",
         "src/test/java",
         "src/androidTest/java",
-        "src/mock/java",
-        "src/prod/java",
     )
 }
 
@@ -109,7 +103,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.kotlin.serialization.json)
-    implementation(libs.mlkit.translate)
+
     implementation(libs.okhttp3)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.kotlinx.serialization)
