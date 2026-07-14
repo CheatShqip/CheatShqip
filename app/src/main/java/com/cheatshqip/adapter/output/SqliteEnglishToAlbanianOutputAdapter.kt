@@ -13,17 +13,23 @@ class SqliteEnglishToAlbanianOutputAdapter(
     override suspend fun getTranslationsForEnglishWord(englishWord: Word): List<Translation> {
         val word = englishWord.normalize().value
         val query = SimpleSQLiteQuery(
-            "SELECT * FROM entry " +
+            "SELECT DISTINCT * FROM entry " +
                 "WHERE english = ? " +
+                "OR english LIKE ? " +
+                "OR english LIKE ? " +
+                "OR english LIKE ? " +
                 "OR english LIKE ? " +
                 "OR english LIKE ? " +
                 "OR english LIKE ? " +
                 "LIMIT ?",
             arrayOf<Any>(
                 word,
-                "$word|",
-                "|$word",
-                "|$word|",
+                "$word%",
+                "%|$word%",
+                "%;$word%",
+                "%; $word%",
+                "%|$word",
+                "%;$word",
                 MAX_RESULTS
             )
         )
