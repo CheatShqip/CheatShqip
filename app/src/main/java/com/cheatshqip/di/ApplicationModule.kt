@@ -4,9 +4,11 @@ import com.cheatshqip.BuildConfig
 import com.cheatshqip.HomeScreenViewModel
 import com.cheatshqip.WordDetailViewModel
 import com.cheatshqip.adapter.output.ApiBaseURL
-import com.cheatshqip.adapter.output.InMemoryAlbanianWordDetailOutputAdapter
-import com.cheatshqip.adapter.output.RESTWordSuggestionsOutputAdapter
+import com.cheatshqip.adapter.output.DictionaryDatabase
+import com.cheatshqip.adapter.output.RoomAlbanianWordDetailOutputAdapter
 import com.cheatshqip.adapter.output.ShqipRESTService
+import com.cheatshqip.adapter.output.SqliteWordSuggestionsOutputAdapter
+import com.cheatshqip.adapter.output.createDictionaryDatabase
 import com.cheatshqip.application.AlbanianWordService
 import com.cheatshqip.application.TranslationService
 import com.cheatshqip.application.port.input.GetAlbanianWordDetailUseCase
@@ -18,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Converter
@@ -65,14 +68,18 @@ val applicationModule = module {
         )
     }
 
+    single<DictionaryDatabase> {
+        createDictionaryDatabase(androidContext())
+    }
+
+    single { get<DictionaryDatabase>().dictionaryDao() }
+
     single<GetWordSuggestionsPort> {
-        RESTWordSuggestionsOutputAdapter(
-            shqipRESTService = get()
-        )
+        SqliteWordSuggestionsOutputAdapter(dao = get())
     }
 
     single<GetAlbanianWordDetailPort> {
-        InMemoryAlbanianWordDetailOutputAdapter()
+        RoomAlbanianWordDetailOutputAdapter(dao = get())
     }
 
     single<GetAlbanianWordDetailUseCase> {

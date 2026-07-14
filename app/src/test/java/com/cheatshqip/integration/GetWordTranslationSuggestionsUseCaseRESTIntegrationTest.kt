@@ -2,8 +2,10 @@ package com.cheatshqip.integration
 
 import com.cheatshqip.FakeAlbanianTranslationOutputAdapter
 import com.cheatshqip.adapter.output.ApiBaseURL
+import com.cheatshqip.adapter.output.RESTWordSuggestionsOutputAdapter
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
 import com.cheatshqip.application.port.output.GetAlbanianTranslationOfEnglishWordPort
+import com.cheatshqip.application.port.output.GetWordSuggestionsPort
 import com.cheatshqip.di.applicationModule
 import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
@@ -34,6 +37,11 @@ class GetWordTranslationSuggestionsUseCaseRESTIntegrationTest : KoinTest {
             module {
             single<ApiBaseURL> { ApiBaseURL(baseURL) }
             single<GetAlbanianTranslationOfEnglishWordPort> { FakeAlbanianTranslationOutputAdapter() }
+            // Override SQLite port with the REST adapter so this integration test
+            // exercises the network path without needing Android context for Room.
+            single<GetWordSuggestionsPort> {
+                RESTWordSuggestionsOutputAdapter(shqipRESTService = get())
+            }
         }
         startKoin {
             modules(applicationModule, baseURLModule)
@@ -43,6 +51,7 @@ class GetWordTranslationSuggestionsUseCaseRESTIntegrationTest : KoinTest {
     @AfterEach
     fun tearDown() {
         mockWebServer.shutdown()
+        stopKoin()
     }
 
     @Test

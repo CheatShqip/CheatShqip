@@ -1,0 +1,108 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "effb6210d1b4278b3ad22f1641f78ef2",
+    "entities": [
+      {
+        "tableName": "entry",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rowid` INTEGER NOT NULL, `id` TEXT NOT NULL, `pos` TEXT NOT NULL, `albanian_headword` TEXT NOT NULL, `albanian_ascii` TEXT NOT NULL, `stress_marked` TEXT, `compact_form` TEXT, `gender` TEXT, `noun_sg_indef` TEXT, `noun_sg_def` TEXT, `noun_pl_indef` TEXT, `noun_pl_def` TEXT, `english` TEXT NOT NULL, `gloss` TEXT NOT NULL, `data_json` TEXT NOT NULL, PRIMARY KEY(`rowid`))",
+        "fields": [
+          {
+            "fieldPath": "rowid",
+            "columnName": "rowid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pos",
+            "columnName": "pos",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "albanianHeadword",
+            "columnName": "albanian_headword",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "albanianAscii",
+            "columnName": "albanian_ascii",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stressMarked",
+            "columnName": "stress_marked",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "compactForm",
+            "columnName": "compact_form",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "nounSgIndef",
+            "columnName": "noun_sg_indef",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "nounSgDef",
+            "columnName": "noun_sg_def",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "nounPlIndef",
+            "columnName": "noun_pl_indef",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "nounPlDef",
+            "columnName": "noun_pl_def",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "english",
+            "columnName": "english",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gloss",
+            "columnName": "gloss",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataJson",
+            "columnName": "data_json",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "rowid"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'effb6210d1b4278b3ad22f1641f78ef2')"
+    ]
+  }
+}

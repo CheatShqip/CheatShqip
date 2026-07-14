@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -59,6 +60,10 @@ android {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
@@ -108,6 +113,10 @@ dependencies {
     implementation(libs.okhttp3)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.kotlinx.serialization)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.sqlite.bundled)
+    ksp(libs.androidx.room.compiler)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(platform(libs.okhttp3.bom))
