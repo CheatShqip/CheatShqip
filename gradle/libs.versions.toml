@@ -2,7 +2,7 @@
 activityComposeVersion = "1.13.0"
 kspVersion = "2.3.10"
 roomVersion = "2.8.4"
-agpVersion = "9.2.1"
+agpVersion = "9.4.1"
 composeBomVersion = "2026.06.01"
 coreKtxVersion = "1.19.0"
 coroutinesVersion = "1.11.0"

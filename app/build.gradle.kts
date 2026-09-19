@@ -38,6 +38,7 @@ android {
         }
         create("analyze") {
             isMinifyEnabled = true
+            isShrinkResources = true
             isDebuggable = false
             matchingFallbacks += listOf("release")
             proguardFiles(
@@ -113,15 +114,12 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     testImplementation(platform(libs.junit.bom))
-    testImplementation(platform(libs.okhttp3.bom))
     testImplementation(libs.junit.juniper)
     testImplementation(libs.junit.juniper.params)
     testImplementation(libs.junit.platform.launcher)
     testImplementation(libs.koin.test)
     testImplementation(libs.okhttp3.mockwebserver)
 
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(platform(libs.okhttp3.bom))
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.ui.test.junit4)
