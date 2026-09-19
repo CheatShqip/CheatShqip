@@ -23,8 +23,8 @@ class HomeScreenTest {
     }
 
     @Test
-    fun homeScreen_translateCard_displaysKarte() {
-        composeTestRule.onNodeWithText("Word").performTextInput("card")
+    fun homeScreen_translatePaper_displaysKarte() {
+        composeTestRule.onNodeWithText("Word").performTextInput("paper")
 
         composeTestRule.onNodeWithContentDescription(label = "Translate").performClick()
 

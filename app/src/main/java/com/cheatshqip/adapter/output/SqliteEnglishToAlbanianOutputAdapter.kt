@@ -16,7 +16,7 @@ class SqliteEnglishToAlbanianOutputAdapter(
             "SELECT DISTINCT entry.* FROM entry, entry_fts " +
                 "WHERE entry.rowid = entry_fts.rowid " +
                 "AND entry_fts.english MATCH ? " +
-                "ORDER BY rank " +
+                "ORDER BY (rank * 0.7) - (frequency * 3.0) " +
                 "LIMIT ?",
             arrayOf<Any>(word, MAX_RESULTS)
         )

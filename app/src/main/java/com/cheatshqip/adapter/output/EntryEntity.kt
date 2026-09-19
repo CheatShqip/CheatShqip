@@ -21,4 +21,5 @@ data class EntryEntity(
     val english: String,
     val gloss: String,
     @ColumnInfo(name = "data_json") val dataJson: String,
+    @ColumnInfo(name = "frequency") val frequency: Float = 0f,
 )

@@ -40,15 +40,19 @@ interface DictionaryDao {
     suspend fun searchFts(query: SupportSQLiteQuery): List<EntryEntity>
 
     /**
-     * Full-text search over the english column using FTS5 BM25 ranking.
-     * FTS5 tokenize='unicode61' treats '|' and ';' as token separators,
-     * so searching "car" matches "car|automobile" but not "placard".
+     * Full-text search over the english column using FTS5 BM25 ranking combined with
+     * corpus frequency (ADR 0007). FTS5 tokenize='unicode61' treats '|' and ';' as
+     * token separators, so searching "car" matches "car|automobile" but not "placard".
+     *
+     * Ranking formula: (rank * 0.7) - (frequency * 3.0) — 70% BM25 signal, 30% corpus
+     * frequency signal. Higher frequency boosts an entry's ranking.
      *
      * Build the query with [androidx.sqlite.db.SimpleSQLiteQuery]:
      * ```
      * SimpleSQLiteQuery(
      *     "SELECT DISTINCT entry.* FROM entry, entry_fts " +
-     *     "WHERE entry.rowid = entry_fts.rowid AND entry_fts.english MATCH ? LIMIT ?",
+     *     "WHERE entry.rowid = entry_fts.rowid AND entry_fts.english MATCH ? " +
+     *     "ORDER BY (rank * 0.7) - (frequency * 3.0) LIMIT ?",
      *     arrayOf(term, limit)
      * )
      * ```

@@ -33,16 +33,25 @@ class HomeScreenViewModel(
         val currentState = _state.value
         check(currentState is WithSearch)
 
-        getWordTranslationSuggestionsUseCase
-            .getWorldTranslationSuggestions(Word(currentState.search))
-            .let { translations ->
-                _state.update {
-                    HomeScreenUIState.WithTranslationSuggestions(
-                        translationSuggestions = translations,
-                        search = currentState.search
-                    )
-                }
+        if (currentState.search.isBlank()) {
+            _state.update { currentState }
+            return@launch
+        }
+
+        try {
+            val translations = getWordTranslationSuggestionsUseCase
+                .getWorldTranslationSuggestions(Word(currentState.search))
+            _state.update {
+                HomeScreenUIState.WithTranslationSuggestions(
+                    translationSuggestions = translations,
+                    search = currentState.search
+                )
             }
+        } catch (e: Throwable) {
+            _state.update {
+                HomeScreenUIState.Error("search", e)
+            }
+        }
     }
 
     fun onSearchChanged(search: String) {

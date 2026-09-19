@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -73,28 +74,56 @@ private fun HomeScreen(
     ) {
         val containerModifier = Modifier.fillMaxWidth()
 
-        if (homeScreenUIState is WithSearch) {
-            ToskTextField(
-                modifier = containerModifier,
-                value = homeScreenUIState.search,
-                onValueChange = onSearchChanged,
-                placeholder = { Text("Word") },
-            )
-
-            ToskButton(
-                modifier = containerModifier,
-                contentDescription = stringResource(R.string.translate),
-                onClick = { onSearch() },
-            ) {
-                Text(stringResource(R.string.translate))
+        when (homeScreenUIState) {
+            is HomeScreenUIState.Loading -> {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
             }
 
-            if (homeScreenUIState is HomeScreenUIState.WithTranslationSuggestions) {
+            is HomeScreenUIState.Error -> {
+                Text(
+                    text = "Error: ${homeScreenUIState.error.message}",
+                    modifier = Modifier.padding(ToskSpacing.S),
+                )
+            }
+
+            is HomeScreenUIState.WithTranslationSuggestions -> {
+                ToskTextField(
+                    modifier = containerModifier,
+                    value = homeScreenUIState.search,
+                    onValueChange = onSearchChanged,
+                    placeholder = { Text("Word") },
+                )
+
+                ToskButton(
+                    modifier = containerModifier,
+                    contentDescription = stringResource(R.string.translate),
+                    onClick = { onSearch() },
+                ) {
+                    Text(stringResource(R.string.translate))
+                }
+
                 TranslationSuggestions(
                     modifier = containerModifier,
                     translationSuggestions = homeScreenUIState.translationSuggestions,
                     onTranslationClicked = onTranslationClicked,
                 )
+            }
+
+            is HomeScreenUIState.Initial -> {
+                ToskTextField(
+                    modifier = containerModifier,
+                    value = homeScreenUIState.search,
+                    onValueChange = onSearchChanged,
+                    placeholder = { Text("Word") },
+                )
+
+                ToskButton(
+                    modifier = containerModifier,
+                    contentDescription = stringResource(R.string.translate),
+                    onClick = { onSearch() },
+                ) {
+                    Text(stringResource(R.string.translate))
+                }
             }
         }
     }
