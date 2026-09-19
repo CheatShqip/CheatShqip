@@ -11,6 +11,7 @@ import com.cheatshqip.domain.DativeDeclension
 import com.cheatshqip.domain.GenitiveDeclension
 import com.cheatshqip.domain.GrammaticalDisplay
 import com.cheatshqip.domain.NominativeDeclension
+import com.cheatshqip.domain.NounParadigm
 import com.cheatshqip.domain.PluralGrammaticalDisplay
 import com.cheatshqip.domain.SingularGrammaticalDisplay
 import com.cheatshqip.domain.Word
@@ -27,7 +28,7 @@ class GetAlbanianWordDetailUseCaseTest {
     private val useCase: GetAlbanianWordDetailUseCase = AlbanianWordService(getAlbanianWordDetailPort)
 
     @Test
-    fun `should get albanian word singular definite declensions`() =
+    fun `should get albanian word full declension paradigm`() =
         runTest {
             val result = useCase.getAlbanianWordDetail(Word("dhuratë"))
 
@@ -53,17 +54,44 @@ private fun albanianWordDetail(
         singular = SingularGrammaticalDisplay("dhurát/ë,-a"),
         plural = PluralGrammaticalDisplay("dhurát/a,-at"),
     ),
-    singularDefiniteDeclensions: AlbanianDeclensions = AlbanianDeclensions(
-        nominative = NominativeDeclension("dhurata"),
-        genitive = GenitiveDeclension("dhurëtës"),
-        dative = DativeDeclension("dhuratës"),
-        accusative = AccusativeDeclension("dhuratën"),
-        ablative = AblativeDeclension("dhuratës"),
+    declensions: NounParadigm = NounParadigm(
+        singularIndefinite = declensions(
+            nominative = "dhuratë",
+            oblique = "dhurate",
+            accusative = "dhuratë",
+        ),
+        singularDefinite = declensions(
+            nominative = "dhurata",
+            oblique = "dhuratës",
+            accusative = "dhuratën",
+        ),
+        pluralIndefinite = declensions(
+            nominative = "dhurata",
+            oblique = "dhuratave",
+            accusative = "dhurata",
+        ),
+        pluralDefinite = declensions(
+            nominative = "dhuratat",
+            oblique = "dhuratave",
+            accusative = "dhuratat",
+        ),
     ),
 ): AlbanianWordDetail = AlbanianWordDetail(
     word = word,
     kind = kind,
     gender = gender,
     grammaticalDisplay = grammaticalDisplay,
-    singularDefiniteDeclensions = singularDefiniteDeclensions,
+    declensions = declensions,
+)
+
+private fun declensions(
+    nominative: String,
+    oblique: String,
+    accusative: String,
+): AlbanianDeclensions = AlbanianDeclensions(
+    nominative = NominativeDeclension(nominative),
+    genitive = GenitiveDeclension(oblique),
+    dative = DativeDeclension(oblique),
+    accusative = AccusativeDeclension(accusative),
+    ablative = AblativeDeclension(oblique),
 )

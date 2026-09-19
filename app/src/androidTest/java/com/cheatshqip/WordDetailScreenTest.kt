@@ -58,24 +58,33 @@ class WordDetailScreenTest {
     }
 
     @Test
-    fun wordDetailScreen_declensions_displaysAllLabels() {
+    fun wordDetailScreen_declensions_displaysAllSetHeadersAndLabels() {
         navigateToKarteDetail()
 
         composeTestRule.onNodeWithText("Declensions").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Nominative").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Genitive").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Dative").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Accusative").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Ablative").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Singular Indefinite").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Singular Definite").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Plural Indefinite").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Plural Definite").assertIsDisplayed()
+        // Case labels repeat once per set (4 sets)
+        composeTestRule.onAllNodesWithText("Nominative")[0].assertIsDisplayed()
+        composeTestRule.onAllNodesWithText("Genitive")[0].assertIsDisplayed()
+        composeTestRule.onAllNodesWithText("Dative")[0].assertIsDisplayed()
+        composeTestRule.onAllNodesWithText("Accusative")[0].assertIsDisplayed()
+        composeTestRule.onAllNodesWithText("Ablative")[0].assertIsDisplayed()
     }
 
     @Test
     fun wordDetailScreen_declensions_displaysValues() {
         navigateToKarteDetail()
 
-        composeTestRule.onNodeWithText("karta").assertIsDisplayed()
+        // Singular definite nominative, plural indefinite nominative, and plural indefinite
+        // accusative all share the value "karta"
+        composeTestRule.onAllNodesWithText("karta")[0].assertIsDisplayed()
         composeTestRule.onNodeWithText("kartën").assertIsDisplayed()
-        // Genitive, Dative, and Ablative all share the same value
+        composeTestRule.onNodeWithText("kartat").assertIsDisplayed()
+        composeTestRule.onNodeWithText("kartave").assertIsDisplayed()
+        // Singular definite genitive, dative, and ablative all share the value "kartës"
         composeTestRule.onAllNodesWithText("kartës")[0].assertIsDisplayed()
     }
 

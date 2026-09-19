@@ -1,14 +1,9 @@
 package com.cheatshqip.adapter.output
 
 import com.cheatshqip.application.port.output.GetAlbanianWordDetailPort
-import com.cheatshqip.domain.AblativeDeclension
-import com.cheatshqip.domain.AccusativeDeclension
-import com.cheatshqip.domain.AlbanianDeclensions
-import com.cheatshqip.domain.AlbanianWordDetail
-import com.cheatshqip.domain.DativeDeclension
-import com.cheatshqip.domain.GenitiveDeclension
+import com.cheatshqip.domain.AlbanianNounEntry
 import com.cheatshqip.domain.GrammaticalDisplay
-import com.cheatshqip.domain.NominativeDeclension
+import com.cheatshqip.domain.NounBaseForms
 import com.cheatshqip.domain.PluralGrammaticalDisplay
 import com.cheatshqip.domain.SingularGrammaticalDisplay
 import com.cheatshqip.domain.Word
@@ -16,12 +11,12 @@ import com.cheatshqip.domain.WordGender
 import com.cheatshqip.domain.WordKind
 
 class InMemoryAlbanianWordDetailOutputAdapter : GetAlbanianWordDetailPort {
-    override suspend fun getAlbanianWordDetail(word: Word): AlbanianWordDetail =
-        wordDetails[word.normalize()] ?: error("No detail found for word: ${word.value}")
+    override suspend fun getAlbanianWord(word: Word): AlbanianNounEntry =
+        wordEntries[word.normalize()] ?: error("No detail found for word: ${word.value}")
 
     private companion object {
-        val wordDetails: Map<Word, AlbanianWordDetail> = mapOf(
-            Word("dhurate") to AlbanianWordDetail(
+        val wordEntries: Map<Word, AlbanianNounEntry> = mapOf(
+            Word("dhurate") to AlbanianNounEntry(
                 word = Word("dhuratë"),
                 kind = WordKind.Name,
                 gender = WordGender.Feminine,
@@ -29,15 +24,14 @@ class InMemoryAlbanianWordDetailOutputAdapter : GetAlbanianWordDetailPort {
                     singular = SingularGrammaticalDisplay("dhurát/ë,-a"),
                     plural = PluralGrammaticalDisplay("dhurát/a,-at"),
                 ),
-                singularDefiniteDeclensions = AlbanianDeclensions(
-                    nominative = NominativeDeclension("dhurata"),
-                    genitive = GenitiveDeclension("dhurëtës"),
-                    dative = DativeDeclension("dhuratës"),
-                    accusative = AccusativeDeclension("dhuratën"),
-                    ablative = AblativeDeclension("dhuratës"),
+                baseForms = NounBaseForms(
+                    singularIndefinite = "dhuratë",
+                    singularDefinite = "dhurata",
+                    pluralIndefinite = "dhurata",
+                    pluralDefinite = "dhuratat",
                 ),
             ),
-            Word("karte") to AlbanianWordDetail(
+            Word("karte") to AlbanianNounEntry(
                 word = Word("kartë"),
                 kind = WordKind.Name,
                 gender = WordGender.Feminine,
@@ -45,12 +39,11 @@ class InMemoryAlbanianWordDetailOutputAdapter : GetAlbanianWordDetailPort {
                     singular = SingularGrammaticalDisplay("kár/të,-ta"),
                     plural = PluralGrammaticalDisplay("kártat"),
                 ),
-                singularDefiniteDeclensions = AlbanianDeclensions(
-                    nominative = NominativeDeclension("karta"),
-                    genitive = GenitiveDeclension("kartës"),
-                    dative = DativeDeclension("kartës"),
-                    accusative = AccusativeDeclension("kartën"),
-                    ablative = AblativeDeclension("kartës"),
+                baseForms = NounBaseForms(
+                    singularIndefinite = "kartë",
+                    singularDefinite = "karta",
+                    pluralIndefinite = "karta",
+                    pluralDefinite = "kartat",
                 ),
             ),
         )

@@ -30,6 +30,7 @@ import com.cheatshqip.domain.DativeDeclension
 import com.cheatshqip.domain.GenitiveDeclension
 import com.cheatshqip.domain.GrammaticalDisplay
 import com.cheatshqip.domain.NominativeDeclension
+import com.cheatshqip.domain.NounParadigm
 import com.cheatshqip.domain.PluralGrammaticalDisplay
 import com.cheatshqip.domain.SingularGrammaticalDisplay
 import com.cheatshqip.domain.Word
@@ -142,12 +143,35 @@ private fun GrammaticalDisplaySection(wordDetail: AlbanianWordDetail) {
 
 @Composable
 private fun DeclensionsSection(wordDetail: AlbanianWordDetail) {
-    val declensions = wordDetail.singularDefiniteDeclensions
-    Column(verticalArrangement = Arrangement.spacedBy(ToskSpacing.XS)) {
+    val paradigm = wordDetail.declensions
+    Column(verticalArrangement = Arrangement.spacedBy(ToskSpacing.S)) {
         Text(
             text = stringResource(R.string.declensions),
             style = ToskTheme.typography.label2,
         )
+        DeclensionSetSection(
+            title = stringResource(R.string.singular_indefinite),
+            declensions = paradigm.singularIndefinite,
+        )
+        DeclensionSetSection(
+            title = stringResource(R.string.singular_definite),
+            declensions = paradigm.singularDefinite,
+        )
+        DeclensionSetSection(
+            title = stringResource(R.string.plural_indefinite),
+            declensions = paradigm.pluralIndefinite,
+        )
+        DeclensionSetSection(
+            title = stringResource(R.string.plural_definite),
+            declensions = paradigm.pluralDefinite,
+        )
+    }
+}
+
+@Composable
+private fun DeclensionSetSection(title: String, declensions: AlbanianDeclensions) {
+    Column(verticalArrangement = Arrangement.spacedBy(ToskSpacing.XS)) {
+        Text(text = title, style = ToskTheme.typography.label2)
         DeclensionRow(label = stringResource(R.string.nominative), value = declensions.nominative.value)
         DeclensionRow(label = stringResource(R.string.genitive), value = declensions.genitive.value)
         DeclensionRow(label = stringResource(R.string.dative), value = declensions.dative.value)
@@ -182,12 +206,35 @@ fun WordDetailScreenPreview() {
                         singular = SingularGrammaticalDisplay("kár/të,-ta"),
                         plural = PluralGrammaticalDisplay("kártat"),
                     ),
-                    singularDefiniteDeclensions = AlbanianDeclensions(
-                        nominative = NominativeDeclension("karta"),
-                        genitive = GenitiveDeclension("kartës"),
-                        dative = DativeDeclension("kartës"),
-                        accusative = AccusativeDeclension("kartën"),
-                        ablative = AblativeDeclension("kartës"),
+                    declensions = NounParadigm(
+                        singularIndefinite = AlbanianDeclensions(
+                            nominative = NominativeDeclension("kartë"),
+                            genitive = GenitiveDeclension("karte"),
+                            dative = DativeDeclension("karte"),
+                            accusative = AccusativeDeclension("kartë"),
+                            ablative = AblativeDeclension("karte"),
+                        ),
+                        singularDefinite = AlbanianDeclensions(
+                            nominative = NominativeDeclension("karta"),
+                            genitive = GenitiveDeclension("kartës"),
+                            dative = DativeDeclension("kartës"),
+                            accusative = AccusativeDeclension("kartën"),
+                            ablative = AblativeDeclension("kartës"),
+                        ),
+                        pluralIndefinite = AlbanianDeclensions(
+                            nominative = NominativeDeclension("karta"),
+                            genitive = GenitiveDeclension("kartave"),
+                            dative = DativeDeclension("kartave"),
+                            accusative = AccusativeDeclension("karta"),
+                            ablative = AblativeDeclension("kartave"),
+                        ),
+                        pluralDefinite = AlbanianDeclensions(
+                            nominative = NominativeDeclension("kartat"),
+                            genitive = GenitiveDeclension("kartave"),
+                            dative = DativeDeclension("kartave"),
+                            accusative = AccusativeDeclension("kartat"),
+                            ablative = AblativeDeclension("kartave"),
+                        ),
                     ),
                 ),
             ),

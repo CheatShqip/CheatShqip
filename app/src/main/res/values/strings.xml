@@ -5,6 +5,10 @@
     <string name="singular">Singular</string>
     <string name="plural">Plural</string>
     <string name="declensions">Declensions</string>
+    <string name="singular_indefinite">Singular Indefinite</string>
+    <string name="singular_definite">Singular Definite</string>
+    <string name="plural_indefinite">Plural Indefinite</string>
+    <string name="plural_definite">Plural Definite</string>
     <string name="nominative">Nominative</string>
     <string name="genitive">Genitive</string>
     <string name="dative">Dative</string>
