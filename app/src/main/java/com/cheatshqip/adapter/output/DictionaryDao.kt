@@ -40,20 +40,32 @@ interface DictionaryDao {
     suspend fun searchFts(query: SupportSQLiteQuery): List<EntryEntity>
 
     /**
-     * Full-text search over the english column using FTS5 BM25 ranking combined with
-     * corpus frequency (ADR 0007). FTS5 tokenize='unicode61' treats '|' and ';' as
-     * token separators, so searching "car" matches "car|automobile" but not "placard".
+     * Full-text search over the english column using a two-tier ranking strategy (ADR 0007).
+     * FTS5 tokenize='unicode61' treats '|' and ';' as token separators, so searching
+     * "car" matches "car|automobile" but not "placard".
      *
-     * Ranking formula: (rank * 0.7) - (frequency * 3.0) — 70% BM25 signal, 30% corpus
-     * frequency signal. Higher frequency boosts an entry's ranking.
+     * Tier 0: entries where the first token of the `english` field (before the first '|')
+     * exactly matches the search word — these are "pure" translations like english="water".
+     * Tier 1: all other matches — compounds like english="water jug" or "water pipe".
+     *
+     * Within each tier, ranking uses (rank * 0.7) - (frequency * 3.0), where FTS5 BM25
+     * `rank` provides relevance and `frequency` (corpus frequency from the `words/` pipeline)
+     * breaks ties. Higher frequency boosts ranking within a tier.
      *
      * Build the query with [androidx.sqlite.db.SimpleSQLiteQuery]:
      * ```
      * SimpleSQLiteQuery(
      *     "SELECT DISTINCT entry.* FROM entry, entry_fts " +
      *     "WHERE entry.rowid = entry_fts.rowid AND entry_fts.english MATCH ? " +
-     *     "ORDER BY (rank * 0.7) - (frequency * 3.0) LIMIT ?",
-     *     arrayOf(term, limit)
+     *     "ORDER BY " +
+     *     "  CASE " +
+     *     "    WHEN (CASE " +
+     *     "      WHEN INSTR(entry.english, '|') > 0 THEN " +
+     *     "        TRIM(SUBSTR(entry.english, 1, INSTR(entry.english, '|') - 1)) " +
+     *     "      ELSE entry.english END) = ? THEN 0 " +
+     *     "    ELSE 1 END, " +
+     *     "  (rank * 0.7) - (frequency * 3.0) LIMIT ?",
+     *     arrayOf(term, term, limit)
      * )
      * ```
      *

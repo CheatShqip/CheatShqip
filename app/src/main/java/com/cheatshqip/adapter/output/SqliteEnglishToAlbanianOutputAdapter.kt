@@ -16,9 +16,21 @@ class SqliteEnglishToAlbanianOutputAdapter(
             "SELECT DISTINCT entry.* FROM entry, entry_fts " +
                 "WHERE entry.rowid = entry_fts.rowid " +
                 "AND entry_fts.english MATCH ? " +
-                "ORDER BY (rank * 0.7) - (frequency * 3.0) " +
+                "ORDER BY " +
+                "  CASE " +
+                "    WHEN (" +
+                "      CASE " +
+                "        WHEN INSTR(entry.english, '|') > 0 " +
+                "          THEN TRIM(SUBSTR(entry.english, 1, " +
+                "            INSTR(entry.english, '|') - 1)) " +
+                "        ELSE entry.english " +
+                "      END" +
+                "    ) = ? THEN 0 " +
+                "    ELSE 1 " +
+                "  END, " +
+                "  (rank * 0.7) - (frequency * 3.0) " +
                 "LIMIT ?",
-            arrayOf<Any>(word, MAX_RESULTS)
+            arrayOf<Any>(word, word, MAX_RESULTS)
         )
         return dao.searchByEnglishFts(query)
             .map { Translation(it.albanianHeadword) }

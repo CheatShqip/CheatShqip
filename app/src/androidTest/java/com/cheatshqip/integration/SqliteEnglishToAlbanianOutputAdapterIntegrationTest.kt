@@ -83,4 +83,85 @@ class SqliteEnglishToAlbanianOutputAdapterIntegrationTest {
 
         assertTrue("Should find at least one translation for or", result.isNotEmpty())
     }
+
+    @Test
+    fun given_water_should_rank_pure_translation_uje_above_compound_water_jug() =
+        runBlocking {
+            val result = adapter.getTranslationsForEnglishWord(Word("water"))
+
+            assertTrue("Should find translations for water", result.isNotEmpty())
+            val ujeTranslation = result.first { it.value == "ujë" }
+            val compoundTranslation = result.firstOrNull { it.value == "kanë" }
+
+            val ujeIndex = result.indexOf(ujeTranslation)
+            val kanIndex = compoundTranslation?.let { result.indexOf(it) } ?: Int.MAX_VALUE
+
+            assertTrue(
+                "'ujë' (pure translation) should rank above 'kanë' (compound: water jug), " +
+                    "ujë index=$ujeIndex, kanë index=$kanIndex",
+                ujeIndex < kanIndex,
+            )
+        }
+
+    @Test
+    fun given_orange_should_rank_pure_portokall_above_compound_paleorange() =
+        runBlocking {
+            val result = adapter.getTranslationsForEnglishWord(Word("orange"))
+
+            assertTrue("Should find translations for orange", result.isNotEmpty())
+            val portokallTranslation = result.first { it.value == "portokall" }
+            val compoundTranslation = result.firstOrNull { it.value == "mollët" }
+
+            val portokallIndex = result.indexOf(portokallTranslation)
+            val mollletIndex =
+                compoundTranslation?.let { result.indexOf(it) } ?: Int.MAX_VALUE
+
+            assertTrue(
+                "'portokall' (pure translation) should rank above 'mollët' (compound: pale orange), " +
+                    "portokallIndex=$portokallIndex, mollletIndex=$mollletIndex",
+                portokallIndex < mollletIndex,
+            )
+        }
+
+    @Test
+    fun given_oil_should_rank_pure_vaj_above_compound_oil_lamp() =
+        runBlocking {
+            val result = adapter.getTranslationsForEnglishWord(Word("oil"))
+
+            assertTrue("Should find translations for oil", result.isNotEmpty())
+            val vajTranslation = result.first { it.value == "vaj" }
+            val compoundTranslation = result.firstOrNull { it.value == "drite" }
+
+            val vajIndex = result.indexOf(vajTranslation)
+            val driteIndex = compoundTranslation?.let { result.indexOf(it) } ?: Int.MAX_VALUE
+
+            assertTrue(
+                "'vaj' (pure translation) should rank above 'drite' (compound: oil lamp), " +
+                    "vajIndex=$vajIndex, driteIndex=$driteIndex",
+                vajIndex < driteIndex,
+            )
+        }
+
+    @Test
+    fun given_first_token_with_pipe_should_use_first_meaning_only() =
+        runBlocking {
+            val result = adapter.getTranslationsForEnglishWord(Word("water"))
+
+            assertTrue("Should find translations for water", result.isNotEmpty())
+            val ujit = result.firstOrNull { it.value == "ujit" }
+
+            // ujit has english="water|to irrigate" — first token is "water", a pure match
+            // It should rank in tier 0 alongside ujë
+            ujit?.let {
+                val ujitIndex = result.indexOf(it)
+                val ujeIndex = result.indexOf(result.first { it.value == "ujë" })
+                // Both are tier 0 (first token == "water"), so order by frequency
+                // uje (10.17) > ujit (9.63), so uje should come first
+                assertTrue(
+                    "ujit (first_token='water') should be a tier 0 match, " +
+                        "ranking close to ujë",
+                    kotlin.math.abs(ujeIndex - ujitIndex) <= 1,
+                )
+            }
+        }
 }
