@@ -13,27 +13,14 @@ class SqliteEnglishToAlbanianOutputAdapter(
     override suspend fun getTranslationsForEnglishWord(englishWord: Word): List<Translation> {
         val word = englishWord.normalize().value
         val query = SimpleSQLiteQuery(
-            "SELECT DISTINCT * FROM entry " +
-                "WHERE english = ? " +
-                "OR english LIKE ? " +
-                "OR english LIKE ? " +
-                "OR english LIKE ? " +
-                "OR english LIKE ? " +
-                "OR english LIKE ? " +
-                "OR english LIKE ? " +
+            "SELECT DISTINCT entry.* FROM entry, entry_fts " +
+                "WHERE entry.rowid = entry_fts.rowid " +
+                "AND entry_fts.english MATCH ? " +
+                "ORDER BY rank " +
                 "LIMIT ?",
-            arrayOf<Any>(
-                word,
-                "$word%",
-                "%|$word%",
-                "%;$word%",
-                "%; $word%",
-                "%|$word",
-                "%;$word",
-                MAX_RESULTS
-            )
+            arrayOf<Any>(word, MAX_RESULTS)
         )
-        return dao.searchByEnglishToken(query)
+        return dao.searchByEnglishFts(query)
             .map { Translation(it.albanianHeadword) }
     }
 }

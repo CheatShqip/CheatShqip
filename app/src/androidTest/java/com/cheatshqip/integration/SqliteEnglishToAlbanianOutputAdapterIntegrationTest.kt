@@ -5,7 +5,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.cheatshqip.adapter.output.DictionaryDatabase
 import com.cheatshqip.adapter.output.SqliteEnglishToAlbanianOutputAdapter
 import com.cheatshqip.adapter.output.createDictionaryDatabase
-import com.cheatshqip.domain.Translation
 import com.cheatshqip.domain.Word
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -19,7 +18,6 @@ private const val TEST_DATABASE_NAME = "dictionary_test.db"
 
 @RunWith(AndroidJUnit4::class)
 class SqliteEnglishToAlbanianOutputAdapterIntegrationTest {
-
     private lateinit var db: DictionaryDatabase
     private lateinit var adapter: SqliteEnglishToAlbanianOutputAdapter
 
@@ -41,7 +39,11 @@ class SqliteEnglishToAlbanianOutputAdapterIntegrationTest {
         val result = adapter.getTranslationsForEnglishWord(Word("work"))
 
         assertTrue("Should find at least one translation for work", result.isNotEmpty())
-        assertTrue("Should contain pune translation", result.any { it.value == "punë" })
+        assertEquals(
+            "punë",
+            result.take(3).first { it.value == "punë" }.value,
+            "'punë' should be in top 3 translations for 'work'",
+        )
     }
 
     @Test

@@ -61,6 +61,21 @@ class DictionaryDatabaseAssetTest {
     }
 
     @Test
+    fun databaseAsset_englishFtsSearch_returnsResultsForEnglishWord() = runBlocking {
+        val query = SimpleSQLiteQuery(
+            "SELECT DISTINCT entry.* FROM entry, entry_fts " +
+                "WHERE entry.rowid = entry_fts.rowid AND entry_fts.english MATCH ? LIMIT ?",
+            arrayOf<Any>("work", 10),
+        )
+        val results = db.dictionaryDao().searchByEnglishFts(query)
+        assertTrue("FTS english search should return results for 'work'", results.isNotEmpty())
+        assertTrue(
+            "Should contain 'punë' for 'work'",
+            results.any { it.albanianHeadword == "punë" },
+        )
+    }
+
+    @Test
     fun databaseAsset_metaTable_recordsSchemaVersion() = runBlocking {
         val query = SimpleSQLiteQuery(
             "SELECT value FROM meta WHERE key = ?",

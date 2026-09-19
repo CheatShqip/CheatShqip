@@ -39,6 +39,27 @@ interface DictionaryDao {
     @RawQuery
     suspend fun searchFts(query: SupportSQLiteQuery): List<EntryEntity>
 
+    /**
+     * Full-text search over the english column using FTS5 BM25 ranking.
+     * FTS5 tokenize='unicode61' treats '|' and ';' as token separators,
+     * so searching "car" matches "car|automobile" but not "placard".
+     *
+     * Build the query with [androidx.sqlite.db.SimpleSQLiteQuery]:
+     * ```
+     * SimpleSQLiteQuery(
+     *     "SELECT DISTINCT entry.* FROM entry, entry_fts " +
+     *     "WHERE entry.rowid = entry_fts.rowid AND entry_fts.english MATCH ? LIMIT ?",
+     *     arrayOf(term, limit)
+     * )
+     * ```
+     *
+     * Use [RawQuery] because Room's compile-time parser does not understand FTS5
+     * virtual-table syntax in [Query].
+     */
+    @RawQuery
+    suspend fun searchByEnglishFts(query: SupportSQLiteQuery): List<EntryEntity>
+
+    /** @deprecated Use [searchByEnglishFts] instead */
     @RawQuery
     suspend fun searchByEnglishToken(query: SupportSQLiteQuery): List<EntryEntity>
 }
