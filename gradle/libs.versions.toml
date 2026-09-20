@@ -1,7 +1,7 @@
 [versions]
 activityComposeVersion = "1.13.0"
 kspVersion = "2.3.10"
-roomVersion = "2.8.4"
+roomVersion = "2.8.5"
 agpVersion = "9.4.1"
 composeBomVersion = "2026.06.01"
 coreKtxVersion = "1.19.0"
@@ -16,7 +16,7 @@ kotlinVersion = "2.4.10"
 lifecycleRuntimeKtxVersion = "2.11.0"
 
 navigationVersion = "2.9.8"
-sqliteVersion = "2.6.2"
+sqliteVersion = "2.7.1"
 
 [libraries]
 androidx-sqlite-bundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "sqliteVersion" }
