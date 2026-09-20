@@ -6,23 +6,23 @@ appId: com.cheatshqip
 - inputText: "card"
 - tapOn: "Translate"
 - extendedWaitUntil:
-    visible: "kartë"
+    visible: "kartushkë"
     timeout: 3000
-- hideKeyboard
-- tapOn: "kartë"
+- tapOn: "kartushkë"
 - extendedWaitUntil:
     visible: "Nominative"
     timeout: 3000
-- assertVisible: "kartë"
 - assertVisible: "Name"
 - assertVisible: "Feminine"
-- assertVisible: "kár/të,-ta"
+- assertVisible: "kartushk/ë,-a"
+- assertVisible: "kartushkë"
 - assertVisible: "Nominative"
-- assertVisible: "karta"
+- assertVisible: "kartushka"
 - assertVisible: "Genitive"
-- assertVisible: "kartës"
+- assertVisible: "kartushkës"
 - assertVisible: "Dative"
 - assertVisible: "Accusative"
-- assertVisible: "kartën"
+- assertVisible: "kartushkën"
 - assertVisible: "Ablative"
+- assertVisible: "kartushkave"
 - takeScreenshot: word_detail_screen

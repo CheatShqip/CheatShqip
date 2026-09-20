@@ -6,7 +6,6 @@ appId: com.cheatshqip
 - inputText: "card"
 - tapOn: "Translate"
 - extendedWaitUntil:
-    visible: "kartë"
+    visible: "kartushkë"
     timeout: 3000
-- hideKeyboard
 - takeScreenshot: translate_word_results
