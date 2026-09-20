@@ -52,6 +52,7 @@ captures/
 
 # Test artifacts
 .maestro/generated
+fastlane/report.xml
 
 # WireMock
 .wiremock/*.jar
