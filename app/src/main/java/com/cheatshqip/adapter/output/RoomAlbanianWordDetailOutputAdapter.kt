@@ -1,5 +1,6 @@
 package com.cheatshqip.adapter.output
 
+import com.cheatshqip.application.port.output.AlbanianNounEntryResult
 import com.cheatshqip.application.port.output.GetAlbanianWordDetailPort
 import com.cheatshqip.domain.AlbanianNounEntry
 import com.cheatshqip.domain.GrammaticalDisplay
@@ -13,11 +14,10 @@ import com.cheatshqip.domain.WordKind
 class RoomAlbanianWordDetailOutputAdapter(
     private val dao: DictionaryDao,
 ) : GetAlbanianWordDetailPort {
-    override suspend fun getAlbanianWord(word: Word): AlbanianNounEntry {
+    override suspend fun getAlbanianWord(word: Word): AlbanianNounEntryResult {
         val ascii = word.normalize().value.lowercase()
-        val entity = dao.findByAscii(ascii)
-            ?: error("No detail found for word: ${word.value}")
-        return entity.toAlbanianNounEntry()
+        val entity = dao.findByAscii(ascii) ?: return AlbanianNounEntryResult.NotFound
+        return AlbanianNounEntryResult.Found(entity.toAlbanianNounEntry())
     }
 }
 

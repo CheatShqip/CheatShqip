@@ -5,13 +5,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,6 +44,7 @@ fun HomeScreenRoute(
     Scaffold(
         modifier = modifier,
         containerColor = ToskTheme.colors.background.secondary,
+        contentWindowInsets = ScaffoldDefaults.contentWindowInsets.only(WindowInsetsSides.Horizontal),
         topBar = {
             ToskTopAppBar(
                 title = { Text(stringResource(R.string.app_name)) },
@@ -163,6 +167,7 @@ fun HomeScreenPreview() {
     ToskTheme {
         Scaffold(
             containerColor = ToskTheme.colors.background.secondary,
+            contentWindowInsets = ScaffoldDefaults.contentWindowInsets.only(WindowInsetsSides.Horizontal),
             topBar = {
                 ToskTopAppBar(
                     title = { Text(stringResource(R.string.app_name)) },

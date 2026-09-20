@@ -1,8 +1,10 @@
 package com.cheatshqip
 
+import android.database.SQLException
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cheatshqip.application.port.input.AlbanianWordDetailResult
 import com.cheatshqip.application.port.input.GetAlbanianWordDetailUseCase
 import com.cheatshqip.domain.Word
 import kotlinx.coroutines.CoroutineDispatcher
@@ -34,11 +36,13 @@ class WordDetailViewModel(
     }
 
     private fun loadDetail() = viewModelScope.launch(coroutineDispatcher) {
-        _state.value = runCatching {
-            getAlbanianWordDetailUseCase.getAlbanianWordDetail(Word(word))
-        }.fold(
-            onSuccess = WordDetailUIState::Loaded,
-            onFailure = WordDetailUIState::Error,
-        )
+        _state.value = try {
+            when (val result = getAlbanianWordDetailUseCase.getAlbanianWordDetail(Word(word))) {
+                is AlbanianWordDetailResult.Found -> WordDetailUIState.Loaded(result.wordDetail)
+                is AlbanianWordDetailResult.NotFound -> WordDetailUIState.NotFound
+            }
+        } catch (e: SQLException) {
+            WordDetailUIState.Error(e)
+        }
     }
 }

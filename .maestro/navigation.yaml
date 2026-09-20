@@ -1,0 +1,24 @@
+appId: com.cheatshqip
+---
+- launchApp:
+    clearState: true
+- assertVisible: "CheatShqip"
+- assertVisible: "Word"
+- tapOn: "Decline tab"
+- assertVisible: "Albanian word"
+- tapOn: "Conjugate tab"
+- assertVisible: "Coming soon"
+- tapOn: "Translate tab"
+- assertVisible: "Word"
+- inputText: "card"
+- tapOn: "Translate"
+- extendedWaitUntil:
+    visible: "kartushkë"
+    timeout: 3000
+- tapOn: "kartushkë"
+- extendedWaitUntil:
+    visible: "Nominative"
+    timeout: 3000
+- assertVisible: "Translate tab"
+- assertVisible: "Decline tab"
+- assertVisible: "Conjugate tab"

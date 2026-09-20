@@ -1,5 +1,6 @@
 package com.cheatshqip.di
 
+import com.cheatshqip.DeclineScreenViewModel
 import com.cheatshqip.HomeScreenViewModel
 import com.cheatshqip.WordDetailViewModel
 import com.cheatshqip.adapter.output.DictionaryDatabase
@@ -57,6 +58,13 @@ val applicationModule = module {
     viewModel {
         WordDetailViewModel(
             savedStateHandle = get(),
+            getAlbanianWordDetailUseCase = get(),
+            coroutineDispatcher = get(),
+        )
+    }
+
+    viewModel {
+        DeclineScreenViewModel(
             getAlbanianWordDetailUseCase = get(),
             coroutineDispatcher = get(),
         )

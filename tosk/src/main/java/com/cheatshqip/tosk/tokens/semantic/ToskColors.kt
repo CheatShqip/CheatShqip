@@ -13,6 +13,7 @@ sealed class ToskColors(
         text = ToskColorsText(
             primary = ToskPalette.black,
             textOnPrimary = ToskPalette.alabaster,
+            textOnPrimaryMuted = ToskPalette.salmonPink,
             textOnPrimaryDisabled = ToskPalette.coralReef,
             secondary = ToskPalette.slateGray,
             textOnSecondaryDisabled = ToskPalette.silver,
@@ -49,6 +50,7 @@ sealed class ToskColors(
         text = ToskColorsText(
             primary = ToskPalette.alabaster,
             textOnPrimary = ToskPalette.alabaster,
+            textOnPrimaryMuted = ToskPalette.salmonPink,
             textOnPrimaryDisabled = ToskPalette.alabaster,
             secondary = ToskPalette.alabaster,
             textOnSecondaryDisabled = ToskPalette.alabaster,
@@ -89,6 +91,7 @@ object ToskRipple {
 data class ToskColorsText(
     val primary: Color,
     val textOnPrimary: Color,
+    val textOnPrimaryMuted: Color,
     val textOnPrimaryDisabled: Color,
     val secondary: Color,
     val textOnSecondaryDisabled: Color,

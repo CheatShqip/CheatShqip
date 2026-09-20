@@ -7,5 +7,6 @@ import com.cheatshqip.domain.AlbanianWordDetail
 sealed class WordDetailUIState {
     data object Loading : WordDetailUIState()
     data class Loaded(val wordDetail: AlbanianWordDetail) : WordDetailUIState()
+    data object NotFound : WordDetailUIState()
     data class Error(val cause: Throwable) : WordDetailUIState()
 }

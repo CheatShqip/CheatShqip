@@ -1,0 +1,27 @@
+appId: com.cheatshqip
+---
+- launchApp:
+    clearState: true
+- tapOn: "Decline tab"
+- tapOn: "Albanian word"
+- inputText: "karte"
+- tapOn: "Decline"
+- extendedWaitUntil:
+    visible: "Nominative"
+    timeout: 3000
+- assertVisible: "kartës"
+- scrollUntilVisible:
+    element:
+      text: "kartave"
+- assertVisible: "kartave"
+- scrollUntilVisible:
+    element:
+      text: "karte"
+    direction: UP
+- tapOn: "karte"
+- eraseText
+- inputText: "zzzznotaword"
+- tapOn: "Decline"
+- extendedWaitUntil:
+    visible: "No declensions found for this word."
+    timeout: 3000

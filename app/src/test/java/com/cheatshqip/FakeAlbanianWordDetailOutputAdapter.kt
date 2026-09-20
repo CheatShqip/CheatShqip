@@ -1,5 +1,6 @@
 package com.cheatshqip
 
+import com.cheatshqip.application.port.output.AlbanianNounEntryResult
 import com.cheatshqip.application.port.output.GetAlbanianWordDetailPort
 import com.cheatshqip.domain.AlbanianNounEntry
 import com.cheatshqip.domain.GrammaticalDisplay
@@ -11,8 +12,11 @@ import com.cheatshqip.domain.WordGender
 import com.cheatshqip.domain.WordKind
 
 class FakeAlbanianWordDetailOutputAdapter : GetAlbanianWordDetailPort {
-    override suspend fun getAlbanianWord(word: Word): AlbanianNounEntry =
-        wordEntries[word.normalize()] ?: error("No detail found for word: ${word.value}")
+    override suspend fun getAlbanianWord(word: Word): AlbanianNounEntryResult {
+        val ascii = word.normalize().value.lowercase()
+        val entry = wordEntries[Word(ascii)] ?: return AlbanianNounEntryResult.NotFound
+        return AlbanianNounEntryResult.Found(entry)
+    }
 
     private companion object {
         val wordEntries: Map<Word, AlbanianNounEntry> = mapOf(

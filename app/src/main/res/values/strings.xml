@@ -15,4 +15,15 @@
     <string name="accusative">Accusative</string>
     <string name="ablative">Ablative</string>
     <string name="word_detail_error">Could not load word details.</string>
+    <string name="word">Word</string>
+    <string name="nav_translate">Translate</string>
+    <string name="nav_translate_content_description">Translate tab</string>
+    <string name="nav_decline">Decline</string>
+    <string name="nav_decline_content_description">Decline tab</string>
+    <string name="nav_conjugate">Conjugate</string>
+    <string name="nav_conjugate_content_description">Conjugate tab</string>
+    <string name="decline_search_placeholder">Albanian word</string>
+    <string name="decline_action">Decline</string>
+    <string name="decline_not_found">No declensions found for this word.</string>
+    <string name="conjugate_placeholder">Coming soon</string>
 </resources>

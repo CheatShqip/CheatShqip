@@ -1,6 +1,7 @@
 package com.cheatshqip
 
 import com.cheatshqip.application.AlbanianWordService
+import com.cheatshqip.application.port.input.AlbanianWordDetailResult
 import com.cheatshqip.application.port.input.GetAlbanianWordDetailUseCase
 import com.cheatshqip.domain.AblativeDeclension
 import com.cheatshqip.domain.AccusativeDeclension
@@ -16,11 +17,9 @@ import com.cheatshqip.domain.SingularGrammaticalDisplay
 import com.cheatshqip.domain.Word
 import com.cheatshqip.domain.WordGender
 import com.cheatshqip.domain.WordKind
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 class GetAlbanianWordDetailUseCaseTest {
     private val getAlbanianWordDetailPort = FakeAlbanianWordDetailOutputAdapter()
@@ -31,18 +30,17 @@ class GetAlbanianWordDetailUseCaseTest {
         runTest {
             val result = useCase.getAlbanianWordDetail(Word("dhuratë"))
 
-            val expected = albanianWordDetail()
+            val expected = AlbanianWordDetailResult.Found(albanianWordDetail())
             assertEquals(expected, result)
         }
 
     @Test
-    fun `should throw when word has no detail`() {
-        val exception = assertThrows<IllegalStateException> {
-            runBlocking { useCase.getAlbanianWordDetail(Word("unknown")) }
-        }
+    fun `should return not found when word has no detail`() =
+        runTest {
+            val result = useCase.getAlbanianWordDetail(Word("unknown"))
 
-        assertEquals("No detail found for word: unknown", exception.message)
-    }
+            assertEquals(AlbanianWordDetailResult.NotFound, result)
+        }
 }
 
 private fun albanianWordDetail(

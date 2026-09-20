@@ -2,10 +2,16 @@ package com.cheatshqip.toskdemo
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +24,8 @@ import com.cheatshqip.tosk.button.ToskButton
 import com.cheatshqip.tosk.button.tokens.ToskButtonColor
 import com.cheatshqip.tosk.card.ToskCard
 import com.cheatshqip.tosk.chip.ToskChip
+import com.cheatshqip.tosk.navbar.ToskNavBar
+import com.cheatshqip.tosk.navbar.ToskNavBarItem
 import com.cheatshqip.tosk.textfield.ToskTextField
 import com.cheatshqip.tosk.tokens.primitive.ToskSpacing
 
@@ -115,6 +123,32 @@ fun MainScreen(modifier: Modifier = Modifier) {
             color = ToskBadgeColor.info5()
         ) {
             Text(text = "ABLATIVE")
+        }
+
+        Spacer(modifier = Modifier.padding(ToskSpacing.M))
+
+        ToskNavBar(windowInsets = WindowInsets(0, 0, 0, 0)) {
+            ToskNavBarItem(
+                selected = true,
+                contentDescription = "Translate tab",
+                onClick = {},
+                icon = { Icon(imageVector = Icons.Filled.Translate, contentDescription = null) },
+                label = { Text("Translate") },
+            )
+            ToskNavBarItem(
+                selected = false,
+                contentDescription = "Decline tab",
+                onClick = {},
+                icon = { Icon(imageVector = Icons.Filled.Edit, contentDescription = null) },
+                label = { Text("Decline") },
+            )
+            ToskNavBarItem(
+                selected = false,
+                contentDescription = "Conjugate tab",
+                onClick = {},
+                icon = { Icon(imageVector = Icons.Filled.Sync, contentDescription = null) },
+                label = { Text("Conjugate") },
+            )
         }
     }
 }
