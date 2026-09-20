@@ -1,0 +1,33 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build release AAB and upload to Play Store"
+  lane :release do
+    # Bump version
+    gradle(
+      task: "bundle",
+      build_type: "Release",
+      print_command: false
+    )
+
+    # Find the AAB file (fastlane runs from the fastlane/ dir, so use lane context)
+    aab_path = Actions.lane_context[SharedValues::GRADLE_ALL_AAB_OUTPUT_PATHS]
+      &.find { |path| path.include?("/app/build/outputs/bundle/release/") }
+
+    unless aab_path
+      raise "No AAB found! Build may have failed."
+    end
+
+    puts "Uploading #{aab_path} to Google Play Store..."
+
+    # Upload to production track
+    supply(
+      aab: aab_path,
+      package_name: "com.cheatshqip",
+      track: "production",
+      skip_upload_apk: true
+    )
+
+    puts "✅ Release uploaded successfully!"
+  end
+end

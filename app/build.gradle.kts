@@ -10,12 +10,32 @@ android {
     namespace = "com.cheatshqip"
     compileSdk = 37
 
+    signingConfigs {
+        create("release") {
+            val ksPath = project.findProperty("storeFile") as? String
+                ?: System.getenv("KEYSTORE_PATH")
+            val ksPass = project.findProperty("storePassword") as? String
+                ?: System.getenv("KEYSTORE_PASSWORD")
+            val kAlias = project.findProperty("keyAlias") as? String
+                ?: System.getenv("KEY_ALIAS")
+            val kPass = project.findProperty("keyPassword") as? String
+                ?: System.getenv("KEY_PASSWORD")
+
+            if (ksPath != null && ksPass != null && kAlias != null && kPass != null) {
+                storeFile = file(ksPath)
+                storePassword = ksPass
+                keyAlias = kAlias
+                keyPassword = kPass
+            }
+        }
+    }
+
     defaultConfig {
         applicationId = "com.cheatshqip"
         minSdk = 24
         targetSdk = 37
-        versionCode = 3
-        versionName = "0.0.3"
+        versionCode = 4
+        versionName = "0.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -30,6 +50,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig = signingConfigs["release"]
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
