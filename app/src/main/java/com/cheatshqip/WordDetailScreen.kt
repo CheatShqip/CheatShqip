@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -74,7 +75,10 @@ private fun WordDetailScreen(
                 },
                 title = {
                     if (state is WordDetailUIState.Loaded) {
-                        Text(state.wordDetail.word.value)
+                        Text(
+                            text = state.wordDetail.word.value,
+                            modifier = Modifier.testTag("word_detail_top_bar_title"),
+                        )
                     }
                 },
             )

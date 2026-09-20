@@ -40,9 +40,9 @@ class SqliteEnglishToAlbanianOutputAdapterIntegrationTest {
 
         assertTrue("Should find at least one translation for work", result.isNotEmpty())
         assertEquals(
+            "'punë' should be in top 3 translations for 'work'",
             "punë",
             result.take(3).first { it.value == "punë" }.value,
-            "'punë' should be in top 3 translations for 'work'",
         )
     }
 
@@ -152,8 +152,8 @@ class SqliteEnglishToAlbanianOutputAdapterIntegrationTest {
 
             // ujit has english="water|to irrigate" — first token is "water", a pure match
             // It should rank in tier 0 alongside ujë
-            ujit?.let {
-                val ujitIndex = result.indexOf(it)
+            if (ujit != null) {
+                val ujitIndex = result.indexOf(ujit)
                 val ujeIndex = result.indexOf(result.first { it.value == "ujë" })
                 // Both are tier 0 (first token == "water"), so order by frequency
                 // uje (10.17) > ujit (9.63), so uje should come first

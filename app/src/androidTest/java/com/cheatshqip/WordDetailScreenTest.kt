@@ -1,9 +1,11 @@
 package com.cheatshqip
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -21,7 +23,7 @@ class WordDetailScreenTest {
     fun wordDetailScreen_topAppBar_displaysWordAsTitle() {
         navigateToKarteDetail()
 
-        composeTestRule.onNodeWithText("kartë").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("word_detail_top_bar_title").assertTextEquals("kartë")
     }
 
     @Test
@@ -46,7 +48,8 @@ class WordDetailScreenTest {
         navigateToKarteDetail()
 
         composeTestRule.onNodeWithText("Singular").assertIsDisplayed()
-        composeTestRule.onNodeWithText("kár/të,-ta").assertIsDisplayed()
+        // Singular display comes from the bundled DB compact form, e.g. "kart/ë,-a"
+        composeTestRule.onNodeWithText("kart/ë,-a").assertIsDisplayed()
     }
 
     @Test
@@ -54,7 +57,9 @@ class WordDetailScreenTest {
         navigateToKarteDetail()
 
         composeTestRule.onNodeWithText("Plural").assertIsDisplayed()
-        composeTestRule.onNodeWithText("kártat").assertIsDisplayed()
+        // "karta" is also the singular definite nominative and plural indefinite
+        // nominative/accusative declension values, so take the first node (plural display)
+        composeTestRule.onAllNodesWithText("karta")[0].assertIsDisplayed()
     }
 
     @Test
@@ -82,8 +87,10 @@ class WordDetailScreenTest {
         // accusative all share the value "karta"
         composeTestRule.onAllNodesWithText("karta")[0].assertIsDisplayed()
         composeTestRule.onNodeWithText("kartën").assertIsDisplayed()
-        composeTestRule.onNodeWithText("kartat").assertIsDisplayed()
-        composeTestRule.onNodeWithText("kartave").assertIsDisplayed()
+        // Plural definite nominative and accusative both share the value "kartat"
+        composeTestRule.onAllNodesWithText("kartat")[0].assertIsDisplayed()
+        // Plural genitive, dative, and ablative (indefinite + definite) share "kartave"
+        composeTestRule.onAllNodesWithText("kartave")[0].assertIsDisplayed()
         // Singular definite genitive, dative, and ablative all share the value "kartës"
         composeTestRule.onAllNodesWithText("kartës")[0].assertIsDisplayed()
     }

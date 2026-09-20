@@ -64,8 +64,17 @@ class DictionaryDatabaseAssetTest {
     fun databaseAsset_englishFtsSearch_returnsResultsForEnglishWord() = runBlocking {
         val query = SimpleSQLiteQuery(
             "SELECT DISTINCT entry.* FROM entry, entry_fts " +
-                "WHERE entry.rowid = entry_fts.rowid AND entry_fts.english MATCH ? LIMIT ?",
-            arrayOf<Any>("work", 10),
+                "WHERE entry.rowid = entry_fts.rowid AND entry_fts.english MATCH ? " +
+                "ORDER BY " +
+                "  CASE " +
+                "    WHEN (CASE " +
+                "      WHEN INSTR(entry.english, '|') > 0 THEN " +
+                "        TRIM(SUBSTR(entry.english, 1, INSTR(entry.english, '|') - 1)) " +
+                "      ELSE entry.english END) = ? THEN 0 " +
+                "    ELSE 1 END, " +
+                "  (rank * 0.7) - (frequency * 3.0) " +
+                "LIMIT ?",
+            arrayOf<Any>("work", "work", 10),
         )
         val results = db.dictionaryDao().searchByEnglishFts(query)
         assertTrue("FTS english search should return results for 'work'", results.isNotEmpty())
