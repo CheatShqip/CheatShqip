@@ -54,9 +54,6 @@ captures/
 .maestro/generated
 fastlane/report.xml
 
-# WireMock
-.wiremock/*.jar
-
 # Qodana
 .qodana/
 .envrc

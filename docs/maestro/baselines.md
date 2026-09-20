@@ -70,14 +70,6 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Start WireMock
-        run: |
-          java -jar .wiremock/wiremock-standalone.jar \
-            --port 9090 --root-dir .wiremock &
-          for i in $(seq 1 10); do
-            curl -sf http://localhost:9090/__admin/health && break; sleep 1
-          done
-
       - uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
@@ -122,7 +114,7 @@ jobs:
           lfs: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # ... same emulator + WireMock setup as above ...
+      # ... same emulator setup as above ...
 
       - uses: reactivecircus/android-emulator-runner@v2
         with:

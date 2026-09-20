@@ -32,25 +32,24 @@ Hexagonal (Clean) Architecture, strictly enforced:
 
 - **Domain** — immutable value objects (`Word`, `Translation`, `AlbanianWordDetail`, declensions)
 - **Application** — use cases as interfaces (input ports), output ports for external deps
-- **Adapters** — REST (Retrofit + OkHttp), ML Kit translation, Koin DI wiring
+- **Adapters** — Room/SQLite against the bundled dictionary database, Koin DI wiring
 - **Presentation** — MVVM with Compose; sealed `HomeScreenUIState`, `HomeScreenViewModel`
 
 Key package layout under `com.cheatshqip`:
 - `domain/` — business entities and value objects
 - `application/port/input/` — use case interfaces
 - `application/port/output/` — output port interfaces
-- `adapter/output/` — REST adapter, ML Kit adapter
+- `adapter/output/` — Room/SQLite adapters (bundled dictionary)
 - `di/` — Koin module (`ApplicationModule.kt`)
 
 ## Tech Stack
 
-- **Language**: Kotlin 2.3.10
-- **UI**: Jetpack Compose (BOM 2026.02.01), Material 3
-- **DI**: Koin 4.1.1
-- **Networking**: Retrofit 3.0.0, OkHttp 5.3.2, Kotlinx Serialization JSON
-- **Translation**: ML Kit Translate 17.0.3 (English → Albanian)
-- **Coroutines**: kotlinx-coroutines 1.10.2
-- **Testing**: JUnit 5 (Jupiter) 6.0.3, MockWebServer, Koin Test, Compose UI Test
+- **Language**: Kotlin 2.4.10
+- **UI**: Jetpack Compose (BOM 2026.06.01), Material 3
+- **DI**: Koin 4.2.2
+- **Database**: Room 2.8.4 + `sqlite-bundled` (FTS5), pre-built SQLite asset
+- **Coroutines**: kotlinx-coroutines 1.11.0
+- **Testing**: JUnit 5 (Jupiter) 6.1.2, Koin Test, Compose UI Test
 - **Lint**: Detekt 1.23.8
 - **Min SDK**: 24 (app), 21 (tosk) — note: toskdemo was bumped to 23 for navigationevent compat
 - **Target/Compile SDK**: 37
@@ -91,7 +90,7 @@ Benign, non-fatal — logged during `prepareKotlinBuildScriptModel` (Kotlin DSL 
 
 ### AndroidX version bumps requiring a newer compileSdk
 
-Newer `androidx.core`/`androidx.lifecycle` releases can require a higher `compileSdk` than the project currently targets, failing at `:app:checkProdDebugAarMetadata` with "requires libraries and applications that depend on it to compile against version N or later." Install the required platform before bumping `compileSdk`/`targetSdk`:
+Newer `androidx.core`/`androidx.lifecycle` releases can require a higher `compileSdk` than the project currently targets, failing at `:app:checkDebugAarMetadata` with "requires libraries and applications that depend on it to compile against version N or later." Install the required platform before bumping `compileSdk`/`targetSdk`:
 ```bash
 sdkmanager "platforms;android-<N>.0"
 ```
@@ -105,7 +104,7 @@ Always load the `code-smells` skill when writing or editing any Kotlin (or other
 Detekt 1.23.8 is incompatible with JDK 25 — run tests and Detekt separately:
 
 ```bash
-./gradlew :app:testMockDebugUnitTest :app:testProdDebugUnitTest
+./gradlew :app:testDebugUnitTest
 JAVA_HOME=~/.sdkman/candidates/java/21.0.7-zulu ./gradlew :app:detekt
 ```
 
@@ -117,60 +116,33 @@ Test results (XML) are located at:
 ### Test Conventions
 
 - Unit tests use JUnit 5 with backtick descriptive names: `` `given X, should Y` ``
-- Fakes over mocks: `FakeAlbanianTranslationOutputAdapter`, `FakeWordSuggestionsOutputAdapter`
-- Integration tests live in `src/test/java/.../integration/` and use MockWebServer
+- Fakes over mocks: `FakeEnglishToAlbanianOutputAdapter`, `FakeAlbanianWordDetailOutputAdapter`
 - UI tests in `src/androidTest/` use `createAndroidComposeRule<MainActivity>()`
 - Async tests use `runTest` with up to 15s timeout
 
-### Connected (Instrumented) Tests — Mock Flavor
+### Connected (Instrumented) Tests
 
-UI/connected tests run against the `mockDebug` build variant, which uses a fully offline app:
-- WireMock standalone (running on the host) serves REST responses from `.wiremock/`
-- The app points to `http://localhost:9090/` — `screenshot_test.sh` sets up `adb reverse tcp:9090 tcp:9090` so the emulator tunnels to the host port (works in CI and locally; no dependency on `10.0.2.2`)
-- `FakeAlbanianTranslationOutputAdapter` replaces ML Kit (maps `"card"` → `"karte"`) — wired in `app/src/mock/java/com/cheatshqip/CheatShqipApplication.kt` via a flavor-specific `mockModule`; `applicationModule` does not register `MlKitTranslator` at all, so ML Kit is never instantiated in the mock flavor
+The app is fully offline (bundled dictionary), so connected tests run against the plain
+`debug` build variant. `DictionaryDatabaseAssetTest` and
+`SqliteEnglishToAlbanianOutputAdapterIntegrationTest` (in `src/androidTest/`) verify the
+bundled dictionary asset and FTS5 search on a real device/emulator.
 
 Run connected tests (requires a running emulator or device):
 ```bash
-./gradlew connectedMockDebugAndroidTest
+./gradlew connectedDebugAndroidTest
 ```
-
-To add support for a new word in connected tests, add its mapping in both:
-1. `app/src/mock/java/com/cheatshqip/FakeAlbanianTranslationOutputAdapter.kt` — add entry to the `translations` map
-2. `.wiremock/mappings/` — add a new stub JSON file for `GET /define/<translated-word>`
-3. `.wiremock/__files/` — add the response body JSON file
-
-### WireMock Stub Structure
-
-```
-.wiremock/
-  mappings/
-    define-karte-200.json   # priority 1: GET /define/karte → 200
-    define-any-404.json     # priority 10: catch-all → 404
-  __files/
-    karte-response.json     # response body for karte
-```
-
-Start WireMock manually (port 9090 by default):
-```bash
-java -jar .wiremock/wiremock-standalone.jar --port 9090 --root-dir .wiremock
-```
-
-The JAR is checked in at `.wiremock/wiremock-standalone.jar` (excluded from git via `.gitignore`).
-
-> **Note**: `localhost` works via `adb reverse`, which is set up by `screenshot_test.sh`. For manual runs without the script, run `adb reverse tcp:9090 tcp:9090` before starting the app.
 
 ### Maestro E2E Tests
 
-Flows live in `.maestro/` and target `com.cheatshqip`. Screenshots are saved under `.maestro/screenshots/`.
-Flows call `runScript: scripts/wiremock-reset.js` before `launchApp` to ensure clean WireMock state.
+Flows live in `.maestro/` and target `com.cheatshqip`. Screenshots are saved under `.maestro/generated/screenshots/`.
 
 | Flow | File | Description |
 |---|---|---|
 | Home screen | `home_screen.yaml` | Asserts initial UI elements are visible, takes screenshot |
 | Translate word | `translate_word.yaml` | Types "card", taps Translate, waits for "kartë", takes screenshot |
-| Translate word error | `translate_word_error.yaml` | Injects a 500 stub mid-flow, verifies error UI |
+| Word detail | `word_detail.yaml` | Translates "card", opens "kartë", asserts declensions, takes screenshot |
 
-**Run all Maestro flows** (requires `mockDebug` APK installed, emulator running, WireMock running):
+**Run all Maestro flows** (requires `debug` APK installed and a running emulator):
 ```bash
 maestro test .maestro/
 ```
@@ -181,10 +153,9 @@ maestro test .maestro/
 ./.maestro/screenshot_test.sh --update-baselines  # update baselines after intentional UI changes
 ```
 
-The script handles everything internally: build + install APK, start/stop WireMock, `adb reverse`, demo mode (clock, battery, network), screenshot capture, crop, and pixel diff. Do not manually start WireMock, apply demo mode broadcasts, or set up `adb reverse` before calling it.
+The script handles everything internally: build + install APK, demo mode (clock, battery, network), screenshot capture, crop, and pixel diff. Do not manually apply demo mode broadcasts before calling it.
 
 Screenshot diff threshold is 100 pixels (override with `SCREENSHOT_THRESHOLD=<n>`).
-WireMock port defaults to 9090 (override with `WIREMOCK_PORT=<n>`).
 Baselines are stored in `.maestro/generated/baselines/`, actuals in `.maestro/generated/actual/`, diffs in `.maestro/generated/diffs/`.
 
 **Only prerequisite:** exactly one emulator running — `Pixel_6` (API 36, x86_64, AOSP `default` target):
@@ -195,43 +166,9 @@ adb devices  ← must show exactly one device
 ```
 `google_apis_playstore` target must not be used (Google Play Services overrides demo mode).
 
-### Maestro JavaScript HTTP API
-
-Decompiled from `~/.maestro/lib/maestro-client.jar` (`maestro.js.GraalJsHttp`).
-
-**Signatures:**
-```
-http.post(url: String)
-http.post(url: String, options: Map)
-http.get(url: String)
-http.get(url: String, options: Map)
-// same pattern for put, delete, request
-```
-
-**Options map keys:** `body` (String), `headers` (Object), `multipartForm`, `method`
-
-**Rules:**
-- `http.post(url)` → OkHttp throws "method POST must have a request body"
-- `http.post(url, {})` → same error (no `body` key)
-- There is **no** 3-arg overload `post(url, body, headers)`
-
-**Correct usage:**
-```js
-// POST with body (body content ignored by server, but required by OkHttp)
-http.post('http://localhost:9090/__admin/reset', { body: '{}' });
-
-// POST with body + headers
-http.post('http://localhost:9090/__admin/mappings', {
-  body: JSON.stringify({ ... }),
-  headers: { 'Content-Type': 'application/json' }
-});
-```
-
 ## API
 
-- Backend: AWS API Gateway (eu-central-1)
-- Endpoint: `GET /define/{word}` — returns exact and fuzzy Albanian word matches
-- Serialization: Kotlinx Serialization JSON via Retrofit converter
+The app is fully offline — all translation and word-detail lookups come from the bundled SQLite dictionary. No network service is used at runtime. (A dormant AWS API Gateway backend once served `GET /define/{word}`; it has been removed from the codebase.)
 
 ## Design System (Tosk)
 
@@ -256,7 +193,7 @@ list_devices → start_device (if needed) → launch_app → inspect_view_hierar
 |---|---|---|
 | `mcp__maestro__list_devices` | — | Lists available emulators/devices |
 | `mcp__maestro__start_device` | `platform: "android"` or `device_id` | Starts an emulator; returns its `device_id` |
-| `mcp__maestro__launch_app` | `device_id`, `appId` | App ID for mock flavor: `com.cheatshqip` |
+| `mcp__maestro__launch_app` | `device_id`, `appId` | App ID: `com.cheatshqip` |
 | `mcp__maestro__stop_app` | `device_id`, `appId` | Stops the app process |
 | `mcp__maestro__take_screenshot` | `device_id` | Returns current screen image |
 | `mcp__maestro__inspect_view_hierarchy` | `device_id` | CSV of UI elements with bounds, text, IDs — use before tapping |
@@ -271,8 +208,7 @@ list_devices → start_device (if needed) → launch_app → inspect_view_hierar
 
 ### Project-specific notes
 
-- Always use the `mockDebug` variant (`com.cheatshqip`) for E2E tests — it replaces ML Kit and uses WireMock.
-- WireMock must be running on port 9090 **and** `adb reverse tcp:9090 tcp:9090` must be set before launching the app, otherwise network calls fail silently.
+- Always use the `debug` variant (`com.cheatshqip`) for E2E tests — the app is fully offline (bundled dictionary), so no network service is involved.
 - Call `inspect_view_hierarchy` before any `tap_on` — never guess element IDs.
 - Prefer `run_flow` for ad-hoc exploration; use `run_flow_files` to execute the committed flows in `.maestro/`.
 - The emulator must be API 36 / x86_64 / AOSP (`default` target, not `google_apis_playstore`) to match screenshot baselines.
@@ -365,7 +301,7 @@ grepai trace graph "ValidateToken" --depth 3 --json
 
 ## Bundled Dictionary Database
 
-The app ships a pre-built SQLite database at `app/src/main/assets/dictionary.db`, loaded by Room via `createFromAsset`. The database is generated by the `words/` Python pipeline.
+The app ships a pre-built SQLite database at `app/src/main/assets/dictionary.db`, loaded by Room with the bundled SQLite driver (FTS5). Because `createFromAsset` is incompatible with a custom driver, `DictionaryDatabaseFactory` copies the asset into the app's database directory on first launch. The database is generated by the `words/` Python pipeline.
 
 ### When to regenerate
 
@@ -381,13 +317,13 @@ Build the app once so KSP generates the Room schema export:
 
 ```bash
 cd android/CheatShqip
-./gradlew :app:kspProdDebugKotlin
+./gradlew :app:kspDebugKotlin
 ```
 
 Read the `identityHash` field from the generated schema:
 
 ```bash
-cat app/schemas/com.cheatshqip.adapter.output.DictionaryDatabase/1.json \
+cat app/schemas/com.cheatshqip.adapter.output.DictionaryDatabase/2.json \
   | python3 -c "import sys,json; print(json.load(sys.stdin)['identityHash'])"
 ```
 

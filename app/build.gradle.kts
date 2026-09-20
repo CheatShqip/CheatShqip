@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.detekt)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
 
@@ -38,12 +37,6 @@ android {
         versionName = "0.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField(
-            type = "String",
-            name = "API_BASE_URL",
-            value = "\"https://qub10cxllf.execute-api.eu-central-1.amazonaws.com/prod/\""
-        )
     }
 
 
@@ -73,7 +66,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
-        buildConfig = true
         compose = true
     }
 }
@@ -108,7 +100,6 @@ dependencies {
     implementation(project(":tosk"))
 
     implementation(platform(libs.androidx.compose.bom))
-    implementation(platform(libs.okhttp3.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.core.ktx)
@@ -124,11 +115,6 @@ dependencies {
     implementation(libs.coroutines.test)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
-    implementation(libs.kotlin.serialization.json)
-
-    implementation(libs.okhttp3)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.kotlinx.serialization)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.sqlite.bundled)
@@ -136,12 +122,10 @@ dependencies {
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(platform(libs.androidx.compose.bom))
-    testImplementation(platform(libs.okhttp3.bom))
     testImplementation(libs.junit.juniper)
     testImplementation(libs.junit.juniper.params)
     testImplementation(libs.junit.platform.launcher)
     testImplementation(libs.koin.test)
-    testImplementation(libs.okhttp3.mockwebserver)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.espresso.core)

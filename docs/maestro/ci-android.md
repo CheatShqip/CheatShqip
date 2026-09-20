@@ -28,17 +28,8 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Build mockDebug APK
-        run: ./gradlew assembleMockDebug
-
-      - name: Start WireMock
-        run: |
-          java -jar .wiremock/wiremock-standalone.jar \
-            --port 9090 --root-dir .wiremock &
-          for i in $(seq 1 10); do
-            curl -sf http://localhost:9090/__admin/health && break
-            sleep 1
-          done
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
 
       - uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -46,7 +37,7 @@ jobs:
           arch: x86_64
           profile: pixel_6
           script: |
-            adb install -r app/build/outputs/apk/mock/debug/app-mock-debug.apk
+            adb install -r app/build/outputs/apk/debug/app-debug.apk
             maestro test .maestro/
 
       - name: Upload Maestro report on failure
@@ -60,10 +51,8 @@ jobs:
 ### Key points
 
 - `fail-fast: false` — all API levels run even if one fails, giving a full picture.
-- WireMock starts on the host before the emulator boots; `10.0.2.2:9090` works from
-  any stock Android emulator instance.
-- `runScript` steps in flows execute on the host (where `maestro` runs), so
-  `localhost:9090` in WireMock scripts reaches WireMock correctly.
+- The app is fully offline: no network service is needed, so flows run against the plain
+  `debug` APK with no WireMock setup.
 - The APK is built once per job; caching via `gradle/actions/setup-gradle` avoids
   redundant compilation across the matrix.
 - Artifacts are uploaded on failure so Maestro's HTML reports are inspectable in CI.
@@ -80,5 +69,5 @@ done
 wait
 ```
 
-Requires one emulator per target API level to be running. WireMock runs once on the
-host and is reachable from all emulators via `10.0.2.2:9090`.
+Requires one emulator per target API level to be running. Since the app is offline,
+no host service needs to run.

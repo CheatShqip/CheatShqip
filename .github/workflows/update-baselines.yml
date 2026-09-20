@@ -40,12 +40,6 @@ jobs:
           curl -fsSL "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
 
-      - name: Download WireMock JAR
-        run: |
-          WIREMOCK_VERSION="${{ vars.WIREMOCK_VERSION || '3.10.0' }}"
-          curl -fsSL -o .wiremock/wiremock-standalone.jar \
-            "https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/${WIREMOCK_VERSION}/wiremock-standalone-${WIREMOCK_VERSION}.jar"
-
       - name: Generate baselines
         uses: reactivecircus/android-emulator-runner@v2
         env:

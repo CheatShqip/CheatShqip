@@ -1,7 +1,7 @@
 # CI — iOS (Future)
 
 > **Prerequisite**: iOS support requires a cross-platform rewrite (e.g. Kotlin Multiplatform)
-> since the current network layer (Retrofit/OkHttp) and ML Kit adapter are Android-specific.
+> since the current UI (Compose), Room database, and app code are Android-specific.
 
 ## Key differences from Android
 
@@ -9,7 +9,6 @@
 |---|---|---|
 | CI runner | `ubuntu-latest` | `macos-15` (simulators require macOS) |
 | Device boot | `reactivecircus/android-emulator-runner` | `xcrun simctl boot "iPhone 16"` |
-| WireMock host | `10.0.2.2:9090` | `localhost:9090` |
 | Matrix axis | API level (24, 30, 35) | iOS version (16.4, 17.5, 18.0) |
 | App install | `adb install` | `xcrun simctl install booted <app.app>` |
 | `appId` in flows | `com.cheatshqip` | iOS bundle ID |
@@ -43,20 +42,11 @@ jobs:
 
       - name: Build & install app
         run: |
-          xcodebuild -scheme CheatShqip -configuration MockDebug \
+          xcodebuild -scheme CheatShqip \
             -destination "id=$SIMULATOR_UDID" \
             -derivedDataPath build/ build
           xcrun simctl install "$SIMULATOR_UDID" \
-            build/Build/Products/MockDebug-iphonesimulator/CheatShqip.app
-
-      - name: Start WireMock
-        run: |
-          java -jar .wiremock/wiremock-standalone.jar \
-            --port 9090 --root-dir .wiremock &
-          for i in $(seq 1 10); do
-            curl -sf http://localhost:9090/__admin/health && break
-            sleep 1
-          done
+            build/Build/Products/Debug-iphonesimulator/CheatShqip.app
 
       - name: Run Maestro flows
         run: maestro test .maestro/ --device "$SIMULATOR_UDID"

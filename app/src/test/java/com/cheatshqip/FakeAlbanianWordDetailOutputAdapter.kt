@@ -1,4 +1,4 @@
-package com.cheatshqip.adapter.output
+package com.cheatshqip
 
 import com.cheatshqip.application.port.output.GetAlbanianWordDetailPort
 import com.cheatshqip.domain.AlbanianNounEntry
@@ -10,7 +10,7 @@ import com.cheatshqip.domain.Word
 import com.cheatshqip.domain.WordGender
 import com.cheatshqip.domain.WordKind
 
-class InMemoryAlbanianWordDetailOutputAdapter : GetAlbanianWordDetailPort {
+class FakeAlbanianWordDetailOutputAdapter : GetAlbanianWordDetailPort {
     override suspend fun getAlbanianWord(word: Word): AlbanianNounEntry =
         wordEntries[word.normalize()] ?: error("No detail found for word: ${word.value}")
 

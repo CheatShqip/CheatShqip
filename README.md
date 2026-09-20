@@ -22,9 +22,8 @@ The whole app works **fully offline** — translation and word details are serve
 | Architecture | Hexagonal (Clean) — domain, ports, adapters |
 | DI | Koin 4.2.2 |
 | Database | Room 2.8.4 + `sqlite-bundled` (FTS5), pre-built SQLite asset |
-| Networking (dormant) | Retrofit 3.0.0, OkHttp 5.4.0, Kotlinx Serialization |
 | Coroutines | kotlinx-coroutines 1.11.0 |
-| Testing | JUnit 5 (Jupiter 6.1.2), MockWebServer, Koin Test, Compose UI Test |
+| Testing | JUnit 5 (Jupiter 6.1.2), Koin Test, Compose UI Test |
 | Static analysis | Detekt 1.23.8 (+ custom rules in `:detekt-rules`) |
 | Build | AGP 9.4.1, KSP 2.3.10, Gradle (configuration cache enabled) |
 | Release | fastlane + Dashlane CLI + GCP ADC |
@@ -59,7 +58,7 @@ UI (Compose)
         │
   adapter/output/                adapters
         │
-  DictionaryDatabase (Room + FTS5)  ·  ShqipRESTService (dormant)
+  DictionaryDatabase (Room + FTS5)
 ```
 
 ### Core data flow
@@ -80,7 +79,7 @@ com.cheatshqip
 ├── application/
 │   ├── port/input/            # use-case interfaces
 │   └── port/output/           # output-port interfaces
-├── adapter/output/            # Room, SQLite FTS5, REST (dormant)
+├── adapter/output/            # Room + SQLite FTS5 adapters
 ├── di/                        # Koin module wiring
 └── (root)                     # Compose screens, ViewModels, UI states, MainActivity
 ```
@@ -146,10 +145,6 @@ The schema version is **2** (`DictionaryDatabase`, `EntryEntity`). See `words/AG
 
 Tests live in `app/src/test/java/`, use descriptive backtick names (`` `given X, should Y` ``), and prefer fakes over mocks (e.g. `FakeEnglishToAlbanianOutputAdapter`).
 
-### Integration tests (MockWebServer)
-
-Local JVM tests in `app/src/test/java/.../integration/` exercise the REST adapter against MockWebServer.
-
 ### Instrumented tests
 
 ```bash
@@ -177,7 +172,7 @@ Baselines are stored in **Cloudflare R2**, not git. CI downloads the latest `v*`
 ./.maestro/screenshot_test.sh --update-baselines   # refresh baselines after intentional UI changes
 ```
 
-> Note: this pipeline was built around the legacy `mockDebug` variant + WireMock; the app has since moved to the fully offline bundled dictionary, and the build config no longer defines product flavors. The flows still target `com.cheatshqip`.
+The app is fully offline (bundled dictionary), so the flows run against the plain `debug` build with no network service involved.
 
 ## CI/CD
 

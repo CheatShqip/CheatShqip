@@ -1,6 +1,5 @@
 appId: com.cheatshqip
 ---
-- runScript: scripts/wiremock-reset.js
 - launchApp:
     clearState: true
 - tapOn: "Word"

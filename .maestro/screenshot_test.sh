@@ -8,7 +8,6 @@ BASELINES_DIR="$GENERATED_DIR/baselines"
 ACTUAL_DIR="$GENERATED_DIR/actual"
 DIFFS_DIR="$GENERATED_DIR/diffs"
 SCREENSHOT_THRESHOLD="${SCREENSHOT_THRESHOLD:-100}"
-WIREMOCK_PORT="${WIREMOCK_PORT:-9090}"
 if command -v magick > /dev/null 2>&1; then
   MAGICK_CONVERT="magick"
   MAGICK_COMPARE="magick compare"
@@ -17,20 +16,12 @@ else
   MAGICK_COMPARE="compare"
 fi
 UPDATE_BASELINES=false
-WIREMOCK_PID=""
 
 for arg in "$@"; do
   if [[ "$arg" == "--update-baselines" ]]; then
     UPDATE_BASELINES=true
   fi
 done
-
-WIREMOCK_JAR="$SCRIPT_DIR/../.wiremock/wiremock-standalone.jar"
-
-if [[ ! -f "$WIREMOCK_JAR" ]]; then
-  echo "ERROR: WireMock JAR not found at $WIREMOCK_JAR"
-  exit 1
-fi
 
 enable_demo_mode() {
   echo "Waiting for SystemUI to be ready..."
@@ -101,30 +92,8 @@ disable_demo_mode() {
 
 cleanup() {
   disable_demo_mode
-  [[ -n "${WIREMOCK_PID:-}" ]] && kill "$WIREMOCK_PID" 2>/dev/null || true
 }
 trap cleanup EXIT
-
-echo "Freeing port $WIREMOCK_PORT if already in use..."
-pgrep -f "wiremock-standalone" | xargs kill -9 2>/dev/null || true
-
-echo "Starting WireMock on port $WIREMOCK_PORT..."
-java -jar "$WIREMOCK_JAR" --port "$WIREMOCK_PORT" --root-dir "$SCRIPT_DIR/../.wiremock" > /tmp/wiremock.log 2>&1 &
-WIREMOCK_PID=$!
-
-echo "Waiting for WireMock to be ready..."
-wiremock_ready=false
-for i in $(seq 1 20); do
-  if curl -s "http://localhost:${WIREMOCK_PORT}/__admin/mappings" > /dev/null 2>&1; then
-    wiremock_ready=true
-    break
-  fi
-  sleep 0.5
-done
-if [[ "$wiremock_ready" != "true" ]]; then
-  echo "ERROR: WireMock failed to start on port $WIREMOCK_PORT"
-  exit 1
-fi
 
 echo "Waiting for Maestro driver to initialize..."
 adb forward tcp:7001 tcp:7001 2>/dev/null || true
@@ -137,11 +106,8 @@ adb forward --remove tcp:7001 2>/dev/null || true
 echo "Enabling Android demo mode..."
 enable_demo_mode
 
-echo "Building and installing mock APK..."
-cd "$SCRIPT_DIR/.." && ./gradlew installMockDebug
-
-echo "Setting up ADB reverse tunnel for WireMock..."
-adb reverse tcp:${WIREMOCK_PORT} tcp:${WIREMOCK_PORT}
+echo "Building and installing debug APK..."
+cd "$SCRIPT_DIR/.." && ./gradlew installDebug
 
 echo "Running Maestro flows..."
 maestro test "$SCRIPT_DIR/"

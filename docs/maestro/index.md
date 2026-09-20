@@ -1,7 +1,8 @@
 # Maestro E2E Test Strategy
 
-Flows live in `.maestro/` and target `com.cheatshqip` (mockDebug build variant).
-WireMock serves offline REST responses; `FakeAlbanianTranslationOutputAdapter` replaces ML Kit.
+Flows live in `.maestro/` and target `com.cheatshqip` (plain `debug` build variant).
+The app is fully offline — translation and word details come from the bundled SQLite
+dictionary, so no network service (WireMock or otherwise) is required.
 
 ## Contents
 

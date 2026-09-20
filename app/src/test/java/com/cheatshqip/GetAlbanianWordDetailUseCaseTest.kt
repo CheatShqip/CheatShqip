@@ -1,6 +1,5 @@
 package com.cheatshqip
 
-import com.cheatshqip.adapter.output.InMemoryAlbanianWordDetailOutputAdapter
 import com.cheatshqip.application.AlbanianWordService
 import com.cheatshqip.application.port.input.GetAlbanianWordDetailUseCase
 import com.cheatshqip.domain.AblativeDeclension
@@ -24,7 +23,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 class GetAlbanianWordDetailUseCaseTest {
-    private val getAlbanianWordDetailPort = InMemoryAlbanianWordDetailOutputAdapter()
+    private val getAlbanianWordDetailPort = FakeAlbanianWordDetailOutputAdapter()
     private val useCase: GetAlbanianWordDetailUseCase = AlbanianWordService(getAlbanianWordDetailPort)
 
     @Test
