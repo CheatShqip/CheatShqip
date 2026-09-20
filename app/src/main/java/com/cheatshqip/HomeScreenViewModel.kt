@@ -1,5 +1,6 @@
 package com.cheatshqip
 
+import android.database.SQLException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cheatshqip.application.port.input.GetWordTranslationSuggestionsUseCase
@@ -47,7 +48,7 @@ class HomeScreenViewModel(
                     search = currentState.search
                 )
             }
-        } catch (e: Throwable) {
+        } catch (e: SQLException) {
             _state.update {
                 HomeScreenUIState.Error("search", e)
             }
