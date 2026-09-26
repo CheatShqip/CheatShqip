@@ -114,6 +114,8 @@ dependencies {
     implementation(libs.coroutines.android)
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.test)
+    implementation(libs.google.play.app.update)
+    implementation(libs.google.play.app.update.ktx)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.androidx.room.runtime)

@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.cheatshqip.appupdate.presentation.AppUpdateGate
 import com.cheatshqip.tosk.LocalToskShowCursor
 import com.cheatshqip.tosk.ToskTheme
 
@@ -27,7 +28,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             CompositionLocalProvider(LocalToskShowCursor provides SHOW_CURSOR) {
                 ToskTheme {
-                    AppNavHost()
+                    AppUpdateGate {
+                        AppNavHost()
+                    }
                 }
             }
         }
