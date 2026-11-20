@@ -7,8 +7,21 @@ import androidx.sqlite.db.SupportSQLiteQuery
 
 @Dao
 interface DictionaryDao {
-    @Query("SELECT * FROM entry WHERE albanian_ascii = :ascii LIMIT 1")
+    @Query(
+        "SELECT * FROM entry WHERE albanian_ascii = :ascii " +
+            "ORDER BY CASE WHEN pos = 'noun' THEN 0 ELSE 1 END, frequency DESC LIMIT 1"
+    )
     suspend fun findByAscii(ascii: String): EntryEntity?
+
+    @Query(
+        "SELECT * FROM entry WHERE albanian_ascii = :ascii " +
+            "ORDER BY " +
+            "  CASE WHEN :headword != :ascii AND albanian_headword = :headword THEN 0 ELSE 1 END, " +
+            "  CASE WHEN pos = 'noun' THEN 0 ELSE 1 END, " +
+            "  frequency DESC " +
+            "LIMIT 1"
+    )
+    suspend fun findByHeadwordOrAscii(ascii: String, headword: String): EntryEntity?
 
     @Query("SELECT COUNT(*) FROM entry")
     suspend fun countEntries(): Int
@@ -40,32 +53,32 @@ interface DictionaryDao {
     suspend fun searchFts(query: SupportSQLiteQuery): List<EntryEntity>
 
     /**
-     * Full-text search over the english column using a two-tier ranking strategy (ADR 0007).
-     * FTS5 tokenize='unicode61' treats '|' and ';' as token separators, so searching
-     * "car" matches "car|automobile" but not "placard".
+     * Full-text search over the normalized entry_english / entry_english_fts tables.
      *
-     * Tier 0: entries where the first token of the `english` field (before the first '|')
-     * exactly matches the search word — these are "pure" translations like english="water".
-     * Tier 1: all other matches — compounds like english="water jug" or "water pipe".
+     * Each English translation is stored as a separate row with its own `position`
+     * (sense index), so no pipe-delimited strings are parsed in SQL. Exact-match
+     * evaluation uses `ee.english = :word`, which is true for ANY sense of the entry
+     * (e.g. "car" matches makinë = machine|vehicle|car), while compounds like
+     * "water jug" are ranked below.
      *
-     * Within each tier, ranking uses (rank * 0.7) - (frequency * 3.0), where FTS5 BM25
-     * `rank` provides relevance and `frequency` (corpus frequency from the `words/` pipeline)
-     * breaks ties. Higher frequency boosts ranking within a tier.
+     * Ranking (per entry):
+     *   MIN(CASE WHEN ee.english = :word THEN 0 ELSE 1 END),
+     *   (MIN(fts.rank) * 0.7) - (entry.frequency * 3.0) + (MIN(ee.position) * 0.1)
      *
-     * Build the query with [androidx.sqlite.db.SimpleSQLiteQuery]:
+     * Build the query with [androidx.sqlite.db.SimpleSQLiteQuery] (the FTS match
+     * value is wrapped in double quotes to behave as an exact phrase):
      * ```
      * SimpleSQLiteQuery(
-     *     "SELECT DISTINCT entry.* FROM entry, entry_fts " +
-     *     "WHERE entry.rowid = entry_fts.rowid AND entry_fts.english MATCH ? " +
+     *     "SELECT entry.* FROM entry " +
+     *     "JOIN entry_english ee ON ee.entry_rowid = entry.rowid " +
+     *     "JOIN entry_english_fts fts ON fts.rowid = ee.id " +
+     *     "WHERE entry_english_fts MATCH ? " +
+     *     "GROUP BY entry.rowid " +
      *     "ORDER BY " +
-     *     "  CASE " +
-     *     "    WHEN (CASE " +
-     *     "      WHEN INSTR(entry.english, '|') > 0 THEN " +
-     *     "        TRIM(SUBSTR(entry.english, 1, INSTR(entry.english, '|') - 1)) " +
-     *     "      ELSE entry.english END) = ? THEN 0 " +
-     *     "    ELSE 1 END, " +
-     *     "  (rank * 0.7) - (frequency * 3.0) LIMIT ?",
-     *     arrayOf(term, term, limit)
+     *     "  MIN(CASE WHEN ee.english = ? THEN 0 ELSE 1 END) ASC, " +
+     *     "  (MIN(fts.rank) * 0.7) - (entry.frequency * 3.0) + (MIN(ee.position) * 0.1) ASC " +
+     *     "LIMIT ?",
+     *     arrayOf("\"$word\"", word, limit)
      * )
      * ```
      *

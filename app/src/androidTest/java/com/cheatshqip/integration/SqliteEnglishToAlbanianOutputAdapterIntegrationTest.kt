@@ -40,9 +40,9 @@ class SqliteEnglishToAlbanianOutputAdapterIntegrationTest {
 
         assertTrue("Should find at least one translation for work", result.isNotEmpty())
         assertEquals(
-            "'punë' should be in top 3 translations for 'work'",
+            "'punë' should be the first translation for 'work'",
             "punë",
-            result.take(3).first { it.value == "punë" }.value,
+            result.first().value,
         )
     }
 
@@ -150,18 +150,66 @@ class SqliteEnglishToAlbanianOutputAdapterIntegrationTest {
             assertTrue("Should find translations for water", result.isNotEmpty())
             val ujit = result.firstOrNull { it.value == "ujit" }
 
-            // ujit has english="water|to irrigate" — first token is "water", a pure match
-            // It should rank in tier 0 alongside ujë
+            // ujit has english="water|to irrigate" — "water" is an exact-match sense.
             if (ujit != null) {
                 val ujitIndex = result.indexOf(ujit)
                 val ujeIndex = result.indexOf(result.first { it.value == "ujë" })
-                // Both are tier 0 (first token == "water"), so order by frequency
-                // uje (10.17) > ujit (9.63), so uje should come first
                 assertTrue(
-                    "ujit (first_token='water') should be a tier 0 match, " +
-                        "ranking close to ujë",
+                    "ujit (water translation) should rank close to ujë",
                     kotlin.math.abs(ujeIndex - ujitIndex) <= 1,
                 )
             }
         }
+
+    @Test
+    fun given_car_should_rank_makine_first() = runBlocking {
+        val result = adapter.getTranslationsForEnglishWord(Word("car"))
+
+        assertTrue("Should find translations for car", result.isNotEmpty())
+        assertEquals("makinë", result.first().value)
+    }
+
+    @Test
+    fun given_weather_should_find_and_rank_kohe_first() = runBlocking {
+        val result = adapter.getTranslationsForEnglishWord(Word("weather"))
+
+        assertTrue("Should find translations for weather", result.isNotEmpty())
+        assertEquals("kohë", result.first().value)
+    }
+
+    @Test
+    fun given_street_should_rank_rruge_before_rruge_without_diacritic() = runBlocking {
+        val result = adapter.getTranslationsForEnglishWord(Word("street"))
+
+        assertTrue("Should find translations for street", result.isNotEmpty())
+        val rrugeIndex = result.indexOfFirst { it.value == "rrugë" }
+        val rrugeNoDiacriticIndex = result.indexOfFirst { it.value == "rruge" }
+        assertTrue("rrugë should be present for street, got $result", rrugeIndex >= 0)
+        assertTrue(
+            "rrugë (street) should rank before rruge (brushwood): $result",
+            rrugeNoDiacriticIndex < 0 || rrugeIndex < rrugeNoDiacriticIndex,
+        )
+    }
+
+    @Test
+    fun given_sunglasses_should_return_compound_translation_syze_dielli() = runBlocking {
+        val result = adapter.getTranslationsForEnglishWord(Word("sunglasses"))
+
+        assertTrue("Should find translations for sunglasses, got $result", result.isNotEmpty())
+        assertTrue(
+            "'syze dielli' should be returned for 'sunglasses', got $result",
+            result.any { it.value == "syze dielli" },
+        )
+    }
+
+    @Test
+    fun given_home_should_return_shtepi_from_secondary_translation() = runBlocking {
+        val result = adapter.getTranslationsForEnglishWord(Word("home"))
+
+        assertTrue("Should find translations for home", result.isNotEmpty())
+        assertTrue(
+            "'shtëpi' should be returned for 'home', got $result",
+            result.any { it.value == "shtëpi" },
+        )
+    }
 }

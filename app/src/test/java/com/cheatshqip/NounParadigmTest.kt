@@ -37,6 +37,17 @@ class NounParadigmTest {
         assertEquals(expected, result)
     }
 
+    @ParameterizedTest
+    @MethodSource("provideCompoundNounArguments")
+    fun `should derive declensions for a compound noun by inflecting the head noun`(
+        baseForms: NounBaseForms,
+        expected: NounParadigm,
+    ) {
+        val result = NounParadigm.from(baseForms)
+
+        assertEquals(expected, result)
+    }
+
     private companion object {
         @JvmStatic
         @Suppress("unused")
@@ -163,6 +174,41 @@ class NounParadigmTest {
                         nominative = "akademitë",
                         oblique = "akademive",
                         accusative = "akademitë",
+                    ),
+                ),
+            ),
+        )
+
+        @JvmStatic
+        @Suppress("unused")
+        fun provideCompoundNounArguments(): Stream<Arguments> = Stream.of(
+            Arguments.of(
+                NounBaseForms(
+                    singularIndefinite = "syze dielli",
+                    singularDefinite = "syzet e diellit",
+                    pluralIndefinite = "syze dielli",
+                    pluralDefinite = "syzet e diellit",
+                ),
+                NounParadigm(
+                    singularIndefinite = declensions(
+                        nominative = "syze dielli",
+                        oblique = "syzee dielli",
+                        accusative = "syze dielli",
+                    ),
+                    singularDefinite = declensions(
+                        nominative = "syzet e diellit",
+                        oblique = "syzesë e diellit",
+                        accusative = "syzenë e diellit",
+                    ),
+                    pluralIndefinite = declensions(
+                        nominative = "syze dielli",
+                        oblique = "syzeve dielli",
+                        accusative = "syze dielli",
+                    ),
+                    pluralDefinite = declensions(
+                        nominative = "syzet e diellit",
+                        oblique = "syzeve e diellit",
+                        accusative = "syzet e diellit",
                     ),
                 ),
             ),

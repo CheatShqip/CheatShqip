@@ -18,7 +18,6 @@ data class EntryEntity(
     @ColumnInfo(name = "noun_sg_def") val nounSgDef: String?,
     @ColumnInfo(name = "noun_pl_indef") val nounPlIndef: String?,
     @ColumnInfo(name = "noun_pl_def") val nounPlDef: String?,
-    val english: String,
     val gloss: String,
     @ColumnInfo(name = "data_json") val dataJson: String,
     @ColumnInfo(name = "frequency") val frequency: Float = 0f,

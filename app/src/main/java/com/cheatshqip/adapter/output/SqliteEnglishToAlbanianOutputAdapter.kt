@@ -11,28 +11,29 @@ class SqliteEnglishToAlbanianOutputAdapter(
     private val dao: DictionaryDao,
 ) : GetEnglishToAlbanianTranslationsPort {
     override suspend fun getTranslationsForEnglishWord(englishWord: Word): List<Translation> {
-        val word = englishWord.normalize().value
+        val word = englishWord.normalize().value.lowercase().trim()
+        val ftsQuery = toFtsPhraseQuery(word)
+        if (ftsQuery.isEmpty()) return emptyList()
         val query = SimpleSQLiteQuery(
-            "SELECT DISTINCT entry.* FROM entry, entry_fts " +
-                "WHERE entry.rowid = entry_fts.rowid " +
-                "AND entry_fts.english MATCH ? " +
+            "SELECT entry.* FROM entry " +
+                "JOIN entry_english ee ON ee.entry_rowid = entry.rowid " +
+                "JOIN entry_english_fts fts ON fts.rowid = ee.id " +
+                "WHERE entry_english_fts MATCH ? " +
+                "GROUP BY entry.rowid " +
                 "ORDER BY " +
-                "  CASE " +
-                "    WHEN (" +
-                "      CASE " +
-                "        WHEN INSTR(entry.english, '|') > 0 " +
-                "          THEN TRIM(SUBSTR(entry.english, 1, " +
-                "            INSTR(entry.english, '|') - 1)) " +
-                "        ELSE entry.english " +
-                "      END" +
-                "    ) = ? THEN 0 " +
-                "    ELSE 1 " +
-                "  END, " +
-                "  (rank * 0.7) - (frequency * 3.0) " +
+                "  MIN(CASE WHEN ee.english = ? THEN 0 ELSE 1 END) ASC, " +
+                "  (MIN(fts.rank) * 0.7) - (entry.frequency * 3.0) + (MIN(ee.position) * 0.1) ASC " +
                 "LIMIT ?",
-            arrayOf<Any>(word, word, MAX_RESULTS)
+            arrayOf<Any>(ftsQuery, word, MAX_RESULTS),
         )
         return dao.searchByEnglishFts(query)
-            .map { Translation(it.albanianHeadword) }
+            .map { entry -> Translation(entry.albanianHeadword) }
+            .distinct()
+    }
+
+    private fun toFtsPhraseQuery(word: String): String {
+        val sanitized = word.replace("\"", "")
+        if (sanitized.isBlank()) return ""
+        return "\"$sanitized\""
     }
 }

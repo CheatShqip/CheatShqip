@@ -15,8 +15,10 @@ class RoomAlbanianWordDetailOutputAdapter(
     private val dao: DictionaryDao,
 ) : GetAlbanianWordDetailPort {
     override suspend fun getAlbanianWord(word: Word): AlbanianNounEntryResult {
+        val headword = word.value.lowercase()
         val ascii = word.normalize().value.lowercase()
-        val entity = dao.findByAscii(ascii) ?: return AlbanianNounEntryResult.NotFound
+        val entity = dao.findByHeadwordOrAscii(ascii = ascii, headword = headword)
+            ?: return AlbanianNounEntryResult.NotFound
         return AlbanianNounEntryResult.Found(entity.toAlbanianNounEntry())
     }
 }

@@ -63,24 +63,23 @@ class DictionaryDatabaseAssetTest {
     @Test
     fun databaseAsset_englishFtsSearch_returnsResultsForEnglishWord() = runBlocking {
         val query = SimpleSQLiteQuery(
-            "SELECT DISTINCT entry.* FROM entry, entry_fts " +
-                "WHERE entry.rowid = entry_fts.rowid AND entry_fts.english MATCH ? " +
+            "SELECT entry.* FROM entry " +
+                "JOIN entry_english ee ON ee.entry_rowid = entry.rowid " +
+                "JOIN entry_english_fts fts ON fts.rowid = ee.id " +
+                "WHERE entry_english_fts MATCH ? " +
+                "GROUP BY entry.rowid " +
                 "ORDER BY " +
-                "  CASE " +
-                "    WHEN (CASE " +
-                "      WHEN INSTR(entry.english, '|') > 0 THEN " +
-                "        TRIM(SUBSTR(entry.english, 1, INSTR(entry.english, '|') - 1)) " +
-                "      ELSE entry.english END) = ? THEN 0 " +
-                "    ELSE 1 END, " +
-                "  (rank * 0.7) - (frequency * 3.0) " +
+                "  MIN(CASE WHEN ee.english = ? THEN 0 ELSE 1 END) ASC, " +
+                "  (MIN(fts.rank) * 0.7) - (entry.frequency * 3.0) + (MIN(ee.position) * 0.1) ASC " +
                 "LIMIT ?",
-            arrayOf<Any>("work", "work", 10),
+            arrayOf<Any>("\"work\"", "work", 10),
         )
         val results = db.dictionaryDao().searchByEnglishFts(query)
         assertTrue("FTS english search should return results for 'work'", results.isNotEmpty())
-        assertTrue(
-            "Should contain 'punë' for 'work'",
-            results.any { it.albanianHeadword == "punë" },
+        assertEquals(
+            "'punë' should be the first result for 'work'",
+            "punë",
+            results.first().albanianHeadword,
         )
     }
 
