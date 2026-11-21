@@ -7,21 +7,34 @@ import java.io.File
 
 private const val DICTIONARY_ASSET_NAME = "dictionary.db"
 
+// Keep in sync with _ASSET_REVISION in words/src/dict_builder/io/sqlite_writer.py.
+private const val DICTIONARY_ASSET_REVISION = "2"
+
 fun createDictionaryDatabase(context: Context, databaseName: String = DICTIONARY_ASSET_NAME): DictionaryDatabase {
-    copyDictionaryAssetIfMissing(context, databaseName)
+    refreshDictionaryAssetIfNeeded(context, databaseName)
     syncUserVersion(context, databaseName)
     return Room.databaseBuilder(context, DictionaryDatabase::class.java, databaseName)
         .setDriver(BundledSQLiteDriver())
         .build()
 }
 
-private fun copyDictionaryAssetIfMissing(context: Context, databaseName: String) {
+private fun refreshDictionaryAssetIfNeeded(context: Context, databaseName: String) {
     val destination = context.getDatabasePath(databaseName)
-    if (destination.exists() && hasCurrentSchema(destination)) return
+    val revisionFile = File(destination.parentFile, "$databaseName.revision")
+    val installedRevision = runCatching { revisionFile.readText().trim() }.getOrNull()
+    if (
+        destination.exists() &&
+        hasCurrentSchema(destination) &&
+        installedRevision == DICTIONARY_ASSET_REVISION
+    ) {
+        return
+    }
+    context.deleteDatabase(databaseName)
     destination.parentFile?.mkdirs()
     context.assets.open(DICTIONARY_ASSET_NAME).use { input ->
         destination.outputStream().use { output -> input.copyTo(output) }
     }
+    revisionFile.writeText(DICTIONARY_ASSET_REVISION)
 }
 
 private fun hasCurrentSchema(destination: File): Boolean =

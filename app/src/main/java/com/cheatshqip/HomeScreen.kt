@@ -143,6 +143,11 @@ private fun TranslationSuggestions(
         modifier = modifier.background(ToskTheme.colors.background.primary),
     )
 
+    if (translationSuggestions.isEmpty()) {
+        Text(text = stringResource(R.string.no_translation_found))
+        return
+    }
+
     for (translation in translationSuggestions) {
         ToskCard(
             modifier = Modifier.fillMaxWidth(),

@@ -16,6 +16,7 @@
     <string name="ablative">Ablative</string>
     <string name="word_detail_error">Could not load word details.</string>
     <string name="word">Word</string>
+    <string name="no_translation_found">No translation found.</string>
     <string name="nav_translate">Translate</string>
     <string name="nav_translate_content_description">Translate tab</string>
     <string name="nav_decline">Decline</string>

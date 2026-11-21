@@ -212,4 +212,52 @@ class SqliteEnglishToAlbanianOutputAdapterIntegrationTest {
             result.any { it.value == "shtëpi" },
         )
     }
+
+    @Test
+    fun given_moonlight_should_return_drite_hene() = runBlocking {
+        val result = adapter.getTranslationsForEnglishWord(Word("moonlight"))
+
+        assertEquals("dritë hëne", result.firstOrNull()?.value)
+    }
+
+    @Test
+    fun given_sunlight_should_return_drite_dielli() = runBlocking {
+        val result = adapter.getTranslationsForEnglishWord(Word("sunlight"))
+
+        assertEquals("dritë dielli", result.firstOrNull()?.value)
+    }
+
+    @Test
+    fun given_sunshine_should_return_drite_dielli() = runBlocking {
+        val result = adapter.getTranslationsForEnglishWord(Word("sunshine"))
+
+        assertEquals("dritë dielli", result.firstOrNull()?.value)
+    }
+
+    @Test
+    fun given_sunlight_should_not_return_fragmentary_gloss_matches() = runBlocking {
+        val result = adapter.getTranslationsForEnglishWord(Word("sunlight"))
+
+        assertTrue(
+            "sunlight should not return diellzoj, dritësor or gërrellë, got $result",
+            result.none { it.value in setOf("diellzoj", "dritësor", "gërrellë") },
+        )
+    }
+
+    @Test
+    fun given_moon_should_return_only_exact_translations() = runBlocking {
+        val result = adapter.getTranslationsForEnglishWord(Word("moon"))
+
+        assertTrue(
+            "moon should only return hënë/hanë, got $result",
+            result.all { it.value in setOf("hënë", "hanë") },
+        )
+    }
+
+    @Test
+    fun given_unknown_word_should_return_no_translation() = runBlocking {
+        val result = adapter.getTranslationsForEnglishWord(Word("zzzzzz"))
+
+        assertTrue("Unknown word should have no exact translation, got $result", result.isEmpty())
+    }
 }

@@ -35,4 +35,32 @@ class HomeScreenTest {
 
         composeTestRule.onNodeWithText("kartë").assertIsDisplayed()
     }
+
+    @Test
+    fun homeScreen_unknownWord_displaysNoTranslationMessage() {
+        composeTestRule.onNodeWithText("Word").performTextInput("zzzzzz")
+
+        composeTestRule.onNodeWithContentDescription(label = "Translate").performClick()
+
+        composeTestRule.waitUntil(timeoutMillis = 20_000) {
+            composeTestRule.onAllNodesWithText("No translation found.")
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+
+        composeTestRule.onNodeWithText("No translation found.").assertIsDisplayed()
+    }
+
+    @Test
+    fun homeScreen_moonlight_displaysDriteHene() {
+        composeTestRule.onNodeWithText("Word").performTextInput("moonlight")
+
+        composeTestRule.onNodeWithContentDescription(label = "Translate").performClick()
+
+        composeTestRule.waitUntil(timeoutMillis = 20_000) {
+            composeTestRule.onAllNodesWithText("dritë hëne")
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+
+        composeTestRule.onNodeWithText("dritë hëne").assertIsDisplayed()
+    }
 }

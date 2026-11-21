@@ -23,6 +23,19 @@ interface DictionaryDao {
     )
     suspend fun findByHeadwordOrAscii(ascii: String, headword: String): EntryEntity?
 
+    @Query(
+        "SELECT entry.* FROM entry " +
+            "JOIN entry_english ee ON ee.entry_rowid = entry.rowid " +
+            "WHERE ee.english = :word " +
+            "GROUP BY entry.rowid " +
+            "ORDER BY " +
+            "  entry.frequency DESC, " +
+            "  MIN(ee.position) ASC, " +
+            "  CASE WHEN entry.pos = 'noun' THEN 0 ELSE 1 END " +
+            "LIMIT :limit"
+    )
+    suspend fun findByEnglishExact(word: String, limit: Int): List<EntryEntity>
+
     @Query("SELECT COUNT(*) FROM entry")
     suspend fun countEntries(): Int
 

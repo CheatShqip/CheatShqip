@@ -93,4 +93,15 @@ class DictionaryDatabaseAssetTest {
         assertNotNull("meta table must contain a schema_version row", schemaVersion)
         assertEquals("1", schemaVersion)
     }
+
+    @Test
+    fun databaseAsset_metaTable_recordsAssetRevision() = runBlocking {
+        val query = SimpleSQLiteQuery(
+            "SELECT value FROM meta WHERE key = ?",
+            arrayOf<Any>("asset_revision"),
+        )
+        val assetRevision = db.dictionaryDao().getMetaValue(query)
+        assertNotNull("meta table must contain an asset_revision row", assetRevision)
+        assertEquals("2", assetRevision)
+    }
 }
