@@ -102,6 +102,31 @@ class DictionaryDatabaseAssetTest {
         )
         val assetRevision = db.dictionaryDao().getMetaValue(query)
         assertNotNull("meta table must contain an asset_revision row", assetRevision)
-        assertEquals("2", assetRevision)
+        assertEquals("3", assetRevision)
+    }
+
+    @Test
+    fun databaseAsset_englishSearchTable_isPopulated() = runBlocking {
+        val query = SimpleSQLiteQuery(
+            "SELECT entry.* FROM entry " +
+                "JOIN english_search es ON es.entry_rowid = entry.rowid " +
+                "WHERE es.term IN (?, ?) LIMIT 5",
+            arrayOf<Any>("letter box", "letterbox"),
+        )
+        val results = db.dictionaryDao().findByEnglishKeys(query)
+        assertTrue("english_search must contain aliases", results.isNotEmpty())
+    }
+
+    @Test
+    fun databaseAsset_englishSearchFts_supportsPrefixMatching() = runBlocking {
+        val query = SimpleSQLiteQuery(
+            "SELECT entry.* FROM entry " +
+                "JOIN english_search es ON es.entry_rowid = entry.rowid " +
+                "JOIN english_search_fts fts ON fts.rowid = es.id " +
+                "WHERE english_search_fts MATCH ? LIMIT 5",
+            arrayOf<Any>("sunglass*"),
+        )
+        val results = db.dictionaryDao().searchEnglishSearchFts(query)
+        assertTrue("english_search_fts prefix lookup must match", results.isNotEmpty())
     }
 }

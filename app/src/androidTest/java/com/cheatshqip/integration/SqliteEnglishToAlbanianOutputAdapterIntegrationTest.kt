@@ -192,6 +192,50 @@ class SqliteEnglishToAlbanianOutputAdapterIntegrationTest {
     }
 
     @Test
+    fun given_hyphenated_spacing_variants_should_resolve_to_the_same_translations() = runBlocking {
+        val concatenated = adapter.getTranslationsForEnglishWord(Word("sunglasses"))
+        val hyphenated = adapter.getTranslationsForEnglishWord(Word("sun-glasses"))
+        val spaced = adapter.getTranslationsForEnglishWord(Word("sun glasses"))
+
+        assertTrue("Should find translations for sunglasses, got $concatenated", concatenated.isNotEmpty())
+        assertEquals(concatenated, hyphenated)
+        assertEquals(concatenated, spaced)
+    }
+
+    @Test
+    fun given_ocr_spellings_should_resolve_to_the_same_translations_as_clean_spellings() =
+        runBlocking {
+            val spellings = listOf(
+                "coffeecup" to "coffee cup",
+                "ear-ache" to "ear ache",
+                "letter-box" to "letter box",
+                "pi- llow case" to "pillow case",
+                "wed ding present" to "wedding present",
+            )
+
+            spellings.forEach { (raw, clean) ->
+                val rawResult = adapter.getTranslationsForEnglishWord(Word(raw))
+                val cleanResult = adapter.getTranslationsForEnglishWord(Word(clean))
+
+                assertTrue("Should find translations for '$raw', got $rawResult", rawResult.isNotEmpty())
+                assertEquals(
+                    "'$raw' and '$clean' should resolve to the same translations",
+                    cleanResult.toSet(),
+                    rawResult.toSet(),
+                )
+            }
+        }
+
+    @Test
+    fun given_prefix_of_a_compact_alias_should_find_the_word() = runBlocking {
+        val full = adapter.getTranslationsForEnglishWord(Word("sunglasses"))
+        val prefix = adapter.getTranslationsForEnglishWord(Word("sunglass"))
+
+        assertTrue("Should find translations for sunglasses, got $full", full.isNotEmpty())
+        assertEquals(full, prefix)
+    }
+
+    @Test
     fun given_sunglasses_should_return_compound_translation_syze_dielli() = runBlocking {
         val result = adapter.getTranslationsForEnglishWord(Word("sunglasses"))
 

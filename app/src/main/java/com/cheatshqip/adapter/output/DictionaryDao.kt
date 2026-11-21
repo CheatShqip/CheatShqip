@@ -23,18 +23,29 @@ interface DictionaryDao {
     )
     suspend fun findByHeadwordOrAscii(ascii: String, headword: String): EntryEntity?
 
-    @Query(
-        "SELECT entry.* FROM entry " +
-            "JOIN entry_english ee ON ee.entry_rowid = entry.rowid " +
-            "WHERE ee.english = :word " +
-            "GROUP BY entry.rowid " +
-            "ORDER BY " +
-            "  entry.frequency DESC, " +
-            "  MIN(ee.position) ASC, " +
-            "  CASE WHEN entry.pos = 'noun' THEN 0 ELSE 1 END " +
-            "LIMIT :limit"
-    )
-    suspend fun findByEnglishExact(word: String, limit: Int): List<EntryEntity>
+    /**
+     * Exact lookup over [english_search] (canonical and compact aliases).
+     *
+     * The table is not a Room entity, so it must be queried with [RawQuery]. Build the
+     * query with [androidx.sqlite.db.SimpleSQLiteQuery]:
+     * ```
+     * SimpleSQLiteQuery(
+     *     "SELECT entry.* FROM entry " +
+     *     "JOIN english_search es ON es.entry_rowid = entry.rowid " +
+     *     "WHERE es.term IN (?, ?) " +
+     *     "GROUP BY entry.rowid " +
+     *     "ORDER BY " +
+     *     "  MIN(CASE WHEN es.term = ? THEN 0 ELSE 1 END) ASC, " +
+     *     "  entry.frequency DESC, " +
+     *     "  MIN(es.position) ASC, " +
+     *     "  CASE WHEN entry.pos = 'noun' THEN 0 ELSE 1 END " +
+     *     "LIMIT ?",
+     *     arrayOf(canonical, compact, canonical, limit)
+     * )
+     * ```
+     */
+    @RawQuery
+    suspend fun findByEnglishKeys(query: SupportSQLiteQuery): List<EntryEntity>
 
     @Query("SELECT COUNT(*) FROM entry")
     suspend fun countEntries(): Int
@@ -100,6 +111,34 @@ interface DictionaryDao {
      */
     @RawQuery
     suspend fun searchByEnglishFts(query: SupportSQLiteQuery): List<EntryEntity>
+
+    /**
+     * Fallback full-text search over [english_search_fts] (canonical and compact aliases).
+     *
+     * Used only when [findByEnglishKeys] returns nothing. The match value must be built by
+     * the caller: either a quoted phrase (`"letter box"`) or a compact prefix (`coffee*`).
+     *
+     * Build the query with [androidx.sqlite.db.SimpleSQLiteQuery]:
+     * ```
+     * SimpleSQLiteQuery(
+     *     "SELECT entry.* FROM entry " +
+     *     "JOIN english_search es ON es.entry_rowid = entry.rowid " +
+     *     "JOIN english_search_fts fts ON fts.rowid = es.id " +
+     *     "WHERE english_search_fts MATCH ? " +
+     *     "GROUP BY entry.rowid " +
+     *     "ORDER BY " +
+     *     "  MIN(CASE WHEN es.term = ? THEN 0 ELSE 1 END) ASC, " +
+     *     "  (MIN(fts.rank) * 0.7) - (entry.frequency * 3.0) + (MIN(es.position) * 0.1) ASC " +
+     *     "LIMIT ?",
+     *     arrayOf(match, canonical, limit)
+     * )
+     * ```
+     *
+     * Use [RawQuery] because Room's compile-time parser does not understand FTS5
+     * virtual-table syntax in [Query].
+     */
+    @RawQuery
+    suspend fun searchEnglishSearchFts(query: SupportSQLiteQuery): List<EntryEntity>
 
     /** @deprecated Use [searchByEnglishFts] instead */
     @RawQuery
